@@ -20,6 +20,7 @@ class ResultsView(TemplateView):
 
 class AdminDashboardView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
     template_name = 'stu-dashboard/admin_dashboard.html'
+    login_url = 'accounts:signin'
 
     def test_func(self):
         return self.request.user.is_staff or self.request.user.role == UserRole.ADMIN
