@@ -32,7 +32,7 @@
 
                     <a class="navbar-brand d-flex align-items-center gap-2 mb-0" href="{% url 'core:home' %}">
                         <img src="{% static 'images/logos/ParoBharo-name.png' %}" alt="ParoBharo"
-                            style="height: 60px; width: auto;">
+                            style="height: 75px; width: auto;">
                     </a>
 
                     <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse"
@@ -96,13 +96,11 @@
         {% if user.is_authenticated %}
         <!-- Logged In Mobile Header -->
         <div class="container-fluid py-2 px-margin-mobile">
-            <div class="d-flex align-items-center justify-content-between" style="min-height: 40px;">
+            <div class="d-flex align-items-center justify-content-between" style="min-height: 48px;">
                 <!-- Left side: Website Name -->
                 <a class="navbar-brand d-flex align-items-center gap-2 mb-0" href="{% url 'core:home' %}">
-                    <img src="{% static 'images/logos/ParoBharo-logo.png' %}" alt="ParoBharo Logo"
-                        style="height: 40px; width: auto;">
                     <img src="{% static 'images/logos/ParoBharo-name.png' %}" alt="ParoBharo"
-                        style="height: 30px; width: auto;">
+                        style="height: 48px; width: auto;">
                 </a>
 
                 <!-- Right side: Search, Cart & Wishlist icons -->
@@ -135,13 +133,11 @@
         {% else %}
         <!-- Logged Out Mobile Header -->
         <div class="container-fluid py-2 px-margin-mobile">
-            <div class="d-flex align-items-center justify-content-between" style="min-height: 40px;">
+            <div class="d-flex align-items-center justify-content-between" style="min-height: 48px;">
                 <!-- Left side: Website Name -->
                 <a class="navbar-brand d-flex align-items-center gap-2 mb-0" href="{% url 'core:home' %}">
-                    <img src="{% static 'images/logos/ParoBharo-logo.png' %}" alt="ParoBharo Logo"
-                        style="height: 32px; width: auto;">
                     <img src="{% static 'images/logos/ParoBharo-name.png' %}" alt="ParoBharo"
-                        style="height: 22px; width: auto;">
+                        style="height: 48px; width: auto;">
                 </a>
 
                 <!-- Right side: Search, Cart & Auth -->
@@ -154,8 +150,7 @@
                     <a href="{% url 'cart:cart_detail' %}" class="text-decoration-none text-on-surface-variant">
                         <i class="bi bi-cart3 fs-5"></i>
                     </a>
-                    <a class="fw-medium text-primary text-decoration-none" href="{% url 'accounts:signin' %}">Sign
-                        In</a>
+                    <a class="fw-medium text-primary text-decoration-none" href="{% url 'accounts:signin' %}">Sign In</a>
                     <button class="btn btn-pill-primary py-1 px-3 text-label-sm" type="button"
                         style="font-family: inherit;">Start Free Trial</button>
                 </div>
