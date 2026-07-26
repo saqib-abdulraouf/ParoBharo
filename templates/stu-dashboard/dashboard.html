@@ -274,7 +274,7 @@
                                     aria-hidden="true">👋</span></h1>
                             <p class="lead-text text-body-lg">Track your live mock test scores, study progress, and performance analytics right from your dashboard.</p>
                             <div class="d-flex flex-wrap gap-3">
-                                <a href="{% url 'products:fia_si' %}" class="btn-primary-solid text-decoration-none">
+                                <a href="{% url 'products:fia-si' %}" class="btn-primary-solid text-decoration-none">
                                     <i class="bi bi-play-circle-fill" aria-hidden="true"></i> Take Live Mock Test
                                 </a>
                                 {% if request.user.is_staff or request.user.role == 'ADMIN' %}
