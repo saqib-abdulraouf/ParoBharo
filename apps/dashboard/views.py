@@ -1,22 +1,70 @@
 from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.db.models import Sum, Count, Q
+from django.db.models import Sum, Count, Avg, Q
 from apps.accounts.models import CustomUser, UserRole
 from apps.categories.models import Category
 from apps.products.models import Product, MockExam, ExamAttempt, Question
 from apps.orders.models import Order
+from apps.dashboard.models import Favorite, StudentNote
 
-class DashboardView(TemplateView):
+class DashboardView(LoginRequiredMixin, TemplateView):
     template_name = 'stu-dashboard/dashboard.html'
+    login_url = 'accounts:signin'
 
-class MyExamsView(TemplateView):
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        user = self.request.user
+        
+        # User Specific Database Stats
+        user_attempts = ExamAttempt.objects.filter(user=user)
+        completed_attempts = user_attempts.filter(status='COMPLETED')
+        
+        ctx['exams_completed_count'] = completed_attempts.count()
+        ctx['favorites_count'] = Favorite.objects.filter(user=user).count()
+        
+        # Average score percentage
+        avg_score = completed_attempts.aggregate(Avg('score'))['score__avg']
+        ctx['avg_score_percentage'] = round(avg_score, 1) if avg_score is not None else 0.0
+
+        # Recent attempts for logged-in student
+        ctx['my_recent_attempts'] = user_attempts.select_related('exam').order_by('-started_at')[:5]
+        
+        # Available Mock Exams for Student
+        ctx['available_mock_exams'] = MockExam.objects.filter(is_live=True).select_related('category')[:6]
+        ctx['recommended_books'] = Product.objects.filter(is_featured=True).select_related('category')[:4]
+        
+        return ctx
+
+class MyExamsView(LoginRequiredMixin, TemplateView):
     template_name = 'stu-dashboard/my-exams.html'
+    login_url = 'accounts:signin'
 
-class MyFavoritesView(TemplateView):
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        user = self.request.user
+        ctx['my_attempts'] = ExamAttempt.objects.filter(user=user).select_related('exam', 'exam__category').order_by('-started_at')
+        ctx['available_exams'] = MockExam.objects.filter(is_live=True).select_related('category')
+        return ctx
+
+class MyFavoritesView(LoginRequiredMixin, TemplateView):
     template_name = 'stu-dashboard/my-favorites.html'
+    login_url = 'accounts:signin'
 
-class ResultsView(TemplateView):
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        user = self.request.user
+        ctx['favorites_list'] = Favorite.objects.filter(user=user).select_related('product', 'exam', 'product__category', 'exam__category')
+        return ctx
+
+class ResultsView(LoginRequiredMixin, TemplateView):
     template_name = 'stu-dashboard/results.html'
+    login_url = 'accounts:signin'
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        user = self.request.user
+        ctx['exam_results'] = ExamAttempt.objects.filter(user=user, status='COMPLETED').select_related('exam', 'exam__category').order_by('-completed_at')
+        return ctx
 
 class AdminDashboardView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
     template_name = 'stu-dashboard/admin_dashboard.html'

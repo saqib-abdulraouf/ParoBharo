@@ -1,16 +1,90 @@
 from django.views.generic import TemplateView
+from django.shortcuts import render, redirect
+from django.views import View
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.utils import timezone
+from django.contrib import messages
+from apps.products.models import Product, MockExam, Question, ExamAttempt, UserAnswer
 
 class ShopView(TemplateView):
     template_name = 'all-exam/exam.html'
 
-class FiaSiMockTestView(TemplateView):
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['products'] = Product.objects.all()
+        ctx['mock_exams'] = MockExam.objects.filter(is_live=True)
+        return ctx
+
+class BaseMockTestView(LoginRequiredMixin, View):
+    login_url = 'accounts:signin'
+    template_name = ''
+    exam_title = ''
+
+    def get(self, request):
+        exam = MockExam.objects.filter(title__icontains=self.exam_title).first()
+        questions = Question.objects.filter(exam=exam) if exam else []
+        return render(request, self.template_name, {'exam': exam, 'questions': questions})
+
+    def post(self, request):
+        exam = MockExam.objects.filter(title__icontains=self.exam_title).first()
+        if not exam:
+            # Fallback to create dummy test entry for demonstration
+            exam = MockExam.objects.first()
+
+        questions = Question.objects.filter(exam=exam)
+        correct_count = 0
+        wrong_count = 0
+        total_questions = questions.count() or 1
+
+        # Create Exam Attempt in database
+        attempt = ExamAttempt.objects.create(
+            user=request.user,
+            exam=exam,
+            total_questions=total_questions,
+            status='IN_PROGRESS'
+        )
+
+        for q in questions:
+            selected_option = request.POST.get(f'question_{q.id}')
+            is_correct = (selected_option == q.correct_option)
+            if is_correct:
+                correct_count += 1
+            elif selected_option:
+                wrong_count += 1
+
+            UserAnswer.objects.create(
+                attempt=attempt,
+                question=q,
+                selected_option=selected_option,
+                is_correct=is_correct
+            )
+
+        # Update attempt score & status
+        score = (correct_count / total_questions) * exam.total_marks if exam else correct_count * 10
+        is_passed = (score >= exam.passing_marks) if exam else (score >= 50)
+        
+        attempt.score = score
+        attempt.correct_count = correct_count
+        attempt.wrong_count = wrong_count
+        attempt.status = 'COMPLETED'
+        attempt.is_passed = is_passed
+        attempt.completed_at = timezone.now()
+        attempt.save()
+
+        messages.success(request, f"Test submitted successfully! Your score: {score:.1f}/{exam.total_marks if exam else 100}")
+        return redirect('dashboard:results')
+
+class FiaSiMockTestView(BaseMockTestView):
     template_name = 'live-mock-test/FIA-SI.html'
+    exam_title = 'FIA'
 
-class FiaUdcMockTestView(TemplateView):
+class FiaUdcMockTestView(BaseMockTestView):
     template_name = 'live-mock-test/FIA-UDC.html'
+    exam_title = 'FIA'
 
-class BanoQabilMockTestView(TemplateView):
+class BanoQabilMockTestView(BaseMockTestView):
     template_name = 'live-mock-test/bano-qabil.html'
+    exam_title = 'Bano Qabil'
 
 class BooksView(TemplateView):
     template_name = 'Books/index.html'
@@ -141,4 +215,3 @@ class DjangoWeek4Lesson4View(DjangoCourseContextMixin, TemplateView):
 
 class DjangoInterviewView(TemplateView):
     template_name = 'Books/Djnago/django-interview/index.html'
-

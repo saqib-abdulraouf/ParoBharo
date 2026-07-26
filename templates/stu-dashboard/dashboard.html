@@ -270,15 +270,16 @@
                     <!-- Welcome Banner -->
                     <section class="welcome-banner reveal-on-scroll" aria-labelledby="welcomeHeading">
                         <div class="banner-content">
-                            <h1 id="welcomeHeading" class="text-display">Good Morning, Alex <span
+                            <h1 id="welcomeHeading" class="text-display">Welcome Back, {{ request.user.username }} <span
                                     aria-hidden="true">👋</span></h1>
-                            <p class="lead-text text-body-lg">You're on a 15-day study streak. Keep it up and you'll
-                                reach your goal for the GRE in no time!</p>
+                            <p class="lead-text text-body-lg">Track your live mock test scores, study progress, and performance analytics right from your dashboard.</p>
                             <div class="d-flex flex-wrap gap-3">
-                                <button type="button" class="btn-primary-solid">
-                                    <i class="bi bi-play-circle-fill" aria-hidden="true"></i> Continue Learning
-                                </button>
-                                <button type="button" class="btn-outline-surface">Take Mock Test</button>
+                                <a href="{% url 'products:fia_si' %}" class="btn-primary-solid text-decoration-none">
+                                    <i class="bi bi-play-circle-fill" aria-hidden="true"></i> Take Live Mock Test
+                                </a>
+                                {% if request.user.is_staff or request.user.role == 'ADMIN' %}
+                                <a href="{% url 'dashboard:admin_panel' %}" class="btn-outline-surface text-decoration-none">Admin Panel</a>
+                                {% endif %}
                             </div>
                         </div>
                         <div class="banner-pattern" aria-hidden="true"></div>
@@ -289,21 +290,10 @@
                         <div class="stats-grid">
                             <div class="stat-col">
                                 <div class="stat-card h-100">
-                                    <p class="stat-label">Total Exams</p>
+                                    <p class="stat-label">Exams Completed</p>
                                     <div class="d-flex align-items-end justify-content-between">
-                                        <h3 class="stat-value mb-0">24</h3>
-                                        <span class="stat-trend"><i class="bi bi-graph-up-arrow" aria-hidden="true"></i>
-                                            12%</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="stat-col">
-                                <div class="stat-card h-100">
-                                    <p class="stat-label">Completed</p>
-                                    <div class="d-flex align-items-end justify-content-between">
-                                        <h3 class="stat-value mb-0">18</h3>
-                                        <span class="stat-trend"><i class="bi bi-graph-up-arrow" aria-hidden="true"></i>
-                                            5%</span>
+                                        <h3 class="stat-value mb-0">{{ exams_completed_count }}</h3>
+                                        <span class="stat-trend"><i class="bi bi-check-circle-fill" aria-hidden="true"></i></span>
                                     </div>
                                 </div>
                             </div>
@@ -311,28 +301,17 @@
                                 <div class="stat-card h-100">
                                     <p class="stat-label">Avg Score</p>
                                     <div class="d-flex align-items-end justify-content-between">
-                                        <h3 class="stat-value mb-0">82%</h3>
-                                        <span class="stat-trend"><i class="bi bi-graph-up-arrow" aria-hidden="true"></i>
-                                            3%</span>
+                                        <h3 class="stat-value mb-0">{{ avg_score_percentage }}%</h3>
+                                        <span class="stat-trend"><i class="bi bi-graph-up-arrow" aria-hidden="true"></i></span>
                                     </div>
                                 </div>
                             </div>
                             <div class="stat-col">
                                 <div class="stat-card h-100">
-                                    <p class="stat-label">Streak</p>
+                                    <p class="stat-label">Saved Favorites</p>
                                     <div class="d-flex align-items-end justify-content-between">
-                                        <h3 class="stat-value mb-0">15d</h3>
-                                        <i class="bi bi-fire text-error-token fs-5" aria-hidden="true"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="stat-col">
-                                <div class="stat-card h-100">
-                                    <p class="stat-label">Accuracy</p>
-                                    <div class="d-flex align-items-end justify-content-between">
-                                        <h3 class="stat-value mb-0">92%</h3>
-                                        <span class="stat-trend"><i class="bi bi-graph-up-arrow" aria-hidden="true"></i>
-                                            1%</span>
+                                        <h3 class="stat-value mb-0">{{ favorites_count }}</h3>
+                                        <i class="bi bi-heart-fill text-error-token fs-5" aria-hidden="true"></i>
                                     </div>
                                 </div>
                             </div>
