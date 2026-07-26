@@ -1264,3 +1264,208 @@ body {
     opacity: 0.85;
     line-height: 1.6;
 }
+
+/* ==========================================================================
+   MOBILE & TABLET RESPONSIVE STYLES (100% Professional Layout)
+   ========================================================================== */
+
+@media (max-width: 991.98px) {
+    /* 1. Header Layout */
+    .app-header {
+        padding: 8px 12px !important;
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+        justify-content: space-between !important;
+    }
+
+    .brand-name {
+        font-size: 1.1rem !important;
+    }
+
+    .exam-title {
+        font-size: 0.95rem !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        max-width: 140px !important;
+        margin-bottom: 0 !important;
+    }
+
+    .exam-subtitle,
+    .header-divider {
+        display: none !important;
+    }
+
+    .timer-box {
+        padding: 4px 8px !important;
+        border-radius: 8px !important;
+        gap: 4px !important;
+    }
+
+    .timer-caption {
+        display: none !important;
+    }
+
+    .timer-value {
+        font-size: 0.95rem !important;
+    }
+
+    /* 2. App Main & Sidebar */
+    .app-main {
+        flex-direction: column !important;
+        padding-bottom: 95px !important; /* Prevents sticky bottom bar overlap */
+    }
+
+    .app-sidebar {
+        width: 100% !important;
+        max-width: 100% !important;
+        border-right: none !important;
+        border-bottom: 1px solid var(--color-outline-variant) !important;
+        padding: 10px 14px !important;
+        background-color: var(--color-surface-container-low) !important;
+    }
+
+    .navigator-title {
+        font-size: 0.9rem !important;
+    }
+
+    .question-palette {
+        display: grid !important;
+        grid-template-columns: repeat(auto-fill, minmax(42px, 1fr)) !important;
+        gap: 6px !important;
+        max-height: 120px !important;
+        overflow-y: auto !important;
+        padding-right: 4px !important;
+    }
+
+    .palette-btn {
+        width: 100% !important;
+        height: 36px !important;
+        font-size: 0.8rem !important;
+        border-radius: 8px !important;
+    }
+
+    .sidebar-legend {
+        display: none !important; /* Hide legend on small screens */
+    }
+
+    /* 3. Question Content & Meta */
+    .app-content {
+        padding: 12px 14px !important;
+    }
+
+    .question-meta-row {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 6px !important;
+        margin-bottom: 12px !important;
+    }
+
+    .points-row {
+        font-size: 0.8rem !important;
+        background: var(--color-surface-container);
+        padding: 4px 10px;
+        border-radius: 6px;
+    }
+
+    .question-card {
+        padding: 16px 14px !important;
+        border-radius: 14px !important;
+    }
+
+    .question-text {
+        font-size: 1rem !important;
+        line-height: 1.55 !important;
+        margin-bottom: 1rem !important;
+    }
+
+    .question-illustration img {
+        max-height: 180px !important;
+    }
+
+    /* 4. Answer Options */
+    .answer-list {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 10px !important;
+    }
+
+    .answer-option {
+        padding: 12px 14px !important;
+        border-radius: 12px !important;
+        gap: 10px !important;
+        align-items: center !important;
+    }
+
+    .answer-letter {
+        width: 28px !important;
+        height: 28px !important;
+        font-size: 0.8rem !important;
+        flex-shrink: 0 !important;
+    }
+
+    .answer-body {
+        font-size: 0.9rem !important;
+        line-height: 1.4 !important;
+    }
+
+    /* 5. Sticky Bottom Action Bar */
+    .action-bar {
+        position: fixed !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        z-index: 1040 !important;
+        padding: 8px 12px !important;
+        background-color: var(--color-surface-container-lowest) !important;
+        border-top: 1px solid var(--color-outline-variant) !important;
+        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15) !important;
+    }
+
+    .action-bar-inner {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        gap: 6px !important;
+        width: 100% !important;
+    }
+
+    .btn-premium {
+        padding: 8px 12px !important;
+        font-size: 0.8rem !important;
+        border-radius: 10px !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 4px !important;
+    }
+
+    .btn-text-hidden {
+        display: none !important;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .app-header {
+        padding: 6px 10px !important;
+    }
+
+    .brand-name {
+        font-size: 1rem !important;
+    }
+
+    .exam-title {
+        max-width: 110px !important;
+        font-size: 0.85rem !important;
+    }
+
+    .question-palette {
+        grid-template-columns: repeat(5, 1fr) !important;
+        max-height: 110px !important;
+    }
+
+    .btn-premium {
+        padding: 8px 10px !important;
+        font-size: 0.75rem !important;
+    }
+}
