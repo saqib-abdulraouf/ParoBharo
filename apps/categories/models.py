@@ -4,6 +4,7 @@ from django.utils.text import slugify
 class Category(models.Model):
     name = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(max_length=120, unique=True, blank=True)
+    parent = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True, related_name='children')
     icon = models.CharField(max_length=50, help_text="Bootstrap icon class, e.g., bi-earbuds", blank=True)
     description = models.TextField(blank=True)
     is_featured = models.BooleanField(default=True)

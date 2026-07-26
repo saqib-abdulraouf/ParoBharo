@@ -72,7 +72,8 @@
                 </div>
 
                 <!-- Registration Form -->
-                <form id="signupForm" class="d-flex flex-column gap-3" novalidate>
+                <form id="signupForm" method="POST" action="{% url 'accounts:signup' %}" class="d-flex flex-column gap-3">
+                    {% csrf_token %}
 
                     <div>
                         <label for="fullName" class="form-label-token text-label-sm">Full Name</label>

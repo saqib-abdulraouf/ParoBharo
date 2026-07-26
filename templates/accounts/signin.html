@@ -38,7 +38,8 @@
                     <p class="subtitle mb-0">Sign in to continue your preparation journey.</p>
                 </div>
 
-                <form id="loginForm" novalidate>
+                <form id="loginForm" method="POST" action="{% url 'accounts:signin' %}">
+                    {% csrf_token %}
                     <!-- Email Field -->
                     <div class="js-field-group mb-3">
                         <label class="form-label-token d-block mb-1" for="email">Email Address</label>
