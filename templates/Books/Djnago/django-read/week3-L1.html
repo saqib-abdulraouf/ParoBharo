@@ -1,0 +1,915 @@
+{% extends "Books/Djnago/django-read/index.html" %}
+{% load static %}
+
+{% block title %}Week 03 — Full CRUD: Create &amp; Read{% endblock %}
+
+{% block content %}
+<!-- ===== BREADCRUMB ===== -->
+<div class="breadcrumb">
+    <a href="{% url 'products:django-book' %}">Django Course</a>
+    <span class="sep">›</span>
+    <span>Week 3</span>
+    <span class="sep">›</span>
+    <span>Lesson 1</span>
+</div>
+
+<!-- ===== LESSON HEADER ===== -->
+<div class="lesson-header">
+    <span class="tag">📖 Week 3 · Lesson 1</span>
+    <h1>Full CRUD — Create &amp; Read</h1>
+    <div class="sub">
+        <i class="fas fa-code" style="color:#0c4b33;margin-right:4px;"></i>
+        Function-Based Views: Task List and Task Create
+    </div>
+</div>
+
+<!-- ===== CONTENT ===== -->
+<div class="reading-content">
+{% verbatim %}
+
+    <!-- ===== INTRODUCTION ===== -->
+    <div class="info-box success-box">
+        <i class="bi bi-trophy me-2 text-success"></i>
+        <strong>🎉 Week 2 Complete!</strong> Ab aap models, relationships, ORM, aur admin panel samajh chuke hain — ye
+        Django ka <strong>strong foundation</strong> hai.
+        <br /><br />
+        Ab shuru karte hain <strong>Week 3: Full CRUD</strong> — ye <strong>sabse important part</strong> hai kyunke
+        yahi hai jo aap <strong>interview mein demonstrate</strong> karenge.
+    </div>
+
+    <!-- ===== WHAT WE'LL BUILD ===== -->
+    <h2>CRUD Kya Banayenge?</h2>
+
+    <p>
+        Hum apna khud ka <strong>frontend</strong> banayenge (admin panel ke bagair) jahan koi bhi user:
+    </p>
+
+    <div class="crud-grid">
+        <div class="crud-item crud-create">
+            <span class="crud-icon">➕</span>
+            <span class="crud-label">Create</span>
+            <span class="crud-desc">Naya task add kar sake</span>
+        </div>
+        <div class="crud-item crud-read">
+            <span class="crud-icon">📋</span>
+            <span class="crud-label">Read</span>
+            <span class="crud-desc">Saare tasks ki list dekh sake</span>
+        </div>
+        <div class="crud-item crud-update">
+            <span class="crud-icon">✏️</span>
+            <span class="crud-label">Update</span>
+            <span class="crud-desc">Task edit kar sake</span>
+        </div>
+        <div class="crud-item crud-read-detail">
+            <span class="crud-icon">🔍</span>
+            <span class="crud-label">Read (Detail)</span>
+            <span class="crud-desc">Ek task ka detail dekh sake</span>
+        </div>
+        <div class="crud-item crud-delete">
+            <span class="crud-icon">🗑️</span>
+            <span class="crud-label">Delete</span>
+            <span class="crud-desc">Task delete kar sake</span>
+        </div>
+    </div>
+
+    <div class="info-box">
+        <i class="bi bi-info-circle me-2"></i>
+        <strong>Approach:</strong> Hum ye <strong>Function-Based Views (FBVs)</strong> se start karenge (samajhna aasan
+        hai), phir baad mein <strong>Class-Based Views (CBVs)</strong> bhi seekhenge (jo jobs mein zyada pucha jata
+        hai).
+    </div>
+
+    <!-- ============================================================
+                    PART 1: READ — Task List
+                    ============================================================ -->
+    <h2><span class="step-number">1</span> READ — Saare Tasks Ki List Dikhana</h2>
+
+    <p>
+        <code>tasks/views.py</code> ko update karein:
+    </p>
+
+    <div class="code-block">
+        <div class="code-label">
+            <i class="fab fa-python"></i> tasks/views.py
+        </div>
+        <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i> Copy</button>
+        <pre><code class="language-python">from django.shortcuts import render, redirect, get_object_or_404
+from .models import Task
+
+def task_list(request):
+    tasks = Task.objects.all()
+    return render(request, 'tasks/task_list.html', {'tasks': tasks})</code></pre>
+    </div>
+
+    <div class="field-explanation">
+        <div class="field-item">
+            <span class="field-name">Task.objects.all()</span>
+            <span class="field-desc">Database se <strong>saare tasks</strong> nikaalna</span>
+        </div>
+        <div class="field-item">
+            <span class="field-name">{'tasks': tasks}</span>
+            <span class="field-desc">Template ko <strong>context</strong> bhejna — ye dictionary hai</span>
+        </div>
+    </div>
+
+    <!-- ============================================================
+                    PART 2: TEMPLATE — task_list.html
+                    ============================================================ -->
+    <h2><span class="step-number">2</span> Template Banayein</h2>
+
+    <p>
+        <code>tasks/templates/tasks/task_list.html</code>:
+    </p>
+
+    <div class="code-block">
+        <div class="code-label">
+            <i class="fab fa-html5"></i> tasks/templates/tasks/task_list.html
+        </div>
+        <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i> Copy</button>
+        <pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Task List&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;My Tasks&lt;/h1&gt;
+
+    &lt;ul&gt;
+        {% for task in tasks %}
+            &lt;li&gt;
+                {{ task.title }} 
+                {% if task.completed %}✅{% else %}⏳{% endif %}
+            &lt;/li&gt;
+        {% empty %}
+            &lt;li&gt;Koi task nahi hai.&lt;/li&gt;
+        {% endfor %}
+    &lt;/ul&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+    </div>
+
+    <!-- ===== DTL EXPLANATION ===== -->
+    <h3>Django Template Language (DTL) — Samjhein:</h3>
+
+    <div class="field-explanation">
+        <div class="field-item">
+            <span class="field-name">{% for task in tasks %}</span>
+            <span class="field-desc">Python loop jaisa, lekin <strong>template</strong> mein</span>
+        </div>
+        <div class="field-item">
+            <span class="field-name">{{ task.title }}</span>
+            <span class="field-desc">Variable print karna (<strong>double curly braces</strong>)</span>
+        </div>
+        <div class="field-item">
+            <span class="field-name">{% if %}</span>
+            <span class="field-desc">Condition check karna</span>
+        </div>
+        <div class="field-item">
+            <span class="field-name">{% empty %}</span>
+            <span class="field-desc">Agar list <strong>khali</strong> ho to ye dikhega</span>
+        </div>
+    </div>
+
+    <!-- ============================================================
+                    PART 3: URL
+                    ============================================================ -->
+    <h2><span class="step-number">3</span> URL Add Karein</h2>
+
+    <p>
+        <code>tasks/urls.py</code>:
+    </p>
+
+    <div class="code-block">
+        <div class="code-label">
+            <i class="fas fa-link"></i> tasks/urls.py
+        </div>
+        <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i> Copy</button>
+        <pre><code class="language-python">from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.task_list, name='task_list'),
+]</code></pre>
+    </div>
+
+    <div class="info-box teal-box">
+        <i class="bi bi-check-circle me-2 text-success"></i>
+        <strong>Note:</strong> Purana <code>home</code> view abhi ke liye replace kar diya — ab <code>task_list</code>
+        hamara <strong>main page</strong> hoga.
+    </div>
+
+    <!-- ============================================================
+                    PART 4: CREATE — Forms
+                    ============================================================ -->
+    <h2><span class="step-number">4</span> CREATE — Naya Task Add Karne Ka Form</h2>
+
+    <div class="info-box">
+        <i class="bi bi-pencil-square me-2"></i>
+        <strong>Approach:</strong> Hum <strong>Django Forms</strong> use karenge (manually HTML form bhi likh sakte
+        hain, lekin <strong>ModelForm</strong> zyada powerful aur kam code wala tareeqa hai).
+    </div>
+
+    <h3>Step 1: Forms File Banayein</h3>
+
+    <p>
+        <code>tasks</code> app ke andar ek nayi file banayein: <code>tasks/forms.py</code>
+    </p>
+
+    <div class="code-block">
+        <div class="code-label">
+            <i class="fab fa-python"></i> tasks/forms.py
+        </div>
+        <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i> Copy</button>
+        <pre><code class="language-python">from django import forms
+from .models import Task
+
+class TaskForm(forms.ModelForm):
+    class Meta:
+        model = Task
+        fields = ['title', 'description', 'category', 'tags', 'completed']</code></pre>
+    </div>
+
+    <div class="field-explanation">
+        <div class="field-item">
+            <span class="field-name">ModelForm</span>
+            <span class="field-desc">Khud-ba-khud model ke fields se <strong>form</strong> bana leta hai</span>
+        </div>
+        <div class="field-item">
+            <span class="field-name">Meta class</span>
+            <span class="field-desc">Batati hai <strong>konsa model</strong> use karna hai aur <strong>konse
+                    fields</strong> form mein chahiye</span>
+        </div>
+    </div>
+
+    <h3>Step 2: Create View Banayein</h3>
+
+    <p>
+        <code>tasks/views.py</code> mein add karein:
+    </p>
+
+    <div class="code-block">
+        <div class="code-label">
+            <i class="fab fa-python"></i> tasks/views.py
+        </div>
+        <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i> Copy</button>
+        <pre><code class="language-python">from django.shortcuts import render, redirect, get_object_or_404
+from .models import Task
+from .forms import TaskForm
+
+def task_list(request):
+    tasks = Task.objects.all()
+    return render(request, 'tasks/task_list.html', {'tasks': tasks})
+
+
+def task_create(request):
+    if request.method == 'POST':
+        form = TaskForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('task_list')
+    else:
+        form = TaskForm()
+    return render(request, 'tasks/task_form.html', {'form': form})</code></pre>
+    </div>
+
+    <h3>Line by Line Samjhein:</h3>
+
+    <div class="field-explanation">
+        <div class="field-item">
+            <span class="field-name">request.method == 'POST'</span>
+            <span class="field-desc">User ne <strong>form submit</strong> kiya hai (data bheja hai)</span>
+        </div>
+        <div class="field-item">
+            <span class="field-name">TaskForm(request.POST)</span>
+            <span class="field-desc">Submitted data se <strong>form</strong> banaya</span>
+        </div>
+        <div class="field-item">
+            <span class="field-name">form.is_valid()</span>
+            <span class="field-desc">Django khud check karta hai data <strong>sahi</strong> hai ya nahi (required
+                fields, data types waghera)</span>
+        </div>
+        <div class="field-item">
+            <span class="field-name">form.save()</span>
+            <span class="field-desc">Valid hone par <strong>database mein save</strong> ho jata hai</span>
+        </div>
+        <div class="field-item">
+            <span class="field-name">redirect('task_list')</span>
+            <span class="field-desc">Save hone ke baad <strong>list page</strong> pe wapas bhej dena (refresh karne pe
+                dobara submit nahi hoga)</span>
+        </div>
+        <div class="field-item">
+            <span class="field-name">else</span>
+            <span class="field-desc">Jab user pehli baar page open kare (<strong>GET</strong> request), khali form
+                dikhana</span>
+        </div>
+    </div>
+
+    <h3>Step 3: Template Banayein</h3>
+
+    <p>
+        <code>tasks/templates/tasks/task_form.html</code>:
+    </p>
+
+    <div class="code-block">
+        <div class="code-label">
+            <i class="fab fa-html5"></i> tasks/templates/tasks/task_form.html
+        </div>
+        <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i> Copy</button>
+        <pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Add Task&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Add New Task&lt;/h1&gt;
+
+    &lt;form method="POST"&gt;
+        {% csrf_token %}
+        {{ form.as_p }}
+        &lt;button type="submit"&gt;Save&lt;/button&gt;
+    &lt;/form&gt;
+
+    &lt;a href="{% url 'task_list' %}"&gt;Back to list&lt;/a&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+    </div>
+
+    <h3>Samjhein:</h3>
+
+    <div class="field-explanation">
+        <div class="field-item">
+            <span class="field-name">{% csrf_token %}</span>
+            <span class="field-desc"><strong>Zaroori hai!</strong> Django security ke liye ye token maangta hai warna
+                form submit hi nahi hoga</span>
+        </div>
+        <div class="field-item">
+            <span class="field-name">{{ form.as_p }}</span>
+            <span class="field-desc">Pora form <strong>&lt;p&gt;</strong> tags mein automatically render kar deta
+                hai</span>
+        </div>
+        <div class="field-item">
+            <span class="field-name">{% url 'task_list' %}</span>
+            <span class="field-desc">URL ka naam use kar ke link banana (hardcode karne se <strong>behtar</strong>
+                hai)</span>
+        </div>
+    </div>
+
+    <h3>Step 4: URL Add Karein</h3>
+
+    <div class="code-block">
+        <div class="code-label">
+            <i class="fas fa-link"></i> tasks/urls.py
+        </div>
+        <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i> Copy</button>
+        <pre><code class="language-python">from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.task_list, name='task_list'),
+    path('create/', views.task_create, name='task_create'),
+]</code></pre>
+    </div>
+
+    <h3>Step 5: List Page Se Link Karein</h3>
+
+    <p>
+        <code>task_list.html</code> mein <code>&lt;h1&gt;</code> ke neeche ye add karein:
+    </p>
+
+    <div class="code-block">
+        <div class="code-label">
+            <i class="fab fa-html5"></i> tasks/templates/tasks/task_list.html
+        </div>
+        <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i> Copy</button>
+        <pre><code class="language-html">&lt;a href="{% url 'task_create' %}"&gt;+ Add New Task&lt;/a&gt;</code></pre>
+    </div>
+
+    <!-- ============================================================
+                    CHECKLIST
+                    ============================================================ -->
+    <div class="checklist-box">
+        <div class="checklist-header">
+            <i class="bi bi-clipboard-check"></i> Practice Checklist
+        </div>
+        <ul class="checklist-items">
+            <li>
+                <span class="check-icon"><i class="bi bi-circle"></i></span>
+                <code>task_list</code> view banaya
+            </li>
+            <li>
+                <span class="check-icon"><i class="bi bi-circle"></i></span>
+                <code>task_list.html</code> template banaya
+            </li>
+            <li>
+                <span class="check-icon"><i class="bi bi-circle"></i></span>
+                URL pattern add kiya (<code>task_list</code>)
+            </li>
+            <li>
+                <span class="check-icon"><i class="bi bi-circle"></i></span>
+                <code>forms.py</code> file banayi
+            </li>
+            <li>
+                <span class="check-icon"><i class="bi bi-circle"></i></span>
+                <code>task_create</code> view banaya
+            </li>
+            <li>
+                <span class="check-icon"><i class="bi bi-circle"></i></span>
+                <code>task_form.html</code> template banaya
+            </li>
+            <li>
+                <span class="check-icon"><i class="bi bi-circle"></i></span>
+                <code>create/</code> URL add kiya
+            </li>
+            <li>
+                <span class="check-icon"><i class="bi bi-circle"></i></span>
+                List page mein <strong>"Add New Task"</strong> link add kiya
+            </li>
+        </ul>
+        <p class="checklist-note">
+            <strong>📌 Test:</strong> <code>http://127.0.0.1:8000/create/</code> pe jayein, form fill karein, submit
+            karein —
+            dekhein wapas list page pe redirect hota hai aur naya task list mein dikhta hai.
+        </p>
+    </div>
+
+    <!-- ============================================================
+                    WHAT'S NEXT
+                    ============================================================ -->
+    <div class="info-box teal-box">
+        <i class="bi bi-arrow-right-circle me-2 text-success"></i>
+        <strong>Result batayein!</strong> Phir hum <strong>Update</strong> aur <strong>Delete</strong> pe chalenge. 🚀
+    </div>
+
+{% endverbatim %}
+</div>
+
+<!-- ===== NAVIGATION FOOTER ===== -->
+<div class="lesson-nav-bar">
+    <div class="d-flex align-items-center justify-content-between gap-3">
+        <a href="{% url 'products:django-week2-l4' %}" class="btn-lesson-nav btn-lesson-prev">
+            <i class="bi bi-arrow-left me-2"></i>
+            <span>Previous (Week 2 L4)</span>
+        </a>
+
+        <div class="d-none d-sm-block text-center">
+            <span class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill font-monospace"
+                style="font-size: 0.8rem; font-weight:500;">
+                Week 3 • Lesson 1 of 4
+            </span>
+        </div>
+
+        <a href="{% url 'products:django-week3-l2' %}" class="btn-lesson-nav btn-lesson-next">
+            <span>Next (L2)</span>
+            <i class="bi bi-arrow-right ms-2"></i>
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block right_sidebar %}
+<!-- ===== PROGRESS ===== -->
+<div class="right-section">
+    <h4>📊 Your Progress</h4>
+    <div class="progress-ring">
+        <div class="circle"><span>25%</span></div>
+        <div class="info">
+            <strong>1/4</strong> Week 3 done
+        </div>
+    </div>
+</div>
+
+<!-- ===== QUICK ACTIONS ===== -->
+<div class="right-section">
+    <h4>⚡ Quick Actions</h4>
+    <div class="quick-actions">
+        <button class="quick-btn"><span class="icon">⭐</span> Bookmark</button>
+        <button class="quick-btn"><span class="icon">📝</span> Add Note</button>
+    </div>
+</div>
+
+<!-- ===== NOTES ===== -->
+<div class="right-section" style="flex:1;">
+    <h4>📝 Your Notes</h4>
+    <textarea class="notes-area" id="djangoNotes" placeholder="Write your notes here..."></textarea>
+</div>
+{% endblock %}
+
+<!-- ================================================================
+    CSS — Inline Styles for the Lesson Page
+    ================================================================ -->
+{% block extra_css %}
+<style>
+    /* ===== BREADCRUMB ===== */
+    .breadcrumb {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        margin-bottom: 1.5rem;
+        flex-wrap: wrap;
+    }
+
+    .breadcrumb a {
+        color: var(--primary);
+        text-decoration: none;
+        transition: color 0.2s;
+    }
+
+    .breadcrumb a:hover {
+        color: var(--primary-dark);
+        text-decoration: underline;
+    }
+
+    .breadcrumb .sep {
+        color: var(--text-muted);
+        opacity: 0.5;
+    }
+
+    /* ===== LESSON HEADER ===== */
+    .lesson-header {
+        margin-bottom: 2rem;
+    }
+
+    .lesson-header .tag {
+        display: inline-block;
+        background: var(--primary);
+        color: #fff;
+        padding: 0.2rem 1rem;
+        border-radius: 9999px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .lesson-header h1 {
+        font-size: 2.25rem;
+        font-weight: 700;
+        color: var(--text-dark);
+        letter-spacing: -0.02em;
+        margin-bottom: 0.25rem;
+    }
+
+    .lesson-header .sub {
+        font-size: 1.05rem;
+        color: var(--text-muted);
+    }
+
+    /* ===== INFO BOXES ===== */
+    .info-box {
+        background: var(--bg-light);
+        border-left: 4px solid var(--primary);
+        padding: 1rem 1.25rem;
+        border-radius: 0.5rem;
+        margin: 1rem 0;
+    }
+
+    .info-box.success-box {
+        border-left-color: var(--success);
+        background: rgba(16, 185, 129, 0.06);
+    }
+
+    .info-box.teal-box {
+        border-left-color: var(--success);
+        background: rgba(16, 185, 129, 0.06);
+    }
+
+    .info-box code {
+        background: var(--bg-light);
+        padding: 0.1rem 0.4rem;
+        border-radius: 0.25rem;
+        font-size: 0.85rem;
+        font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* ===== CRUD GRID ===== */
+    .crud-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 0.75rem;
+        margin: 1rem 0 1.5rem 0;
+    }
+
+    .crud-item {
+        background: var(--bg-light);
+        border-radius: 0.75rem;
+        padding: 1rem;
+        text-align: center;
+        border: 2px solid transparent;
+        transition: all 0.3s ease;
+    }
+
+    .crud-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    }
+
+    .crud-item .crud-icon {
+        font-size: 1.5rem;
+        display: block;
+        margin-bottom: 0.25rem;
+    }
+
+    .crud-item .crud-label {
+        font-weight: 700;
+        font-size: 0.9rem;
+        color: var(--text-dark);
+        display: block;
+    }
+
+    .crud-item .crud-desc {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        display: block;
+        margin-top: 0.1rem;
+    }
+
+    .crud-item.crud-create {
+        border-color: #10b981;
+    }
+
+    .crud-item.crud-read {
+        border-color: #3b82f6;
+    }
+
+    .crud-item.crud-update {
+        border-color: #f59e0b;
+    }
+
+    .crud-item.crud-read-detail {
+        border-color: #8b5cf6;
+    }
+
+    .crud-item.crud-delete {
+        border-color: #ef4444;
+    }
+
+    /* ===== CODE BLOCKS ===== */
+    .code-block {
+        background: #0d1117;
+        border-radius: 0.75rem;
+        padding: 1.25rem 1.5rem;
+        margin: 1rem 0 1.5rem 0;
+        overflow-x: auto;
+        position: relative;
+    }
+
+    .code-block .code-label {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.7rem;
+        font-weight: 500;
+        color: #8b949e;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .code-block .code-label i {
+        color: var(--success);
+    }
+
+    .code-block code {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.85rem;
+        line-height: 1.7;
+        color: #e6edf3;
+    }
+
+    .code-block .copy-btn {
+        position: absolute;
+        top: 0.75rem;
+        right: 0.75rem;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        color: #8b949e;
+        padding: 0.3rem 0.8rem;
+        border-radius: 0.375rem;
+        font-family: 'Inter', sans-serif;
+        font-size: 0.75rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .code-block .copy-btn:hover {
+        background: rgba(255, 255, 255, 0.12);
+        color: #e6edf3;
+    }
+
+    .code-block .copy-btn.copied {
+        background: var(--success);
+        color: #fff;
+        border-color: var(--success);
+    }
+
+    /* ===== FIELD EXPLANATION ===== */
+    .field-explanation {
+        background: var(--bg-light);
+        border-radius: 0.75rem;
+        padding: 1.25rem 1.5rem;
+        margin: 1rem 0 1.5rem 0;
+    }
+
+    .field-explanation .field-item {
+        display: flex;
+        gap: 1rem;
+        padding: 0.6rem 0;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .field-explanation .field-item:last-child {
+        border-bottom: none;
+    }
+
+    .field-explanation .field-name {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--primary);
+        min-width: 160px;
+        flex-shrink: 0;
+    }
+
+    .field-explanation .field-desc {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        line-height: 1.5rem;
+    }
+
+    .field-explanation .field-desc code {
+        background: var(--bg-light);
+        padding: 0.1rem 0.4rem;
+        border-radius: 0.25rem;
+        font-size: 0.8rem;
+        font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* ===== STEP NUMBER ===== */
+    .step-number {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--primary);
+        color: #fff;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.8rem;
+        font-weight: 600;
+        margin-right: 0.5rem;
+        flex-shrink: 0;
+    }
+
+    h2 {
+        display: flex;
+        align-items: center;
+        font-size: 1.35rem;
+        font-weight: 600;
+        color: var(--text-dark);
+        margin-top: 2rem;
+        margin-bottom: 0.75rem;
+    }
+
+    h3 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--text-dark);
+        margin-top: 1.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    /* ===== CHECKLIST ===== */
+    .checklist-box {
+        background: var(--bg-light);
+        border-radius: 0.75rem;
+        padding: 1.25rem 1.5rem;
+        margin: 1.5rem 0;
+        border-left: 4px solid var(--primary);
+    }
+
+    .checklist-box .checklist-header {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--text-dark);
+        margin-bottom: 0.5rem;
+    }
+
+    .checklist-box .checklist-header i {
+        color: var(--primary);
+        margin-right: 0.5rem;
+    }
+
+    .checklist-box .checklist-items {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 0.5rem 0;
+    }
+
+    .checklist-box .checklist-items li {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.3rem 0;
+        font-size: 0.9rem;
+        color: var(--text-muted);
+    }
+
+    .checklist-box .checklist-items li .check-icon {
+        color: var(--text-muted);
+        font-size: 0.8rem;
+        width: 20px;
+        text-align: center;
+    }
+
+    .checklist-box .checklist-items li code {
+        background: var(--bg-light);
+        padding: 0.1rem 0.4rem;
+        border-radius: 0.25rem;
+        font-size: 0.8rem;
+        font-family: 'JetBrains Mono', monospace;
+    }
+
+    .checklist-box .checklist-note {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        margin-top: 0.5rem;
+        padding-top: 0.5rem;
+        border-top: 1px solid var(--border-color);
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+        .lesson-header h1 {
+            font-size: 1.6rem;
+        }
+
+        .field-explanation .field-item {
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .field-explanation .field-name {
+            min-width: auto;
+        }
+
+        .lesson-nav-bar .d-flex {
+            flex-wrap: wrap;
+            justify-content: center !important;
+        }
+
+        .code-block {
+            padding: 1rem;
+        }
+
+        .code-block code {
+            font-size: 0.75rem;
+        }
+
+        .crud-grid {
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        }
+    }
+</style>
+{% endblock %}
+
+<!-- ================================================================
+    JAVASCRIPT — Copy Button Functionality
+    ================================================================ -->
+{% block extra_js %}
+<script>
+    // ===== COPY CODE BUTTON =====
+    document.querySelectorAll('.copy-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            const codeBlock = this.closest('.code-block');
+            const code = codeBlock.querySelector('code');
+            const text = code.textContent;
+
+            navigator.clipboard.writeText(text).then(function () {
+                btn.innerHTML = '<i class="bi bi-check"></i> Copied!';
+                btn.classList.add('copied');
+                setTimeout(function () {
+                    btn.innerHTML = '<i class="bi bi-clipboard"></i> Copy';
+                    btn.classList.remove('copied');
+                }, 2000);
+            }).catch(function () {
+                // Fallback
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                btn.innerHTML = '<i class="bi bi-check"></i> Copied!';
+                setTimeout(function () {
+                    btn.innerHTML = '<i class="bi bi-clipboard"></i> Copy';
+                }, 2000);
+            });
+        });
+    });
+</script>
+{% endblock %}

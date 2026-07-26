@@ -1,0 +1,631 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Exam Results | ExamPrep Student Portal</title>
+    <meta name="description"
+        content="View your exam results, performance analytics, and subject strengths on the ExamPrep Student Portal." />
+
+    <!-- Google Fonts: Inter & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap"
+        rel="stylesheet" />
+
+    <!-- Bootstrap 5.3 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+
+    <!-- Project Stylesheet -->
+    <link rel="stylesheet" href="{% static 'css/stu-dashboard/results.css' %}" />
+</head>
+
+<body>
+    <a class="visually-hidden-skip" href="#mainContent">Skip to main content</a>
+
+    <div class="app-shell">
+
+        <!-- =========================================================
+         SIDEBAR (Desktop)
+         ========================================================= -->
+        <aside class="app-sidebar" aria-label="Primary navigation">
+            <div class="sidebar-brand-header">
+                <a href="{% url 'dashboard:index' %}" class="sidebar-brand text-decoration-none" style="color: inherit;">
+                    <div class="sidebar-brand-mark" aria-hidden="true">
+                        <i class="bi bi-mortarboard-fill"></i>
+                    </div>
+                    <div class="sidebar-brand-text">
+                        <h1 class="sidebar-brand-title">ExamPrep</h1>
+                        <p class="sidebar-brand-subtitle">Student Portal</p>
+                    </div>
+                </a>
+                <div role="button" class="ds-button ds-button--iconLabelTertiary ds-button--icon ds-button--capsule ds-button--m ds-button--icon-relative-m ds-button--sizing-content _7d1f5e2" tabindex="0" style="--dsl-button-height: 34px;" id="desktopSidebarToggle" aria-label="Toggle sidebar">
+                    <div class="ds-button__background"></div>
+                    <div class="ds-button__icon ds-button__icon--last-child">
+                        <div class="ds-icon" style="font-size: inherit;">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M9.67272 0.522841C10.8339 0.522841 11.76 0.522714 12.4963 0.602493C13.2453 0.683657 13.8789 0.854248 14.4264 1.25197C14.7504 1.48739 15.0355 1.77247 15.2709 2.0965C15.6686 2.64394 15.8392 3.27758 15.9204 4.02655C16.0002 4.7629 16 5.68895 16 6.85014V9.14986C16 10.3111 16.0002 11.2371 15.9204 11.9735C15.8392 12.7224 15.6686 13.3561 15.2709 13.9035C15.0355 14.2275 14.7504 14.5126 14.4264 14.748C13.8789 15.1458 13.2453 15.3163 12.4963 15.3975C11.76 15.4773 10.8339 15.4772 9.67272 15.4772H6.3273C5.16611 15.4772 4.24006 15.4773 3.50371 15.3975C2.75474 15.3163 2.1211 15.1458 1.57366 14.748C1.24963 14.5126 0.964549 14.2275 0.729131 13.9035C0.331407 13.3561 0.160817 12.7224 0.0796529 11.9735C-0.000126137 11.2371 1.25338e-09 10.3111 1.25338e-09 9.14986V6.85014C1.25329e-09 5.68895 -0.000126137 4.7629 0.0796529 4.02655C0.160817 3.27758 0.331407 2.64394 0.729131 2.0965C0.964549 1.77247 1.24963 1.48739 1.57366 1.25197C2.1211 0.854248 2.75474 0.683657 3.50371 0.602493C4.24006 0.522714 5.16611 0.522841 6.3273 0.522841H9.67272ZM5.54303 1.88715V14.1118C5.78636 14.1128 6.04709 14.1169 6.3273 14.1169H9.67272C10.8639 14.1169 11.7032 14.1164 12.3493 14.0465C12.9824 13.9779 13.3497 13.8494 13.6268 13.6482C13.8354 13.4966 14.0195 13.3125 14.1711 13.1039C14.3723 12.8268 14.5007 12.4595 14.5693 11.8264C14.6393 11.1803 14.6398 10.341 14.6398 9.14986V6.85014C14.6398 5.65896 14.6393 4.81967 14.5693 4.1736C14.5007 3.54048 14.3723 3.17318 14.1711 2.89609C14.0195 2.68747 13.8354 2.50337 13.6268 2.35179C13.3497 2.1506 12.9824 2.02212 12.3493 1.95353C11.7032 1.88358 10.8639 1.88307 9.67272 1.88307H6.3273C6.04709 1.88307 5.78636 1.8862 5.54303 1.88715ZM4.1828 1.91166C3.99125 1.9216 3.8148 1.93577 3.65076 1.95353C3.01764 2.02212 2.65034 2.1506 2.37325 2.35179C2.16463 2.50337 1.98052 2.68747 1.82895 2.89609C1.62776 3.17318 1.49928 3.54048 1.43069 4.1736C1.36074 4.81967 1.36023 5.65896 1.36023 6.85014V9.14986C1.36023 10.341 1.36074 11.1803 1.43069 11.8264C1.49928 12.4595 1.62776 12.8268 1.82895 13.1039C1.98052 13.3125 2.16463 13.4966 2.37325 13.6482C2.65034 13.8494 3.01764 13.9779 3.65076 14.0465C3.81478 14.0642 3.99127 14.0774 4.1828 14.0873V1.91166Z" fill="currentColor"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav" aria-label="Dashboard sections">
+                <a class="sidebar-nav-link" href="{% url 'dashboard:index' %}" tabindex="0">
+                    <i class="bi bi-grid-1x2-fill" aria-hidden="true"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a class="sidebar-nav-link" href="{% url 'dashboard:my_exams' %}" tabindex="0">
+                    <i class="bi bi-journal-bookmark-fill" aria-hidden="true"></i>
+                    <span>My Exams</span>
+                </a>
+                <a class="sidebar-nav-link" href="{% url 'dashboard:my_favorites' %}" tabindex="0">
+                    <i class="bi bi-heart" aria-hidden="true"></i>
+                    <span>My Favorites</span>
+                </a>
+                <a class="sidebar-nav-link active" href="{% url 'dashboard:results' %}" aria-current="page" tabindex="0">
+                    <i class="bi bi-check2-square" aria-hidden="true"></i>
+                    <span>Results</span>
+                </a>
+                <a class="sidebar-nav-link" href="#" tabindex="0">
+                    <i class="bi bi-graph-up-arrow" aria-hidden="true"></i>
+                    <span>Analytics</span>
+                </a>
+                <a class="sidebar-nav-link" href="#" tabindex="0">
+                    <i class="bi bi-gear-fill" aria-hidden="true"></i>
+                    <span>Settings</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-upgrade">
+                <div class="sidebar-upgrade-card">
+                    <h4>Upgrade to Pro</h4>
+                    <p>Get unlimited practice tests and expert insights.</p>
+                    <button type="button" class="btn-upgrade">Upgrade Now</button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- =========================================================
+         SIDEBAR (Mobile Offcanvas Slide Drawer)
+         ========================================================= -->
+        <div class="offcanvas offcanvas-start app-sidebar-mobile" tabindex="-1" id="mobileSidebar"
+            aria-labelledby="mobileSidebarLabel">
+            <div class="offcanvas-header sidebar-brand">
+                <a href="{% url 'dashboard:index' %}" class="d-flex text-decoration-none flex-grow-1 align-items-center" style="color: inherit; gap: 12px;">
+                    <div class="sidebar-brand-mark" aria-hidden="true" style="margin-right: 0;"><i class="bi bi-mortarboard-fill"></i></div>
+                    <div>
+                        <h2 class="sidebar-brand-title" id="mobileSidebarLabel">ExamPrep</h2>
+                        <p class="sidebar-brand-subtitle">Student Portal</p>
+                    </div>
+                </a>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close menu"></button>
+            </div>
+            <div class="offcanvas-body d-flex flex-column">
+                <nav class="sidebar-nav" aria-label="Dashboard sections (mobile)">
+                    <a class="sidebar-nav-link" href="{% url 'dashboard:index' %}"><i class="bi bi-grid-1x2-fill"
+                            aria-hidden="true"></i><span>Dashboard</span></a>
+                    <a class="sidebar-nav-link" href="{% url 'dashboard:my_exams' %}"><i class="bi bi-journal-bookmark-fill"
+                            aria-hidden="true"></i><span>My Exams</span></a>
+                    <a class="sidebar-nav-link" href="{% url 'dashboard:my_favorites' %}"><i class="bi bi-heart"
+                            aria-hidden="true"></i><span>My Favorites</span></a>
+                    <a class="sidebar-nav-link active" href="{% url 'dashboard:results' %}" aria-current="page"><i class="bi bi-check2-square"
+                            aria-hidden="true"></i><span>Results</span></a>
+                    <a class="sidebar-nav-link" href="#"><i class="bi bi-graph-up-arrow"
+                            aria-hidden="true"></i><span>Analytics</span></a>
+                    <a class="sidebar-nav-link" href="#"><i class="bi bi-gear-fill"
+                            aria-hidden="true"></i><span>Settings</span></a>
+                </nav>
+                <div class="sidebar-upgrade mt-auto px-0">
+                    <div class="sidebar-upgrade-card">
+                        <h4>Upgrade to Pro</h4>
+                        <p>Get unlimited practice tests and expert insights.</p>
+                        <button type="button" class="btn-upgrade">Upgrade Now</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- =========================================================
+         MAIN CONTENT
+         ========================================================= -->
+        <div class="main-content">
+
+            <!-- Header -->
+            <header class="app-header">
+                <div class="app-header-inner">
+                    <div class="d-flex align-items-center gap-2 flex-grow-1">
+                        <button class="sidebar-toggle-btn d-md-none" type="button" data-bs-toggle="offcanvas"
+                            data-bs-target="#mobileSidebar" aria-controls="mobileSidebar"
+                            aria-label="Open navigation menu">
+                            <svg width="20" height="20" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M9.67272 0.522841C10.8339 0.522841 11.76 0.522714 12.4963 0.602493C13.2453 0.683657 13.8789 0.854248 14.4264 1.25197C14.7504 1.48739 15.0355 1.77247 15.2709 2.0965C15.6686 2.64394 15.8392 3.27758 15.9204 4.02655C16.0002 4.7629 16 5.68895 16 6.85014V9.14986C16 10.3111 16.0002 11.2371 15.9204 11.9735C15.8392 12.7224 15.6686 13.3561 15.2709 13.9035C15.0355 14.2275 14.7504 14.5126 14.4264 14.748C13.8789 15.1458 13.2453 15.3163 12.4963 15.3975C11.76 15.4773 10.8339 15.4772 9.67272 15.4772H6.3273C5.16611 15.4772 4.24006 15.4773 3.50371 15.3975C2.75474 15.3163 2.1211 15.1458 1.57366 14.748C1.24963 14.5126 0.964549 14.2275 0.729131 13.9035C0.331407 13.3561 0.160817 12.7224 0.0796529 11.9735C-0.000126137 11.2371 0 10.3111 0 9.14986V6.85014C0 5.68895 -0.000126137 4.7629 0.0796529 4.02655C0.160817 3.27758 0.331407 2.64394 0.729131 2.0965C0.964549 1.77247 1.24963 1.48739 1.57366 1.25197C2.1211 0.854248 2.75474 0.683657 3.50371 0.602493C4.24006 0.522714 5.16611 0.522841 6.3273 0.522841H9.67272ZM5.54303 1.88715V14.1118C5.78636 14.1128 6.04709 14.1169 6.3273 14.1169H9.67272C10.8639 14.1169 11.7032 14.1164 12.3493 14.0465C12.9824 13.9779 13.3497 13.8494 13.6268 13.6482C13.8354 13.4966 14.0195 13.3125 14.1711 13.1039C14.3723 12.8268 14.5007 12.4595 14.5693 11.8264C14.6393 11.1803 14.6398 10.341 14.6398 9.14986V6.85014C14.6398 5.65896 14.6393 4.81967 14.5693 4.1736C14.5007 3.54048 14.3723 3.17318 14.1711 2.89609C14.0195 2.68747 13.8354 2.50337 13.6268 2.35179C13.3497 2.1506 12.9824 2.02212 12.3493 1.95353C11.7032 1.88358 10.8639 1.88307 9.67272 1.88307H6.3273C6.04709 1.88307 5.78636 1.8862 5.54303 1.88715ZM4.1828 1.91166C3.99125 1.9216 3.8148 1.93577 3.65076 1.95353C3.01764 2.02212 2.65034 2.1506 2.37325 2.35179C2.16463 2.50337 1.98052 2.68747 1.82895 2.89609C1.62776 3.17318 1.49928 3.54048 1.43069 4.1736C1.36074 4.81967 1.36023 5.65896 1.36023 6.85014V9.14986C1.36023 10.341 1.36074 11.1803 1.43069 11.8264C1.49928 12.4595 1.62776 12.8268 1.82895 13.1039C1.98052 13.3125 2.16463 13.4966 2.37325 13.6482C2.65034 13.8494 3.01764 13.9779 3.65076 14.0465C3.81478 14.0642 3.99127 14.0774 4.1828 14.0873V1.91166Z" fill="currentColor"></path></svg>
+                        </button>
+
+                        <form class="header-search d-none d-md-block" role="search">
+                            <label for="globalSearch" class="visually-hidden">Search exams and lessons</label>
+                            <i class="bi bi-search" aria-hidden="true"></i>
+                            <input type="search" id="globalSearch" placeholder="Search exams, lessons..." />
+                        </form>
+                    </div>
+
+                    <div class="header-actions">
+                        <!-- Dark mode toggle (UI only) -->
+                        <button class="icon-btn" type="button" id="darkModeToggle" aria-pressed="false"
+                            aria-label="Toggle dark mode">
+                            <i class="bi bi-moon-stars" aria-hidden="true"></i>
+                        </button>
+
+                        <!-- Notification dropdown -->
+                        <div class="dropdown">
+                            <button class="icon-btn" type="button" id="notifDropdownBtn" data-bs-toggle="dropdown"
+                                aria-expanded="false" aria-label="View notifications">
+                                <i class="bi bi-bell" aria-hidden="true"></i>
+                                <span class="notif-dot" aria-hidden="true"></span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-custom"
+                                aria-labelledby="notifDropdownBtn">
+                                <li class="dropdown-header-custom">Notifications</li>
+                                <li>
+                                    <a class="dropdown-item-custom" href="#">
+                                        <i class="bi bi-check-circle-fill" aria-hidden="true"></i>
+                                        <div>
+                                            <p class="item-title">Mathematics Advanced graded</p>
+                                            <p class="item-desc">You scored 48/50 — 2 minutes ago</p>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item-custom" href="#">
+                                        <i class="bi bi-trophy-fill" aria-hidden="true"></i>
+                                        <div>
+                                            <p class="item-title">New leaderboard rank</p>
+                                            <p class="item-desc">You moved up to #124 globally</p>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item-custom" href="#">
+                                        <i class="bi bi-calendar-event-fill" aria-hidden="true"></i>
+                                        <div>
+                                            <p class="item-title">Today's Mock Test is live</p>
+                                            <p class="item-desc">Starts in 45 minutes</p>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <button class="icon-btn" type="button" aria-label="Help and support">
+                            <i class="bi bi-question-circle" aria-hidden="true"></i>
+                        </button>
+
+                        <div class="header-divider" aria-hidden="true"></div>
+
+                        <!-- User profile dropdown -->
+                        <div class="dropdown">
+                            <button class="user-menu-btn dropdown-toggle" type="button" id="userDropdownBtn"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                <span class="d-none d-sm-block text-end">
+                                    <p class="user-menu-name">Alex Johnson</p>
+                                    <p class="user-menu-plan">Standard Plan</p>
+                                </span>
+                                <img class="user-avatar" src="https://i.pravatar.cc/150?img=47"
+                                    alt="Alex Johnson's profile photo" width="40" height="40" />
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-custom"
+                                aria-labelledby="userDropdownBtn">
+                                <li>
+                                    <a class="dropdown-item-custom" href="#">
+                                        <i class="bi bi-person-circle" aria-hidden="true"></i>
+                                        <div>
+                                            <p class="item-title">My Profile</p>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item-custom" href="#">
+                                        <i class="bi bi-credit-card" aria-hidden="true"></i>
+                                        <div>
+                                            <p class="item-title">Billing &amp; Plan</p>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item-custom" href="#">
+                                        <i class="bi bi-gear" aria-hidden="true"></i>
+                                        <div>
+                                            <p class="item-title">Account Settings</p>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider my-1" />
+                                </li>
+                                <li>
+                                    <a class="dropdown-item-custom" href="#">
+                                        <i class="bi bi-box-arrow-right" aria-hidden="true"></i>
+                                        <div>
+                                            <p class="item-title">Sign Out</p>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main -->
+            <main id="mainContent" class="content-canvas">
+
+                <!-- Breadcrumb + Page Heading -->
+                <section aria-label="Page heading">
+                    <nav aria-label="Breadcrumb">
+                        <ol class="page-breadcrumb">
+                            <li><a href="{% url 'core:home' %}" class="text-decoration-none text-reset">Home</a></li>
+                            <li aria-hidden="true"><i class="bi bi-chevron-right"></i></li>
+                            <li><a href="{% url 'dashboard:index' %}" class="text-decoration-none text-reset">Dashboard</a></li>
+                            <li aria-hidden="true"><i class="bi bi-chevron-right"></i></li>
+                            <li class="active-crumb" aria-current="page">Results</li>
+                        </ol>
+                    </nav>
+
+                    <div class="page-heading-row">
+                        <h2 class="page-title">Exam Results</h2>
+
+                        <div class="page-filters">
+                            <div class="filter-select-group">
+                                <i class="bi bi-funnel" aria-hidden="true"></i>
+                                <label for="examFilter" class="visually-hidden">Filter by exam</label>
+                                <select id="examFilter">
+                                    <option>All Exams</option>
+                                    <option>Mathematics</option>
+                                    <option>Physics</option>
+                                    <option>Chemistry</option>
+                                </select>
+                            </div>
+                            <div class="filter-select-group">
+                                <i class="bi bi-calendar3" aria-hidden="true"></i>
+                                <label for="dateFilter" class="visually-hidden">Filter by date range</label>
+                                <select id="dateFilter">
+                                    <option>Last 30 Days</option>
+                                    <option>Last 6 Months</option>
+                                    <option>Year to Date</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Statistic Cards -->
+                <section aria-label="Result statistics" class="row g-3 g-md-4">
+                    <div class="col-12 col-sm-6 col-lg-3">
+                        <div class="stat-card">
+                            <div class="stat-card-top">
+                                <span class="stat-icon bg-tone-primary" aria-hidden="true"><i
+                                        class="bi bi-clipboard-data"></i></span>
+                                <span class="stat-badge tone-secondary"><i class="bi bi-graph-up-arrow"
+                                        aria-hidden="true"></i>+2 this week</span>
+                            </div>
+                            <h3 class="stat-label">Total Tests</h3>
+                            <p class="stat-value">24</p>
+                            <div class="stat-progress-track">
+                                <div class="stat-progress-fill" style="width:80%" data-fill-width="80%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-lg-3">
+                        <div class="stat-card">
+                            <div class="stat-card-top">
+                                <span class="stat-icon bg-tone-secondary" aria-hidden="true"><i
+                                        class="bi bi-check-circle-fill"></i></span>
+                                <span class="stat-badge tone-secondary">88% Pass Rate</span>
+                            </div>
+                            <h3 class="stat-label">Passed</h3>
+                            <p class="stat-value">21</p>
+                            <div class="stat-sparkline" aria-hidden="true">
+                                <span style="height:32px"></span>
+                                <span class="dim" style="height:20px"></span>
+                                <span style="height:40px"></span>
+                                <span class="dim" style="height:24px"></span>
+                                <span style="height:36px"></span>
+                                <span class="dim" style="height:28px"></span>
+                                <span style="height:44px"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-lg-3">
+                        <div class="stat-card">
+                            <div class="stat-card-top">
+                                <span class="stat-icon bg-tone-tertiary" aria-hidden="true"><i
+                                        class="bi bi-bar-chart-fill"></i></span>
+                                <span class="stat-badge tone-primary">+4.2% Growth</span>
+                            </div>
+                            <h3 class="stat-label">Average Score</h3>
+                            <p class="stat-value">82%</p>
+                            <div class="stat-barchart" aria-hidden="true">
+                                <span style="height:60%"></span>
+                                <span style="height:75%"></span>
+                                <span style="height:65%"></span>
+                                <span style="height:90%"></span>
+                                <span style="height:80%"></span>
+                                <span style="height:85%"></span>
+                                <span style="height:95%"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-lg-3">
+                        <div class="stat-card">
+                            <div class="stat-card-top">
+                                <span class="stat-icon bg-tone-neutral" aria-hidden="true"><i
+                                        class="bi bi-globe-americas"></i></span>
+                                <span class="stat-badge tone-neutral">Top 5%</span>
+                            </div>
+                            <h3 class="stat-label">Global Rank</h3>
+                            <p class="stat-value">#124</p>
+                            <div class="stat-status-row">
+                                <span class="status-dot" aria-hidden="true"></span>
+                                <span>Active in Mock Olympiad</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Charts Section -->
+                <section aria-label="Performance overview and subject strengths" class="row g-3 g-md-4">
+                    <div class="col-12 col-lg-8">
+                        <div class="panel h-100">
+                            <div class="panel-header-row">
+                                <h3 class="panel-title">Performance Overview</h3>
+                                <div class="chart-legend">
+                                    <span class="chart-legend-item"><span class="legend-dot you"
+                                            aria-hidden="true"></span>You</span>
+                                    <span class="chart-legend-item"><span class="legend-dot avg"
+                                            aria-hidden="true"></span>Average</span>
+                                </div>
+                            </div>
+
+                            <div class="chart-frame" role="img"
+                                aria-label="Line chart showing your performance trending upward from January to June, consistently above the class average.">
+                                <div class="chart-svg-wrap">
+                                    <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                                        <path d="M0,80 Q10,70 20,75 T40,60 T60,40 T80,30 T100,20" fill="none"
+                                            stroke="#4f46e5" stroke-width="2" vector-effect="non-scaling-stroke" />
+                                        <path d="M0,90 Q10,85 20,88 T40,80 T60,75 T80,72 T100,70" fill="none"
+                                            stroke="#d8e3fb" stroke-width="2" vector-effect="non-scaling-stroke" />
+                                    </svg>
+                                </div>
+                                <span class="chart-axis-label">Jan</span>
+                                <span class="chart-axis-label">Feb</span>
+                                <span class="chart-axis-label">Mar</span>
+                                <span class="chart-axis-label">Apr</span>
+                                <span class="chart-axis-label">May</span>
+                                <span class="chart-axis-label">Jun</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-lg-4">
+                        <div class="panel h-100">
+                            <h3 class="panel-title mb-4">Subject Strengths</h3>
+
+                            <div class="subject-row">
+                                <div class="subject-row-head">
+                                    <span class="subject-name">Mathematics</span>
+                                    <span class="subject-score">92%</span>
+                                </div>
+                                <div class="subject-track">
+                                    <div class="subject-fill" style="width:0" data-fill-width="92%"></div>
+                                </div>
+                            </div>
+
+                            <div class="subject-row">
+                                <div class="subject-row-head">
+                                    <span class="subject-name">Physics</span>
+                                    <span class="subject-score">78%</span>
+                                </div>
+                                <div class="subject-track">
+                                    <div class="subject-fill" style="width:0" data-fill-width="78%"></div>
+                                </div>
+                            </div>
+
+                            <div class="subject-row">
+                                <div class="subject-row-head">
+                                    <span class="subject-name">Chemistry</span>
+                                    <span class="subject-score">85%</span>
+                                </div>
+                                <div class="subject-track">
+                                    <div class="subject-fill" style="width:0" data-fill-width="85%"></div>
+                                </div>
+                            </div>
+
+                            <div class="subject-row">
+                                <div class="subject-row-head">
+                                    <span class="subject-name">Biology</span>
+                                    <span class="subject-score">64%</span>
+                                </div>
+                                <div class="subject-track">
+                                    <div class="subject-fill" style="width:0" data-fill-width="64%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Recent Submissions Table -->
+                <section aria-label="Recent submissions" class="table-panel">
+                    <div class="table-panel-header">
+                        <div class="table-panel-title-row">
+                            <h3 class="table-panel-title">Recent Submissions</h3>
+                            <div class="table-search">
+                                <i class="bi bi-search" aria-hidden="true"></i>
+                                <label for="submissionSearch" class="visually-hidden">Search by test name</label>
+                                <input type="search" id="submissionSearch" placeholder="Search by test name..." />
+                            </div>
+                        </div>
+
+                        <div class="table-sort">
+                            <span>Sort by:</span>
+                            <label for="submissionSort" class="visually-hidden">Sort submissions</label>
+                            <select id="submissionSort">
+                                <option value="newest">Newest First</option>
+                                <option value="score-desc">Score: High to Low</option>
+                                <option value="score-asc">Score: Low to High</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="table-scroll">
+                        <table class="results-table">
+                            <caption class="visually-hidden">Recent exam submissions with score, rank, and status
+                            </caption>
+                            <thead>
+                                <tr>
+                                    <th scope="col">Exam &amp; Test Name</th>
+                                    <th scope="col">Date &amp; Time</th>
+                                    <th scope="col" class="text-center">Score</th>
+                                    <th scope="col" class="text-center">Rank</th>
+                                    <th scope="col" class="text-center">Status</th>
+                                    <th scope="col" class="text-end">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr data-row-index="1">
+                                    <td>
+                                        <p class="exam-name">Mathematics Advanced</p>
+                                        <p class="exam-sub">Calculus III Mastery Quiz</p>
+                                    </td>
+                                    <td>
+                                        <p class="exam-date">Oct 24, 2023</p>
+                                        <p class="exam-time">42m 15s taken</p>
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="score-pill tone-good">48/50 <small>(96%)</small></span>
+                                    </td>
+                                    <td class="rank-cell">#42 / 1,200</td>
+                                    <td class="text-center"><span class="status-badge passed">Passed</span></td>
+                                    <td class="text-end"><button type="button" class="btn-view-details">View
+                                            Details</button></td>
+                                </tr>
+                                <tr data-row-index="2">
+                                    <td>
+                                        <p class="exam-name">Physics Core</p>
+                                        <p class="exam-sub">Thermodynamics Midterm</p>
+                                    </td>
+                                    <td>
+                                        <p class="exam-date">Oct 18, 2023</p>
+                                        <p class="exam-time">1h 12m taken</p>
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="score-pill"
+                                            style="background-color:var(--color-surface-container-high); color:var(--color-on-surface);">35/50
+                                            <small>(70%)</small></span>
+                                    </td>
+                                    <td class="rank-cell">#215 / 950</td>
+                                    <td class="text-center"><span class="status-badge passed">Passed</span></td>
+                                    <td class="text-end"><button type="button" class="btn-view-details">View
+                                            Details</button></td>
+                                </tr>
+                                <tr data-row-index="3">
+                                    <td>
+                                        <p class="exam-name">Organic Chemistry</p>
+                                        <p class="exam-sub">Molecular Bonding Practice</p>
+                                    </td>
+                                    <td>
+                                        <p class="exam-date">Oct 12, 2023</p>
+                                        <p class="exam-time">35m 00s taken</p>
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="score-pill tone-bad">18/50 <small>(36%)</small></span>
+                                    </td>
+                                    <td class="rank-cell">#780 / 840</td>
+                                    <td class="text-center"><span class="status-badge failed">Failed</span></td>
+                                    <td class="text-end"><button type="button" class="btn-view-details">View
+                                            Details</button></td>
+                                </tr>
+                                <tr data-row-index="4">
+                                    <td>
+                                        <p class="exam-name">Mock SAT #4</p>
+                                        <p class="exam-sub">Full Length Simulation</p>
+                                    </td>
+                                    <td>
+                                        <p class="exam-date">Oct 05, 2023</p>
+                                        <p class="exam-time">2h 45m taken</p>
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="score-pill tone-good">1420/1600 <small>(89%)</small></span>
+                                    </td>
+                                    <td class="rank-cell">#12 / 5,400</td>
+                                    <td class="text-center"><span class="status-badge passed">Passed</span></td>
+                                    <td class="text-end"><button type="button" class="btn-view-details">View
+                                            Details</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="empty-state d-none" id="tableEmptyState">
+                            <i class="bi bi-inbox" aria-hidden="true"></i>
+                            <p>No submissions match your search.</p>
+                        </div>
+                    </div>
+
+                    <div class="table-pagination">
+                        <p class="pagination-info">Showing 1-10 of 24 results</p>
+                        <nav class="pagination-controls" aria-label="Table pagination">
+                            <button type="button" class="page-btn nav-btn" data-nav="prev" aria-label="Previous page">
+                                <i class="bi bi-chevron-left"></i>
+                            </button>
+                            <button type="button" class="page-btn active" data-page="1" aria-current="page">1</button>
+                            <button type="button" class="page-btn" data-page="2">2</button>
+                            <button type="button" class="page-btn" data-page="3">3</button>
+                            <button type="button" class="page-btn nav-btn" data-nav="next" aria-label="Next page">
+                                <i class="bi bi-chevron-right"></i>
+                            </button>
+                        </nav>
+                    </div>
+                </section>
+
+            </main>
+
+            <!-- Footer -->
+            <footer class="app-footer">
+                <div class="app-footer-inner">
+                    <p class="app-footer-copy">© 2024 ExamPrep Educational Platforms Inc.</p>
+                    <nav class="app-footer-links" aria-label="Footer links">
+                        <a href="#">Privacy Policy</a>
+                        <a href="#">Terms of Service</a>
+                        <a href="#">Contact Support</a>
+                    </nav>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Mobile Bottom Navigation -->
+    <nav class="mobile-bottom-nav" aria-label="Primary navigation (mobile)">
+        <a href="{% url 'dashboard:index' %}"><i class="bi bi-grid-1x2-fill" aria-hidden="true"></i><span>Dashboard</span></a>
+        <a href="{% url 'dashboard:my_exams' %}"><i class="bi bi-journal-bookmark-fill" aria-hidden="true"></i><span>My Exams</span></a>
+        <a href="{% url 'dashboard:results' %}" class="active" aria-current="page"><i class="bi bi-check2-square"
+                aria-hidden="true"></i><span>Results</span></a>
+        <a href="#"><i class="bi bi-graph-up-arrow" aria-hidden="true"></i><span>Analytics</span></a>
+        <a href="#"><i class="bi bi-gear-fill" aria-hidden="true"></i><span>Settings</span></a>
+    </nav>
+
+    <!-- Toast container -->
+    <div class="toast-container-custom" id="toastContainer" aria-live="polite" aria-atomic="true"></div>
+
+    <!-- Bootstrap Bundle (includes Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Project Script -->
+    <script src="{% static 'js/stu-dashboard/results.js' %}"></script>
+</body>
+
+</html>

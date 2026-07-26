@@ -1,0 +1,1115 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Books & Study Material | ExamPrep</title>
+    <meta name="description"
+        content="Browse expert-curated study guides, past papers, and comprehensive books for FIA, Punjab Police, Armed Forces, and CSS competitive exams.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap"
+        rel="stylesheet">
+
+    <!-- Bootstrap 5.3 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="{% static 'css/Books/index.css' %}" rel="stylesheet">
+</head>
+
+<body class="d-flex flex-column min-vh-100 has-bottom-nav">
+
+    <!-- ==================== Top Navigation Bar (Desktop) ==================== -->
+    <header class="sticky-top bg-surface shadow-sm d-none d-md-block">
+        <nav class="navbar navbar-expand-md">
+            <div class="container-fluid max-w-container px-margin-mobile" style="margin-left:auto; margin-right:auto;">
+                <div class="d-flex align-items-center gap-4 w-100">
+
+                    <a class="navbar-brand d-flex align-items-center gap-2 mb-0" href="{% url 'core:home' %}">
+                        <img src="{% static 'images/logos/ParoBharo-name.png' %}" alt="ParoBharo"
+                            style="height: 75px; width: auto;">
+                    </a>
+
+                    <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false"
+                        aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="mainNavbar">
+                        <div class="d-md-flex gap-4 align-items-md-center ms-md-4 mb-3 mb-md-0">
+                            <a class="d-block d-md-inline-block nav-link-custom mb-2 mb-md-0"
+                                href="{% url 'core:home' %}">Home</a>
+                            <a class="d-block d-md-inline-block nav-link-custom mb-2 mb-md-0"
+                                href="{% url 'products:shop' %}">Exams</a>
+                            <a class="d-block d-md-inline-block nav-link-active mb-2 mb-md-0"
+                                href="{% url 'products:books' %}">Books</a>
+                            <a class="d-block d-md-inline-block nav-link-custom mb-2 mb-md-0"
+                                href="{% url 'core:home' %}#pricing-section">Pricing</a>
+                            <a class="d-block d-md-inline-block nav-link-custom" href="#">Blog</a>
+                        </div>
+
+                        <div class="d-flex flex-column flex-md-row align-items-md-center gap-3 ms-md-auto mt-3 mt-md-0">
+                            <div
+                                class="d-none d-lg-flex align-items-center bg-surface-container-low px-3 py-2 rounded-pill border border-outline-variant js-search-wrapper">
+                                <i class="bi bi-search text-outline me-2"></i>
+                                <input
+                                    class="form-control form-control-sm border-0 bg-transparent shadow-none js-search-input"
+                                    style="width: 12rem;" type="text" placeholder="Search exams...">
+                            </div>
+                            <a href="{% url 'cart:cart_detail' %}"
+                                class="text-decoration-none text-on-surface-variant p-2 rounded-circle hover-bg-light"
+                                title="Shopping Cart">
+                                <i class="bi bi-cart3 fs-5"></i>
+                            </a>
+                            {% if user.is_authenticated %}
+                            <div class="d-flex gap-3 align-items-center">
+                                <i class="bi bi-bell text-on-surface-variant fs-5" role="button"
+                                    aria-label="Notifications"></i>
+                                <a href="{% url 'dashboard:index' %}"
+                                    class="text-decoration-none text-on-surface-variant fs-4" aria-label="Account">
+                                    <i class="bi bi-person-circle" role="button"></i>
+                                </a>
+                            </div>
+                            {% else %}
+                            <a class="btn d-none d-md-inline-block fw-medium text-primary p-0 text-start text-decoration-none"
+                                href="{% url 'accounts:signin' %}">Sign In</a>
+
+                            <a href="{% url 'accounts:signin' %}"><button class="btn btn-pill-primary"
+                                    type="button">Start Free Trial</button></a>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ==================== Top Navigation Bar (Mobile) ==================== -->
+    <header class="sticky-top bg-surface shadow-sm d-block d-md-none mobile-nav-header">
+        {% if user.is_authenticated %}
+        <!-- Logged In Mobile Header -->
+        <div class="container-fluid py-2 px-margin-mobile">
+            <div class="d-flex align-items-center justify-content-between" style="min-height: 48px;">
+                <!-- Left side: Website Name -->
+                <a class="navbar-brand d-flex align-items-center gap-2 mb-0" href="{% url 'core:home' %}">
+                    <img src="{% static 'images/logos/ParoBharo-name.png' %}" alt="ParoBharo"
+                        style="height: 48px; width: auto;">
+                </a>
+
+                <!-- Right side: Search, Cart & Wishlist icons -->
+                <div class="d-flex align-items-center gap-3 text-on-surface-variant">
+                    <button class="btn p-0 border-0 text-on-surface-variant" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#mobileSearchCollapse" aria-expanded="false"
+                        aria-controls="mobileSearchCollapse">
+                        <i class="bi bi-search fs-5"></i>
+                    </button>
+                    <a href="{% url 'cart:cart_detail' %}" class="text-decoration-none text-on-surface-variant">
+                        <i class="bi bi-cart3 fs-5"></i>
+                    </a>
+                    <a href="#" class="text-decoration-none text-on-surface-variant">
+                        <i class="bi bi-heart fs-5"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Collapsible Mobile Search -->
+        <div class="collapse bg-surface-container-low border-bottom border-outline-variant px-margin-mobile py-2"
+            id="mobileSearchCollapse">
+            <div
+                class="d-flex align-items-center bg-surface px-3 py-2 rounded-pill border border-outline-variant js-search-wrapper">
+                <i class="bi bi-search text-outline me-2"></i>
+                <input class="form-control form-control-sm border-0 bg-transparent shadow-none js-search-input"
+                    type="text" placeholder="Search exams...">
+            </div>
+        </div>
+        {% else %}
+        <!-- Logged Out Mobile Header -->
+        <div class="container-fluid py-2 px-margin-mobile">
+            <div class="d-flex align-items-center justify-content-between" style="min-height: 48px;">
+                <!-- Left side: Website Name -->
+                <a class="navbar-brand d-flex align-items-center gap-2 mb-0" href="{% url 'core:home' %}">
+                    <img src="{% static 'images/logos/ParoBharo-name.png' %}" alt="ParoBharo"
+                        style="height: 48px; width: auto;">
+                </a>
+
+                <!-- Right side: Search, Cart & Auth -->
+                <div class="d-flex align-items-center gap-3">
+                    <button class="btn p-0 border-0 text-on-surface-variant" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#mobileSearchCollapse" aria-expanded="false"
+                        aria-controls="mobileSearchCollapse">
+                        <i class="bi bi-search fs-5"></i>
+                    </button>
+                    <a href="{% url 'cart:cart_detail' %}" class="text-decoration-none text-on-surface-variant">
+                        <i class="bi bi-cart3 fs-5"></i>
+                    </a>
+                    <a class="fw-medium text-primary text-decoration-none" href="{% url 'accounts:signin' %}">Sign In</a>
+                    <button class="btn btn-pill-primary py-1 px-3 text-label-sm" type="button"
+                        style="font-family: inherit;">Start Free Trial</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Collapsible Mobile Search -->
+        <div class="collapse bg-surface-container-low border-bottom border-outline-variant px-margin-mobile py-2"
+            id="mobileSearchCollapse">
+            <div
+                class="d-flex align-items-center bg-surface px-3 py-2 rounded-pill border border-outline-variant js-search-wrapper">
+                <i class="bi bi-search text-outline me-2"></i>
+                <input class="form-control form-control-sm border-0 bg-transparent shadow-none js-search-input"
+                    type="text" placeholder="Search exams...">
+            </div>
+        </div>
+        {% endif %}
+    </header>
+
+    <!-- Bottom Navigation Bar for Mobile -->
+    <div class="mobile-bottom-nav d-flex d-md-none justify-content-around align-items-center fixed-bottom bg-surface border-top border-outline-variant py-2 shadow-lg"
+        style="z-index: 1030;">
+        <a href="{% url 'core:home' %}"
+            class="d-flex flex-column align-items-center text-decoration-none text-on-surface-variant">
+            <i class="bi bi-house-door fs-5"></i>
+            <span class="text-label-sm mt-1" style="font-family: inherit; font-size: 10px;">Home</span>
+        </a>
+        <a href="{% url 'products:shop' %}"
+            class="d-flex flex-column align-items-center text-decoration-none text-on-surface-variant">
+            <i class="bi bi-journal-text fs-5"></i>
+            <span class="text-label-sm mt-1" style="font-family: inherit; font-size: 10px;">Exams</span>
+        </a>
+        <a href="{% url 'products:books' %}"
+            class="d-flex flex-column align-items-center text-decoration-none text-on-surface-variant active-bottom-nav">
+            <i class="bi bi-book fs-5"></i>
+            <span class="text-label-sm mt-1" style="font-family: inherit; font-size: 10px;">Books</span>
+        </a>
+        <a href="#" class="d-flex flex-column align-items-center text-decoration-none text-on-surface-variant">
+            <i class="bi bi-newspaper fs-5"></i>
+            <span class="text-label-sm mt-1" style="font-family: inherit; font-size: 10px;">Blogs</span>
+        </a>
+    </div>
+
+    <!-- ==================== Hero Section ==================== -->
+    <section class="books-hero position-relative overflow-hidden">
+        <div class="books-hero-bg"></div>
+        <div class="max-w-container mx-auto px-margin-mobile position-relative" style="z-index: 2;">
+            <div class="row align-items-center py-5">
+                <div class="col-12 col-lg-7">
+                    <span
+                        class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill bg-white bg-opacity-10 text-white text-label-sm text-uppercase mb-3"
+                        style="width: fit-content; letter-spacing: 0.05em; backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.15);">
+                        <i class="bi bi-book-half"></i>
+                        500+ Study Resources
+                    </span>
+
+                    <h1 class="text-white fw-bold lh-sm mb-3" style="font-size: clamp(2rem, 5vw, 3rem);">
+                        Study Smarter with <br class="d-none d-md-block">
+                        <span class="books-hero-highlight">Expert-Curated Books</span>
+                    </h1>
+
+                    <p class="text-white-50 mb-4" style="max-width: 32rem; font-size: 1.05rem;">
+                        Past papers, comprehensive guides, and solved MCQs for FIA, Punjab Police, CSS, Armed Forces,
+                        and more — all in one place.
+                    </p>
+
+                    <div class="books-hero-search d-flex align-items-center">
+                        <i class="bi bi-search text-on-surface-variant me-2"></i>
+                        <input type="text" id="booksHeroSearch" class="books-hero-search-input"
+                            placeholder="Search by title, subject, or exam..." autocomplete="off">
+                        <button class="btn btn-primary-custom py-2 px-4 ms-2 d-none d-sm-block" type="button"
+                            style="padding: 0.6rem 1.5rem; white-space: nowrap;">Search</button>
+                    </div>
+
+                    <div class="d-flex flex-wrap gap-2 mt-3">
+                        <span class="books-popular-tag" data-filter="FIA">FIA</span>
+                        <span class="books-popular-tag" data-filter="Punjab Police">Punjab Police</span>
+                        <span class="books-popular-tag" data-filter="CSS">CSS</span>
+                        <span class="books-popular-tag" data-filter="General Knowledge">General Knowledge</span>
+                    </div>
+                </div>
+
+                <div class="col-12 col-lg-5 d-none d-lg-flex justify-content-center">
+                    <div class="books-hero-visual">
+                        <div class="books-stack">
+                            <div class="books-stack-item books-stack-1">
+                                <i class="bi bi-shield-lock"></i>
+                                <span>FIA Guide</span>
+                            </div>
+                            <div class="books-stack-item books-stack-2">
+                                <i class="bi bi-mortarboard"></i>
+                                <span>CSS Prep</span>
+                            </div>
+                            <div class="books-stack-item books-stack-3">
+                                <i class="bi bi-flag"></i>
+                                <span>Pak Studies</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== Stats Bar ==================== -->
+    <section class="bg-surface-container-lowest border-bottom border-outline-variant">
+        <div class="max-w-container mx-auto px-margin-mobile">
+            <div class="row text-center py-4 g-3">
+                <div class="col-6 col-md-3">
+                    <div class="stats-item">
+                        <span class="stats-number" data-target="500">0</span><span class="stats-number-suffix">+</span>
+                        <p class="stats-label">Study Books</p>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="stats-item">
+                        <span class="stats-number" data-target="25">0</span><span class="stats-number-suffix">+</span>
+                        <p class="stats-label">Exam Categories</p>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="stats-item">
+                        <span class="stats-number" data-target="10000">0</span><span
+                            class="stats-number-suffix">+</span>
+                        <p class="stats-label">Solved MCQs</p>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="stats-item">
+                        <span class="stats-number" data-target="50000">0</span><span
+                            class="stats-number-suffix">+</span>
+                        <p class="stats-label">Happy Students</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== Category Filter Tabs ==================== -->
+    <section class="py-4 bg-background">
+        <div class="max-w-container mx-auto px-margin-mobile">
+            <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-3">
+                <div>
+                    <h2 class="text-headline-md text-on-background mb-1">Browse Study Materials</h2>
+                    <p class="text-on-surface-variant mb-0">Find the perfect book for your exam preparation</p>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <button class="btn btn-view-toggle active" data-view="grid" aria-label="Grid view">
+                        <i class="bi bi-grid-3x3-gap-fill"></i>
+                    </button>
+                    <button class="btn btn-view-toggle" data-view="list" aria-label="List view">
+                        <i class="bi bi-list-ul"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="category-tabs-wrapper mb-4">
+                <div class="category-tabs" id="categoryTabs">
+                    <button class="category-tab active" data-category="all">
+                        <i class="bi bi-grid-fill"></i> All Books
+                    </button>
+                    <button class="category-tab" data-category="fia">
+                        <i class="bi bi-shield-lock"></i> FIA
+                    </button>
+                    <button class="category-tab" data-category="punjab-police">
+                        <i class="bi bi-shield-fill"></i> Punjab Police
+                    </button>
+                    <button class="category-tab" data-category="css">
+                        <i class="bi bi-mortarboard"></i> CSS
+                    </button>
+                    <button class="category-tab" data-category="piaic">
+                        <i class="bi bi-cpu"></i> PIAIC
+                    </button>
+                    <button class="category-tab" data-category="bitcoin">
+                        <i class="bi bi-currency-bitcoin"></i> BitCoin
+                    </button>
+                    <button class="category-tab" data-category="django">
+                        <i class="bi bi-code-slash"></i> Django
+                    </button>
+                    <button class="category-tab" data-category="armed-forces">
+                        <i class="bi bi-airplane"></i> Armed Forces
+                    </button>
+                    <button class="category-tab" data-category="general-knowledge">
+                        <i class="bi bi-globe-americas"></i> General Knowledge
+                    </button>
+                    <button class="category-tab" data-category="english">
+                        <i class="bi bi-chat-square-text"></i> English
+                    </button>
+                    <button class="category-tab" data-category="mathematics">
+                        <i class="bi bi-calculator"></i> Mathematics
+                    </button>
+                    <button class="category-tab" data-category="islamiat">
+                        <i class="bi bi-book"></i> Islamiat
+                    </button>
+                    <button class="category-tab" data-category="pak-studies">
+                        <i class="bi bi-flag"></i> Pak Studies
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== Books Grid ==================== -->
+    <section class="pb-5 bg-background">
+        <div class="max-w-container mx-auto px-margin-mobile">
+            <div class="row g-4" id="booksGrid">
+
+                <!-- Book Card - BitCoin -->
+                <div class="col-12 col-sm-6 col-lg-4 col-xl-3 book-card-col" data-category="bitcoin"
+                    data-title="BitCoin & Crypto Trading Masterclass">
+                    <div class="book-card">
+                        <div class="book-card-cover book-cover-bitcoin">
+                            <div class="book-card-badge">HOT COURSE</div>
+                            <div class="book-cover-icon">
+                                <i class="bi bi-currency-bitcoin"></i>
+                            </div>
+                            <div class="book-cover-pattern"></div>
+                        </div>
+                        <div class="book-card-body">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <span class="book-category-badge">Crypto</span>
+                                <span class="book-type-badge">Course</span>
+                            </div>
+                            <h3 class="book-card-title">BitCoin & Crypto Trading Masterclass</h3>
+                            <p class="book-card-author">By Pro Traders Community</p>
+
+                            <div class="book-meta-grid">
+                                <div class="book-meta-item">
+                                    <i class="bi bi-journal-text"></i>
+                                    <span>30 Lessons</span>
+                                </div>
+                                <div class="book-meta-item">
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                    <span>4.9 (1.2k)</span>
+                                </div>
+                            </div>
+
+                            <div class="book-card-footer flex-column gap-3 pt-3">
+                                <div class="d-flex align-items-baseline justify-content-between w-100">
+                                    <div class="book-card-price">
+                                        <span class="price-current">Rs. 2,500</span>
+                                        <span class="price-original">Rs. 4,000</span>
+                                    </div>
+                                    <span
+                                        class="badge text-bg-light border border-outline-variant text-on-surface-variant fw-normal">In
+                                        Stock</span>
+                                </div>
+                                <div class="d-flex align-items-center gap-2 w-100">
+                                    <a href="{% url 'products:bitcoin-book' %}"
+                                        class="btn btn-read-now flex-grow-1 text-decoration-none text-center"><i
+                                            class="bi bi-book-half me-1"></i> Read Now</a>
+                                    <button class="btn btn-book-add" type="button" title="Add to Cart"><i
+                                            class="bi bi-cart-plus-fill me-1"></i> Add to Cart</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Book Card - Django -->
+                <div class="col-12 col-sm-6 col-lg-4 col-xl-3 book-card-col" data-category="django"
+                    data-title="Django Web Development Masterclass">
+                    <div class="book-card">
+                        <div class="book-card-cover book-cover-django"
+                            style="background: linear-gradient(135deg, #0c4b33, #092e20);">
+                            <div class="book-card-badge" style="background: #10b981; color: #fff;">HOT COURSE</div>
+                            <div class="book-cover-icon">
+                                <i class="bi bi-code-slash"></i>
+                            </div>
+                            <div class="book-cover-pattern"></div>
+                        </div>
+                        <div class="book-card-body">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <span class="book-category-badge"
+                                    style="background: #e6f4ea; color: #0c4b33;">Python</span>
+                                <span class="book-type-badge">Course</span>
+                            </div>
+                            <h3 class="book-card-title">Django Web Development Masterclass</h3>
+                            <p class="book-card-author">By Python Experts Community</p>
+
+                            <div class="book-meta-grid">
+                                <div class="book-meta-item">
+                                    <i class="bi bi-journal-text"></i>
+                                    <span>25 Lessons</span>
+                                </div>
+                                <div class="book-meta-item">
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                    <span>4.9 (980)</span>
+                                </div>
+                            </div>
+
+                            <div class="book-card-footer flex-column gap-3 pt-3">
+                                <div class="d-flex align-items-baseline justify-content-between w-100">
+                                    <div class="book-card-price">
+                                        <span class="price-current">Rs. 2,800</span>
+                                        <span class="price-original">Rs. 4,500</span>
+                                    </div>
+                                    <span
+                                        class="badge text-bg-light border border-outline-variant text-on-surface-variant fw-normal">In
+                                        Stock</span>
+                                </div>
+                                <div class="d-flex align-items-center gap-2 w-100">
+                                    <a href="{% url 'products:django-book' %}"
+                                        class="btn btn-read-now flex-grow-1 text-decoration-none text-center"><i
+                                            class="bi bi-book-half me-1"></i> Read Now</a>
+                                    <button class="btn btn-book-add" type="button" title="Add to Cart"><i
+                                            class="bi bi-cart-plus-fill me-1"></i> Add to Cart</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Book Card - Django Interview Prep -->
+                <div class="col-12 col-sm-6 col-lg-4 col-xl-3 book-card-col" data-category="django"
+                    data-title="Django Interview Preparation">
+                    <div class="book-card">
+                        <div class="book-card-cover"
+                            style="background: linear-gradient(135deg, #4f46e5, #7c3aed);">
+                            <div class="book-card-badge" style="background: #f59e0b; color: #fff;">INTERVIEW</div>
+                            <div class="book-cover-icon">
+                                <i class="bi bi-briefcase-fill"></i>
+                            </div>
+                            <div class="book-cover-pattern"></div>
+                        </div>
+                        <div class="book-card-body">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <span class="book-category-badge"
+                                    style="background: #eef2ff; color: #4f46e5;">Interview</span>
+                                <span class="book-type-badge">Prep</span>
+                            </div>
+                            <h3 class="book-card-title">Django Interview Preparation</h3>
+                            <p class="book-card-author">By Python Experts Community</p>
+
+                            <div class="book-meta-grid">
+                                <div class="book-meta-item">
+                                    <i class="bi bi-question-circle"></i>
+                                    <span>16 Questions</span>
+                                </div>
+                                <div class="book-meta-item">
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                    <span>4.9 (750)</span>
+                                </div>
+                            </div>
+
+                            <div class="book-card-footer flex-column gap-3 pt-3">
+                                <div class="d-flex align-items-baseline justify-content-between w-100">
+                                    <div class="book-card-price">
+                                        <span class="price-current" style="color: #4f46e5;">FREE</span>
+                                    </div>
+                                    <span
+                                        class="badge text-bg-light border border-outline-variant text-on-surface-variant fw-normal">Available</span>
+                                </div>
+                                <div class="d-flex align-items-center gap-2 w-100">
+                                    <a href="{% url 'products:django-interview' %}"
+                                        class="btn btn-read-now flex-grow-1 text-decoration-none text-center"
+                                        style="background: linear-gradient(135deg, #4f46e5, #7c3aed); border-color: #4f46e5;"><i
+                                            class="bi bi-lightning-fill me-1"></i> Start Prep</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Book Card 1 -->
+                <div class="col-12 col-sm-6 col-lg-4 col-xl-3 book-card-col" data-category="fia"
+                    data-title="FIA Inspector Complete Guide 2024">
+                    <div class="book-card">
+                        <div class="book-card-cover book-cover-fia">
+                            <div class="book-card-badge">BEST SELLER</div>
+                            <div class="book-cover-icon">
+                                <i class="bi bi-shield-lock"></i>
+                            </div>
+                            <div class="book-cover-pattern"></div>
+                        </div>
+                        <div class="book-card-body">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <span class="book-category-badge">FIA</span>
+                                <span class="book-type-badge">Guide</span>
+                            </div>
+                            <h3 class="book-card-title">FIA Inspector Complete Guide 2024</h3>
+                            <p class="book-card-author"><i class="bi bi-person-fill"></i> Prof. Ahmed Khan</p>
+                            <div class="book-card-meta">
+                                <div class="d-flex align-items-center gap-1">
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                    <span class="fw-bold">4.9</span>
+                                    <span class="text-on-surface-variant">(234)</span>
+                                </div>
+                                <span class="book-card-pages"><i class="bi bi-file-earmark-text"></i> 450 Pages</span>
+                            </div>
+                            <div class="book-card-footer flex-column gap-3 pt-3">
+                                <div class="d-flex align-items-baseline justify-content-between w-100">
+                                    <div class="book-card-price">
+                                        <span class="price-current">Rs. 1,200</span>
+                                        <span class="price-original">Rs. 1,800</span>
+                                    </div>
+                                    <span
+                                        class="badge text-bg-light border border-outline-variant text-on-surface-variant fw-normal">In
+                                        Stock</span>
+                                </div>
+                                <div class="d-flex align-items-center gap-2 w-100">
+                                    <button class="btn btn-read-now flex-grow-1" type="button"><i
+                                            class="bi bi-book-half me-1"></i> Read Now</button>
+                                    <button class="btn btn-book-add" type="button" title="Add to Cart"><i
+                                            class="bi bi-cart-plus-fill me-1"></i> Add to Cart</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Book Card 2 -->
+                <div class="col-12 col-sm-6 col-lg-4 col-xl-3 book-card-col" data-category="punjab-police"
+                    data-title="Punjab Police SI & ASI Solved Papers">
+                    <div class="book-card">
+                        <div class="book-card-cover book-cover-police">
+                            <div class="book-card-badge badge-new">NEW</div>
+                            <div class="book-cover-icon">
+                                <i class="bi bi-shield-fill"></i>
+                            </div>
+                            <div class="book-cover-pattern"></div>
+                        </div>
+                        <div class="book-card-body">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <span class="book-category-badge badge-police">Punjab Police</span>
+                                <span class="book-type-badge">Past Papers</span>
+                            </div>
+                            <h3 class="book-card-title">Punjab Police SI & ASI Solved Papers</h3>
+                            <p class="book-card-author"><i class="bi bi-person-fill"></i> Dr. Saleem Akhtar</p>
+                            <div class="book-card-meta">
+                                <div class="d-flex align-items-center gap-1">
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                    <span class="fw-bold">4.8</span>
+                                    <span class="text-on-surface-variant">(189)</span>
+                                </div>
+                                <span class="book-card-pages"><i class="bi bi-file-earmark-text"></i> 380 Pages</span>
+                            </div>
+                            <div class="book-card-footer flex-column gap-3 pt-3">
+                                <div class="d-flex align-items-baseline justify-content-between w-100">
+                                    <div class="book-card-price">
+                                        <span class="price-current">Rs. 950</span>
+                                        <span class="price-original">Rs. 1,400</span>
+                                    </div>
+                                    <span
+                                        class="badge text-bg-light border border-outline-variant text-on-surface-variant fw-normal">In
+                                        Stock</span>
+                                </div>
+                                <div class="d-flex align-items-center gap-2 w-100">
+                                    <button class="btn btn-read-now flex-grow-1" type="button"><i
+                                            class="bi bi-book-half me-1"></i> Read Now</button>
+                                    <button class="btn btn-book-add" type="button" title="Add to Cart"><i
+                                            class="bi bi-cart-plus-fill me-1"></i> Add to Cart</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Book Card 3 -->
+                <div class="col-12 col-sm-6 col-lg-4 col-xl-3 book-card-col" data-category="css"
+                    data-title="CSS Compulsory Subjects MCQs">
+                    <div class="book-card">
+                        <div class="book-card-cover book-cover-css">
+                            <div class="book-card-badge badge-popular">POPULAR</div>
+                            <div class="book-cover-icon">
+                                <i class="bi bi-mortarboard"></i>
+                            </div>
+                            <div class="book-cover-pattern"></div>
+                        </div>
+                        <div class="book-card-body">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <span class="book-category-badge badge-css">CSS</span>
+                                <span class="book-type-badge">MCQs</span>
+                            </div>
+                            <h3 class="book-card-title">CSS Compulsory Subjects MCQs</h3>
+                            <p class="book-card-author"><i class="bi bi-person-fill"></i> Shahid Nazar</p>
+                            <div class="book-card-meta">
+                                <div class="d-flex align-items-center gap-1">
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                    <span class="fw-bold">4.7</span>
+                                    <span class="text-on-surface-variant">(312)</span>
+                                </div>
+                                <span class="book-card-pages"><i class="bi bi-file-earmark-text"></i> 620 Pages</span>
+                            </div>
+                            <div class="book-card-footer flex-column gap-3 pt-3">
+                                <div class="d-flex align-items-baseline justify-content-between w-100">
+                                    <div class="book-card-price">
+                                        <span class="price-current">Rs. 1,500</span>
+                                        <span class="price-original">Rs. 2,200</span>
+                                    </div>
+                                    <span
+                                        class="badge text-bg-light border border-outline-variant text-on-surface-variant fw-normal">In
+                                        Stock</span>
+                                </div>
+                                <div class="d-flex align-items-center gap-2 w-100">
+                                    <button class="btn btn-read-now flex-grow-1" type="button"><i
+                                            class="bi bi-book-half me-1"></i> Read Now</button>
+                                    <button class="btn btn-book-add" type="button" title="Add to Cart"><i
+                                            class="bi bi-cart-plus-fill me-1"></i> Add to Cart</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Book Card 4 -->
+                <div class="col-12 col-sm-6 col-lg-4 col-xl-3 book-card-col" data-category="armed-forces"
+                    data-title="ISSB Complete Preparation Guide">
+                    <div class="book-card">
+                        <div class="book-card-cover book-cover-armed">
+                            <div class="book-cover-icon">
+                                <i class="bi bi-airplane"></i>
+                            </div>
+                            <div class="book-cover-pattern"></div>
+                        </div>
+                        <div class="book-card-body">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <span class="book-category-badge badge-armed">Armed Forces</span>
+                                <span class="book-type-badge">Guide</span>
+                            </div>
+                            <h3 class="book-card-title">ISSB Complete Preparation Guide</h3>
+                            <p class="book-card-author"><i class="bi bi-person-fill"></i> Col. (R) Hamid Ali</p>
+                            <div class="book-card-meta">
+                                <div class="d-flex align-items-center gap-1">
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                    <span class="fw-bold">4.9</span>
+                                    <span class="text-on-surface-variant">(178)</span>
+                                </div>
+                                <span class="book-card-pages"><i class="bi bi-file-earmark-text"></i> 520 Pages</span>
+                            </div>
+                            <div class="book-card-footer flex-column gap-3 pt-3">
+                                <div class="d-flex align-items-baseline justify-content-between w-100">
+                                    <div class="book-card-price">
+                                        <span class="price-current">Rs. 1,350</span>
+                                        <span class="price-original">Rs. 1,900</span>
+                                    </div>
+                                    <span
+                                        class="badge text-bg-light border border-outline-variant text-on-surface-variant fw-normal">In
+                                        Stock</span>
+                                </div>
+                                <div class="d-flex align-items-center gap-2 w-100">
+                                    <button class="btn btn-read-now flex-grow-1" type="button"><i
+                                            class="bi bi-book-half me-1"></i> Read Now</button>
+                                    <button class="btn btn-book-add" type="button" title="Add to Cart"><i
+                                            class="bi bi-cart-plus-fill me-1"></i> Add to Cart</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Book Card 5 -->
+                <div class="col-12 col-sm-6 col-lg-4 col-xl-3 book-card-col" data-category="general-knowledge"
+                    data-title="General Knowledge Encyclopedia 2024">
+                    <div class="book-card">
+                        <div class="book-card-cover book-cover-gk">
+                            <div class="book-card-badge">UPDATED</div>
+                            <div class="book-cover-icon">
+                                <i class="bi bi-globe-americas"></i>
+                            </div>
+                            <div class="book-cover-pattern"></div>
+                        </div>
+                        <div class="book-card-body">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <span class="book-category-badge badge-gk">General Knowledge</span>
+                                <span class="book-type-badge">Encyclopedia</span>
+                            </div>
+                            <h3 class="book-card-title">General Knowledge Encyclopedia 2024</h3>
+                            <p class="book-card-author"><i class="bi bi-person-fill"></i> Dr. Irfan Hussain</p>
+                            <div class="book-card-meta">
+                                <div class="d-flex align-items-center gap-1">
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                    <span class="fw-bold">4.6</span>
+                                    <span class="text-on-surface-variant">(456)</span>
+                                </div>
+                                <span class="book-card-pages"><i class="bi bi-file-earmark-text"></i> 780 Pages</span>
+                            </div>
+                            <div class="book-card-footer flex-column gap-3 pt-3">
+                                <div class="d-flex align-items-baseline justify-content-between w-100">
+                                    <div class="book-card-price">
+                                        <span class="price-current">Rs. 1,800</span>
+                                        <span class="price-original">Rs. 2,500</span>
+                                    </div>
+                                    <span
+                                        class="badge text-bg-light border border-outline-variant text-on-surface-variant fw-normal">In
+                                        Stock</span>
+                                </div>
+                                <div class="d-flex align-items-center gap-2 w-100">
+                                    <button class="btn btn-read-now flex-grow-1" type="button"><i
+                                            class="bi bi-book-half me-1"></i> Read Now</button>
+                                    <button class="btn btn-book-add" type="button" title="Add to Cart"><i
+                                            class="bi bi-cart-plus-fill me-1"></i> Add to Cart</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Book Card 6 -->
+                <div class="col-12 col-sm-6 col-lg-4 col-xl-3 book-card-col" data-category="english"
+                    data-title="English Grammar & Composition for Competitive Exams">
+                    <div class="book-card">
+                        <div class="book-card-cover book-cover-english">
+                            <div class="book-cover-icon">
+                                <i class="bi bi-chat-square-text"></i>
+                            </div>
+                            <div class="book-cover-pattern"></div>
+                        </div>
+                        <div class="book-card-body">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <span class="book-category-badge badge-english">English</span>
+                                <span class="book-type-badge">Grammar</span>
+                            </div>
+                            <h3 class="book-card-title">English Grammar & Composition for Competitive Exams</h3>
+                            <p class="book-card-author"><i class="bi bi-person-fill"></i> Prof. Wren & Martin</p>
+                            <div class="book-card-meta">
+                                <div class="d-flex align-items-center gap-1">
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                    <span class="fw-bold">4.8</span>
+                                    <span class="text-on-surface-variant">(567)</span>
+                                </div>
+                                <span class="book-card-pages"><i class="bi bi-file-earmark-text"></i> 340 Pages</span>
+                            </div>
+                            <div class="book-card-footer flex-column gap-3 pt-3">
+                                <div class="d-flex align-items-baseline justify-content-between w-100">
+                                    <div class="book-card-price">
+                                        <span class="price-current">Rs. 800</span>
+                                        <span class="price-original">Rs. 1,200</span>
+                                    </div>
+                                    <span
+                                        class="badge text-bg-light border border-outline-variant text-on-surface-variant fw-normal">In
+                                        Stock</span>
+                                </div>
+                                <div class="d-flex align-items-center gap-2 w-100">
+                                    <button class="btn btn-read-now flex-grow-1" type="button"><i
+                                            class="bi bi-book-half me-1"></i> Read Now</button>
+                                    <button class="btn btn-book-add" type="button" title="Add to Cart"><i
+                                            class="bi bi-cart-plus-fill me-1"></i> Add to Cart</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Book Card 7 -->
+                <div class="col-12 col-sm-6 col-lg-4 col-xl-3 book-card-col" data-category="mathematics"
+                    data-title="Quantitative Aptitude & Reasoning">
+                    <div class="book-card">
+                        <div class="book-card-cover book-cover-math">
+                            <div class="book-card-badge badge-popular">POPULAR</div>
+                            <div class="book-cover-icon">
+                                <i class="bi bi-calculator"></i>
+                            </div>
+                            <div class="book-cover-pattern"></div>
+                        </div>
+                        <div class="book-card-body">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <span class="book-category-badge badge-math">Mathematics</span>
+                                <span class="book-type-badge">Aptitude</span>
+                            </div>
+                            <h3 class="book-card-title">Quantitative Aptitude & Reasoning</h3>
+                            <p class="book-card-author"><i class="bi bi-person-fill"></i> R.S. Aggarwal</p>
+                            <div class="book-card-meta">
+                                <div class="d-flex align-items-center gap-1">
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                    <span class="fw-bold">4.7</span>
+                                    <span class="text-on-surface-variant">(389)</span>
+                                </div>
+                                <span class="book-card-pages"><i class="bi bi-file-earmark-text"></i> 560 Pages</span>
+                            </div>
+                            <div class="book-card-footer flex-column gap-3 pt-3">
+                                <div class="d-flex align-items-baseline justify-content-between w-100">
+                                    <div class="book-card-price">
+                                        <span class="price-current">Rs. 1,100</span>
+                                        <span class="price-original">Rs. 1,600</span>
+                                    </div>
+                                    <span
+                                        class="badge text-bg-light border border-outline-variant text-on-surface-variant fw-normal">In
+                                        Stock</span>
+                                </div>
+                                <div class="d-flex align-items-center gap-2 w-100">
+                                    <button class="btn btn-read-now flex-grow-1" type="button"><i
+                                            class="bi bi-book-half me-1"></i> Read Now</button>
+                                    <button class="btn btn-book-add" type="button" title="Add to Cart"><i
+                                            class="bi bi-cart-plus-fill me-1"></i> Add to Cart</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Book Card 8 -->
+                <div class="col-12 col-sm-6 col-lg-4 col-xl-3 book-card-col" data-category="islamiat"
+                    data-title="Islamiat Objective & Subjective for All Exams">
+                    <div class="book-card">
+                        <div class="book-card-cover book-cover-islamiat">
+                            <div class="book-cover-icon">
+                                <i class="bi bi-book"></i>
+                            </div>
+                            <div class="book-cover-pattern"></div>
+                        </div>
+                        <div class="book-card-body">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <span class="book-category-badge badge-islamiat">Islamiat</span>
+                                <span class="book-type-badge">Objective</span>
+                            </div>
+                            <h3 class="book-card-title">Islamiat Objective & Subjective for All Exams</h3>
+                            <p class="book-card-author"><i class="bi bi-person-fill"></i> Hafiz Karim Awan</p>
+                            <div class="book-card-meta">
+                                <div class="d-flex align-items-center gap-1">
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                    <span class="fw-bold">4.5</span>
+                                    <span class="text-on-surface-variant">(210)</span>
+                                </div>
+                                <span class="book-card-pages"><i class="bi bi-file-earmark-text"></i> 290 Pages</span>
+                            </div>
+                            <div class="book-card-footer flex-column gap-3 pt-3">
+                                <div class="d-flex align-items-baseline justify-content-between w-100">
+                                    <div class="book-card-price">
+                                        <span class="price-current">Rs. 750</span>
+                                        <span class="price-original">Rs. 1,100</span>
+                                    </div>
+                                    <span
+                                        class="badge text-bg-light border border-outline-variant text-on-surface-variant fw-normal">In
+                                        Stock</span>
+                                </div>
+                                <div class="d-flex align-items-center gap-2 w-100">
+                                    <button class="btn btn-read-now flex-grow-1" type="button"><i
+                                            class="bi bi-book-half me-1"></i> Read Now</button>
+                                    <button class="btn btn-book-add" type="button" title="Add to Cart"><i
+                                            class="bi bi-cart-plus-fill me-1"></i> Add to Cart</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- No Results Message -->
+            <div class="no-results-message text-center py-5 d-none" id="noResults">
+                <i class="bi bi-search display-4 text-on-surface-variant mb-3 d-block"></i>
+                <h3 class="text-headline-md text-on-surface mb-2">No Books Found</h3>
+                <p class="text-on-surface-variant">Try a different search term or category filter.</p>
+            </div>
+
+            <!-- Load More -->
+            <div class="text-center mt-5">
+                <button class="btn btn-outline-custom px-5 py-3" type="button" id="loadMoreBtn">
+                    <i class="bi bi-arrow-down-circle me-2"></i> Load More Books
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== Featured Bundles ==================== -->
+    <section class="py-5 px-margin-mobile bg-surface-container-low">
+        <div class="max-w-container mx-auto" style="margin-left:auto; margin-right:auto;">
+            <div class="text-center mb-5">
+                <h2 class="text-headline-md text-on-background mb-3">Study Bundles — Save More</h2>
+                <p class="text-on-surface-variant mb-0">Curated sets of books packaged together for maximum exam
+                    readiness</p>
+            </div>
+
+            <div class="row g-4 justify-content-center">
+                <!-- Bundle 1 -->
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="bundle-card">
+                        <div class="bundle-card-header">
+                            <span class="bundle-save-tag"><i class="bi bi-tag-fill"></i> SAVE 30%</span>
+                            <div class="bundle-icon">
+                                <i class="bi bi-shield-lock"></i>
+                            </div>
+                            <h3 class="bundle-title">FIA Complete Pack</h3>
+                            <p class="bundle-desc">Everything you need to crack FIA Inspector & SI exams</p>
+                        </div>
+                        <div class="bundle-card-body">
+                            <ul class="bundle-items">
+                                <li><i class="bi bi-check-circle-fill text-secondary"></i> FIA Inspector Complete Guide
+                                </li>
+                                <li><i class="bi bi-check-circle-fill text-secondary"></i> FIA Past Papers (2015–2024)
+                                </li>
+                                <li><i class="bi bi-check-circle-fill text-secondary"></i> General Knowledge
+                                    Encyclopedia</li>
+                                <li><i class="bi bi-check-circle-fill text-secondary"></i> English Grammar & Composition
+                                </li>
+                            </ul>
+                            <div class="bundle-pricing">
+                                <div>
+                                    <span class="bundle-price-current">Rs. 3,150</span>
+                                    <span class="bundle-price-original">Rs. 4,500</span>
+                                </div>
+                                <button class="btn btn-primary-custom py-2 px-4" type="button">Get Bundle</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bundle 2 -->
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="bundle-card bundle-card-featured">
+                        <div class="bundle-featured-badge">MOST POPULAR</div>
+                        <div class="bundle-card-header">
+                            <span class="bundle-save-tag"><i class="bi bi-tag-fill"></i> SAVE 35%</span>
+                            <div class="bundle-icon">
+                                <i class="bi bi-star-fill"></i>
+                            </div>
+                            <h3 class="bundle-title">Ultimate Competitive Pack</h3>
+                            <p class="bundle-desc">The all-in-one collection for any government job exam</p>
+                        </div>
+                        <div class="bundle-card-body">
+                            <ul class="bundle-items">
+                                <li><i class="bi bi-check-circle-fill"></i> General Knowledge Encyclopedia</li>
+                                <li><i class="bi bi-check-circle-fill"></i> English Grammar & Composition</li>
+                                <li><i class="bi bi-check-circle-fill"></i> Quantitative Aptitude & Reasoning</li>
+                                <li><i class="bi bi-check-circle-fill"></i> Islamiat Objective & Subjective</li>
+                                <li><i class="bi bi-check-circle-fill"></i> Pakistan Studies Complete</li>
+                            </ul>
+                            <div class="bundle-pricing">
+                                <div>
+                                    <span class="bundle-price-current">Rs. 4,200</span>
+                                    <span class="bundle-price-original">Rs. 6,500</span>
+                                </div>
+                                <button class="btn btn-primary-custom py-2 px-4" type="button">Get Bundle</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bundle 3 -->
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="bundle-card">
+                        <div class="bundle-card-header">
+                            <span class="bundle-save-tag"><i class="bi bi-tag-fill"></i> SAVE 25%</span>
+                            <div class="bundle-icon">
+                                <i class="bi bi-airplane"></i>
+                            </div>
+                            <h3 class="bundle-title">Armed Forces Pack</h3>
+                            <p class="bundle-desc">Complete ISSB and initial test preparation kit</p>
+                        </div>
+                        <div class="bundle-card-body">
+                            <ul class="bundle-items">
+                                <li><i class="bi bi-check-circle-fill text-secondary"></i> ISSB Complete Preparation
+                                    Guide</li>
+                                <li><i class="bi bi-check-circle-fill text-secondary"></i> Intelligence Tests & Aptitude
+                                </li>
+                                <li><i class="bi bi-check-circle-fill text-secondary"></i> English Vocabulary Builder
+                                </li>
+                            </ul>
+                            <div class="bundle-pricing">
+                                <div>
+                                    <span class="bundle-price-current">Rs. 2,600</span>
+                                    <span class="bundle-price-original">Rs. 3,500</span>
+                                </div>
+                                <button class="btn btn-primary-custom py-2 px-4" type="button">Get Bundle</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== CTA Section ==================== -->
+    <section class="py-5 bg-background">
+        <div class="max-w-container mx-auto px-margin-mobile">
+            <div class="cta-card">
+                <div class="cta-card-content">
+                    <div class="cta-icon-wrap">
+                        <i class="bi bi-download"></i>
+                    </div>
+                    <h2 class="text-headline-md text-white mb-3">Get Free Sample Chapters</h2>
+                    <p class="text-white-50 mb-4" style="max-width: 28rem;">Sign up today and receive free sample
+                        chapters from our top-selling books. No credit card required.</p>
+                    <div class="d-flex flex-column flex-sm-row gap-3">
+                        <input type="email" class="cta-email-input" placeholder="Enter your email address">
+                        <button class="btn btn-cta" type="button">Get Free Samples</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== Footer ==================== -->
+    <footer
+        class="w-100 py-stack-lg px-margin-desktop bg-surface-container-highest border-top border-outline-variant mt-auto">
+        <div class="max-w-container mx-auto" style="margin-left:auto; margin-right:auto;">
+
+            <div class="row g-4 mb-5">
+                <div class="col-12 col-md-3">
+                    <a href="{% url 'core:home' %}" class="d-flex align-items-center gap-2 mb-3 text-decoration-none">
+                        <img src="{% static 'images/logos/ParoBharo-logo.png' %}" alt="ParoBharo Logo"
+                            style="height: 46px; width: auto;">
+                        <img src="{% static 'images/logos/ParoBharo-name.png' %}" alt="ParoBharo"
+                            style="height: 36px; width: auto;">
+                    </a>
+                    <p class="text-body-md text-on-surface-variant">The definitive platform for academic and
+                        professional excellence in competitive examinations.</p>
+                    <div class="d-flex gap-3">
+                        <i class="bi bi-emoji-smile text-on-surface-variant fs-5" role="button"
+                            aria-label="Social link"></i>
+                        <i class="bi bi-globe text-on-surface-variant fs-5" role="button" aria-label="Website"></i>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-3">
+                    <h5 class="fw-bold text-on-surface mb-3">Company</h5>
+                    <ul class="list-unstyled text-on-surface-variant">
+                        <li class="mb-2"><a class="text-decoration-none text-on-surface-variant" href="#">About Us</a>
+                        </li>
+                        <li class="mb-2"><a class="text-decoration-none text-on-surface-variant" href="#">Careers</a>
+                        </li>
+                        <li class="mb-2"><a class="text-decoration-none text-on-surface-variant" href="#">Contact</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="col-12 col-md-3">
+                    <h5 class="fw-bold text-on-surface mb-3">Resources</h5>
+                    <ul class="list-unstyled text-on-surface-variant">
+                        <li class="mb-2"><a class="text-decoration-none text-on-surface-variant" href="#">Books</a></li>
+                        <li class="mb-2"><a class="text-decoration-none text-on-surface-variant"
+                                href="{% url 'products:shop' %}">Exams</a></li>
+                        <li class="mb-2"><a class="text-decoration-none text-on-surface-variant" href="#">Blog</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-12 col-md-3">
+                    <h5 class="fw-bold text-on-surface mb-3">Newsletter</h5>
+                    <p class="text-body-md text-on-surface-variant mb-3">Get the latest exam updates directly.</p>
+                    <div class="input-group">
+                        <input type="email" class="form-control bg-surface-container-low border-outline-variant"
+                            placeholder="Your email" aria-label="Your email">
+                        <button class="btn btn-primary-custom rounded-0 rounded-end" type="button"
+                            style="padding: 0.5rem 1rem;">Join</button>
+                    </div>
+                </div>
+            </div>
+
+            <div
+                class="pt-4 border-top border-outline-variant d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
+                <p class="text-label-sm text-on-surface-variant mb-0">© 2024 ExamPrep. Premium Academic Excellence.</p>
+                <div class="d-flex gap-4 text-label-sm text-on-surface-variant">
+                    <a class="text-decoration-none text-on-surface-variant" href="#">Privacy</a>
+                    <a class="text-decoration-none text-on-surface-variant" href="#">Terms</a>
+                    <a class="text-decoration-none text-on-surface-variant" href="#">Resources</a>
+                </div>
+            </div>
+
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5.3 JS bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="{% static 'js/Books/index.js' %}"></script>
+</body>
+
+</html>

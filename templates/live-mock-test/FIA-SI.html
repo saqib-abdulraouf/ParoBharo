@@ -1,0 +1,229 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Live Mock Test | ExamPrep</title>
+
+    <!-- Bootstrap 5.3 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom design system CSS -->
+    <link href="{% static 'css/live-mock-test/FIA-SI.css' %}" rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- ============================= Prepare Countdown Overlay ============================= -->
+    <div id="prep-overlay" class="prep-overlay-backdrop">
+        <div class="prep-overlay-card">
+            <div class="prep-timer-wrap">
+                <span id="prep-countdown-val">10</span>
+            </div>
+            <h2 class="prep-title">Prepare Yourself!</h2>
+            <p class="prep-subtitle">The test is about to start. Take a deep breath and get ready.</p>
+        </div>
+    </div>
+
+    <!-- ============================= Top Navigation ============================= -->
+    <header class="app-header" style="position: relative;">
+        <div class="d-flex align-items-center gap-3">
+            <a class="brand-name text-decoration-none" href="{% url 'core:home' %}">ExamPrep</a>
+            <div class="header-divider d-none d-md-block"></div>
+            <div>
+                <h1 class="exam-title">Advanced Physics: Quantum Mechanics II</h1>
+                <p class="exam-subtitle">
+                    <span class="material-symbols-outlined">history_edu</span>
+                    Final Certification Test
+                </p>
+            </div>
+        </div>
+
+        <div class="d-flex align-items-center gap-4">
+            <!-- Timer -->
+            <div class="timer-box" id="timer-container">
+                <span class="material-symbols-outlined fill">timer</span>
+                <div class="d-flex flex-column">
+                    <span class="timer-caption">Time Remaining</span>
+                    <span class="timer-value timer-glow" id="countdown">01:42:15</span>
+                </div>
+            </div>
+
+            <!-- Premium Controls: Fullscreen, Dark Mode, Profile -->
+            <div class="d-flex align-items-center gap-2">
+                <button type="button" class="btn btn-light btn-sm rounded-circle p-2" id="fullscreen-btn" aria-label="Toggle Fullscreen" style="border: none; background: rgba(0, 0, 0, 0.05);">
+                    <span class="material-symbols-outlined d-block">fullscreen</span>
+                </button>
+                <button type="button" class="btn btn-light btn-sm rounded-circle p-2" id="darkmode-btn" aria-label="Toggle Dark Mode" style="border: none; background: rgba(0, 0, 0, 0.05);">
+                    <span class="material-symbols-outlined d-block" id="dark-mode-icon">light_mode</span>
+                </button>
+                <div class="ms-2 d-none d-sm-block">
+                    <img alt="Profile" class="rounded-circle" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAHsLfl_YriM__9pA1R39heHj38wvQCZW4QP0BvzVQ8dIDOT_cz-owhlpQQNI1EZT7kyhf2RA4rYZ1qmdt4tryyyBdYLZM0J9L7q5OeYOaLQm7MK2_UiUkubkQ8Mr1zas2IYxWiRIz5tqMHmlJNU0L682hGMGQbil3sK84oyMZEaiNRZeeQA6YTSqcCaajzuav56yJnS4RuToILTDJfyQ3l8djjCzyujfC4Ed3CRkmFvYBCJ6C_NcJrjushT6IcVts-5DfxZQSqfug" width="32"/>
+                </div>
+            </div>
+        </div>
+        <!-- Blue Bottom Line Progress Bar -->
+        <div class="header-progress-bar" id="header-progress-bar"></div>
+    </header>
+
+    <!-- ================================= Main ==================================== -->
+    <main class="app-main">
+
+        <!-- ------------------------- Sidebar: Question Palette ------------------------- -->
+        <aside class="app-sidebar">
+            <div class="mb-5 d-flex align-items-center justify-content-between">
+                <h3 class="navigator-title mb-0">Question Navigator</h3>
+                <button type="button" class="icon-btn" id="sidebar-close-btn" aria-label="Close Navigator">
+                    <span class="material-symbols-outlined">chevron_left</span>
+                </button>
+            </div>
+            <div class="question-palette" id="question-palette"></div>
+
+            <div class="sidebar-legend">
+                <h4 class="legend-title">Legend</h4>
+                <div class="legend-list">
+                    <div class="legend-item">
+                        <div class="legend-swatch answered"></div>
+                        <span class="legend-label">Answered</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-swatch flagged"></div>
+                        <span class="legend-label">Flagged for Review</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-swatch not-visited"></div>
+                        <span class="legend-label">Not Visited</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- --------------------------- Content: Question Display --------------------------- -->
+        <section class="app-content">
+            <div class="content-wrapper">
+
+                <!-- Question Header -->
+                <div class="question-meta-row">
+                    <div>
+                        <span class="question-eyebrow">Question 24 of 50</span>
+                        <div class="tag-row">
+                            <span class="tag-chip">Physics</span>
+                            <span class="tag-chip tag-hard">Hard</span>
+                        </div>
+                    </div>
+                    <div class="points-row">
+                        <span class="font-label-sm">Points: <span class="points-value">4.0</span></span>
+                        <span class="points-divider">|</span>
+                        <span class="font-label-sm">Negative: <span class="negative-value">-1.0</span></span>
+                    </div>
+                </div>
+
+                <!-- Question Card -->
+                <div class="question-card">
+                    <p class="question-text">
+                        The Schrödinger equation for a particle of mass <em>m</em> moving in a potential <em>V(x)</em>
+                        in one dimension is given by. If the potential is a symmetric double-well, which of the
+                        following statements correctly describes the parity of the ground state wavefunction?
+                    </p>
+
+                    <!-- Illustration -->
+                    <div class="question-illustration">
+                        <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuB2iFYV-WQ9uPd3i68ABgcvr8x-eFa73Jwg8d9IlNoJsddzDrG1H9lnQzH4S_P8IczAzsHhfcdzRbZLD-_U0xJf82tSF5948SzCD7qt0GcoUfSGACB_kgtwkmeBDslgRM2atZnScEWWyHNzQwRnfP29AbORfxFK8wywCCLCCk5mtggeTlS_n8HiOwpitgNJwZJN0kmC-q9JOKxduonm7dndWCU8iErASeDKrS53gu7qSDmQEAjEEbnU12iK6QvVy8Kwg-VMBaCsjaM"
+                            alt="Diagram of a symmetric double-well potential with the ground state wavefunction overlaid, showing the barrier height and the two minima.">
+                        <button type="button" class="zoom-btn" aria-label="Zoom illustration">
+                            <span class="material-symbols-outlined">zoom_in</span>
+                        </button>
+                    </div>
+
+                    <!-- Answer Options -->
+                    <div class="answer-list" role="radiogroup" aria-label="Answer options for question 24">
+
+                        <label class="answer-option">
+                            <input class="answer-radio" type="radio" name="question_24" value="A">
+                            <div class="answer-body">
+                                <span>The ground state is always antisymmetric with respect to the center of the
+                                    well.</span>
+                            </div>
+                            <span class="answer-letter">A</span>
+                        </label>
+
+                        <label class="answer-option">
+                            <input class="answer-radio" type="radio" name="question_24" value="B" checked>
+                            <div class="answer-body">
+                                <span>The ground state is always symmetric, having even parity and no nodes.</span>
+                            </div>
+                            <span class="answer-letter">B</span>
+                        </label>
+
+                        <label class="answer-option">
+                            <input class="answer-radio" type="radio" name="question_24" value="C">
+                            <div class="answer-body">
+                                <span>The ground state parity depends on the height of the central barrier.</span>
+                            </div>
+                            <span class="answer-letter">C</span>
+                        </label>
+
+                        <label class="answer-option">
+                            <input class="answer-radio" type="radio" name="question_24" value="D">
+                            <div class="answer-body">
+                                <span>The parity is undefined because the system is inherently degenerate.</span>
+                            </div>
+                            <span class="answer-letter">D</span>
+                        </label>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Sticky Bottom Actions -->
+    <div class="action-bar" style="position: relative;">
+        <!-- Blue Top Line Progress Bar (matches header bottom line) -->
+        <div class="footer-progress-bar" id="footer-progress-bar"></div>
+        <div class="action-bar-inner">
+            <div class="btn-group-left">
+                <button type="button" class="btn btn-outline-premium btn-premium text-danger border-danger-subtle" id="flag-btn">
+                    <span class="material-symbols-outlined">flag</span>
+                    <span class="btn-text-hidden">Mark for Review</span>
+                </button>
+            </div>
+            <div class="btn-group-right">
+                <button type="button" class="btn btn-primary-premium btn-premium px-5" id="save-next-btn">
+                    Save &amp; Next
+                    <span class="material-symbols-outlined">arrow_forward</span>
+                </button>
+                <button type="button" class="btn btn-dark btn-premium" id="finish-test-btn">
+                    Finish <span class="btn-text-hidden">Test</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================= Submit Confirmation Modal ============================= -->
+    <div class="exam-modal-backdrop d-none" id="submit-modal">
+        <div class="exam-modal-content" id="modal-content">
+            <div class="text-center">
+                <div class="modal-icon-wrap">
+                    <span class="material-symbols-outlined">assignment_turned_in</span>
+                </div>
+                <h2 class="modal-title">Finish Exam?</h2>
+                <p class="modal-text">You have answered 24 out of 50 questions. Are you sure you want to submit your
+                    test for evaluation?</p>
+                <div class="modal-btn-row">
+                    <button type="button" class="btn-modal btn-modal-outline" id="modal-go-back-btn">Go Back</button>
+                    <button type="button" class="btn-modal btn-modal-primary">Submit Now</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap Bundle (Popper included) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="{% static 'js/live-mock-test/FIA-SI.js' %}"></script>
+</body>
+
+</html>

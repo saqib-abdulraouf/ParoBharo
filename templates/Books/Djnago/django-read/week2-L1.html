@@ -1,0 +1,208 @@
+{% extends "Books/Djnago/django-read/index.html" %}
+{% load static %}
+
+{% block title %}Week 02 — Lesson 1: Models banana, migrations{% endblock %}
+
+{% block content %}
+                <div class="breadcrumb">
+                    <a href="{% url 'products:django-book' %}">Django Course</a>
+                    <span class="sep">›</span>
+                    <span>Week 2</span>
+                    <span class="sep">›</span>
+                    <span>Lesson 1</span>
+                </div>
+
+                <div class="lesson-header">
+                    <span class="tag">📖 Week 2 · Lesson 1</span>
+                    <h1>Models banana, migrations</h1>
+                    <div class="sub"><i class="fas fa-database" style="color:#0c4b33;margin-right:4px;"></i> The heart of Django — database tables as Python classes</div>
+                </div>
+
+                <div class="reading-content">
+
+                    <p>
+                        Ab hum Django ke <strong>sabse important part</strong> pe aate hain — <strong>Models</strong>.
+                        Yahan se real <strong>CRUD</strong> development shuru hoti hai.
+                    </p>
+
+                    <!-- MODELS KYA HAIN -->
+                    <h2>
+                        <span class="step-number" style="background:#4b4dd8;"><i class="fas fa-question" style="font-size:14px;"></i></span> Models Kya Hain?
+                    </h2>
+
+                    <div class="info-box" style="border-left-color:#10b981;background:rgba(16,185,129,0.06);">
+                        <i class="fas fa-lightbulb" style="color:#10b981;margin-right:8px;"></i>
+                        <strong>Definition:</strong> Model ek <strong>Python class</strong> hoti hai jo <strong>database table</strong> ko represent karti hai.
+                        Har class attribute ek <strong>column</strong> banta hai.
+                        <br /><br />
+                        <strong>Django ORM</strong> (Object-Relational Mapping) hume SQL likhne ki zaroorat nahi deta —
+                        hum <strong>Python code</strong> se database handle karte hain.
+                    </div>
+
+                    <!-- STEP 15 -->
+                    <h2>
+                        <span class="step-number">15</span> Task Model Banayein
+                    </h2>
+
+                    <p>
+                        <code style="background:rgba(0,0,0,0.06);padding:2px 6px;border-radius:4px;">tasks/models.py</code> file kholein aur ye code likhein:
+                    </p>
+
+                    <div class="code-block">
+                        <div class="code-label"><i class="fab fa-python"></i> tasks/models.py</div>
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                        <pre><code class="language-python">from django.db import models
+
+class Task(models.Model):
+    title = models.CharField(max_length=200)
+    description = models.TextField(blank=True)
+    completed = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title</code></pre>
+                    </div>
+
+                    <!-- MODEL EXPLANATION TABLE -->
+                    <h3 style="font-size:18px;font-weight:600;margin:20px 0 10px;color:#111c2d;">Har Line Samjhein:</h3>
+
+                    <div class="model-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Field</th>
+                                    <th>Type</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>title</code></td>
+                                    <td><code>CharField(max_length=200)</code></td>
+                                    <td>Chhoti text (title ke liye), <strong>max_length</strong> zaroori hai</td>
+                                </tr>
+                                <tr>
+                                    <td><code>description</code></td>
+                                    <td><code>TextField(blank=True)</code></td>
+                                    <td>Lambi text (description ke liye), <code>blank=True</code> matlab ye field khali chhoda ja sakta hai</td>
+                                </tr>
+                                <tr>
+                                    <td><code>completed</code></td>
+                                    <td><code>BooleanField(default=False)</code></td>
+                                    <td>True/False value (<strong>default False</strong> rakha hai)</td>
+                                </tr>
+                                <tr>
+                                    <td><code>created_at</code></td>
+                                    <td><code>DateTimeField(auto_now_add=True)</code></td>
+                                    <td>Jab task banega, uska time <strong>automatically</strong> save ho jayega</td>
+                                </tr>
+                                <tr>
+                                    <td><code>__str__</code></td>
+                                    <td><code>return self.title</code></td>
+                                    <td>Django admin panel mein task ka naam <strong>readable</strong> dikhane ke liye (warna "Task object (1)" jaisa ajeeb dikhta hai)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- STEP 16 -->
+                    <h2>
+                        <span class="step-number">16</span> Migration Banayein
+                    </h2>
+
+                    <p>
+                        Model banane ka matlab ye nahi ke database mein table ban gayi — Django ko batana padta hai
+                        <strong>"migrate"</strong> karke:
+                    </p>
+
+                    <div class="terminal-command">
+                        <span class="prompt">$</span>
+                        <span class="command">python manage.py makemigrations</span>
+                    </div>
+
+                    <div class="info-box">
+                        <i class="fas fa-info-circle" style="color:#0c4b33;margin-right:8px;"></i>
+                        <strong>Samjhein:</strong> Ye command ek <strong>migration file</strong> banayegi (jaise blueprint)
+                        jo batati hai database mein <strong>kya changes</strong> karne hain.
+                    </div>
+
+                    <!-- STEP 17 -->
+                    <h2>
+                        <span class="step-number">17</span> Migration Apply Karein
+                    </h2>
+
+                    <div class="terminal-command">
+                        <span class="prompt">$</span>
+                        <span class="command">python manage.py migrate</span>
+                    </div>
+
+                    <div class="info-box" style="border-left-color:#10b981;background:rgba(16,185,129,0.06);">
+                        <i class="fas fa-check-circle" style="color:#10b981;margin-right:8px;"></i>
+                        <strong>Result:</strong> Ye actual database (SQLite, jo Django default use karta hai) mein
+                        <strong>table create</strong> karega.
+                    </div>
+
+                    <!-- CHECKLIST -->
+                    <div class="success-box" style="background:rgba(12,75,51,0.06);border-left-color:#0c4b33;">
+                        <div class="success-title" style="color:#0c4b33;">
+                            <i class="fas fa-clipboard-check"></i> Practice Checklist
+                        </div>
+                        <p>
+                            <strong>✅ Step 1:</strong> <code>tasks/models.py</code> mein <code>Task</code> model likha?
+                            <br />
+                            <strong>✅ Step 2:</strong> <code>python manage.py makemigrations</code> chalaya?
+                            <br />
+                            <strong>✅ Step 3:</strong> <code>python manage.py migrate</code> chalaya?
+                            <br /><br />
+                            <strong style="color:#0c4b33;">🎯 Next Step:</strong> Django Admin panel setup karenge jahan aap ye data visually manage kar sakte hain! 🚀
+                        </p>
+                    </div>
+
+                </div>
+
+                <!-- Navigation Footer -->
+                <div class="lesson-nav-bar">
+                    <div class="d-flex align-items-center justify-content-between gap-3">
+                        <a href="{% url 'products:django-week1-l5' %}" class="btn-lesson-nav btn-lesson-prev">
+                            <i class="bi bi-arrow-left me-2"></i>
+                            <span>Previous (W1 L5)</span>
+                        </a>
+
+                        <div class="d-none d-sm-block text-center">
+                            <span class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill font-monospace" style="font-size: 0.8rem; font-weight:500;">
+                                Week 2 • Lesson 1 of 4
+                            </span>
+                        </div>
+
+                        <a href="{% url 'products:django-week2-l2' %}" class="btn-lesson-nav btn-lesson-next">
+                            <span>Next Lesson (L2)</span>
+                            <i class="bi bi-arrow-right ms-2"></i>
+                        </a>
+                    </div>
+                </div>
+{% endblock %}
+
+{% block right_sidebar %}
+            <div class="right-section">
+                <h4>📊 Your Progress</h4>
+                <div class="progress-ring">
+                    <div class="circle"><span>25%</span></div>
+                    <div class="info">
+                        <strong>1/4</strong> Week 2 done
+                    </div>
+                </div>
+            </div>
+
+            <div class="right-section">
+                <h4>⚡ Quick Actions</h4>
+                <div class="quick-actions">
+                    <button class="quick-btn"><span class="icon">⭐</span> Bookmark</button>
+                    <button class="quick-btn"><span class="icon">📝</span> Add Note</button>
+                </div>
+            </div>
+
+            <div class="right-section" style="flex:1;">
+                <h4>📝 Your Notes</h4>
+                <textarea class="notes-area" id="djangoNotes" placeholder="Write your notes here..."></textarea>
+            </div>
+{% endblock %}

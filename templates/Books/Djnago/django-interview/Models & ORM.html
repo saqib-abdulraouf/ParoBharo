@@ -1,0 +1,121 @@
+<!-- SECTION 2: MODELS & ORM -->
+<section class="section">
+    <div class="section-header">
+        <h2>Models &amp; Database ORM</h2>
+    </div>
+
+    <div class="question-grid">
+
+        <!-- Q5 -->
+        <div class="question-card">
+            <div class="q-header">
+                <span class="q-num-badge">Q05</span>
+                <div class="q-title-group">
+                    <div class="q-title"><code class="code-inline">ForeignKey</code> aur <code class="code-inline">ManyToManyField</code> mein farq?</div>
+                    <span class="q-tag">Relationships</span>
+                </div>
+            </div>
+            <div class="q-actions">
+                <button type="button" class="btn-q-action btn-view-ans" onclick="toggleAns(this)">
+                    <i class="bi bi-eye"></i> View Answer
+                </button>
+                <button type="button" class="btn-q-action btn-view-example" onclick="toggleExample(this)">
+                    <i class="bi bi-code-square"></i> Practical Example
+                </button>
+            </div>
+            <div class="ans-box d-none">
+                <p>
+                    • <code class="code-inline">ForeignKey</code>: <strong>One-to-Many</strong> relationship create karta hai (e.g. Ek Category ke multiple Tasks ho sakte hain).<br />
+                    • <code class="code-inline">ManyToManyField</code>: <strong>Many-to-Many</strong> relationship create karta hai (e.g. Ek Task ke multiple Tags ho sakte hain, aur ek Tag multiple Tasks par apply ho sakta hai).
+                </p>
+            </div>
+            <div class="example-box d-none">
+                <strong>📌 Real Project Application:</strong> In Task Manager, we defined <code class="code-inline">category = models.ForeignKey(Category)</code> and <code class="code-inline">tags = models.ManyToManyField(Tag)</code>.
+            </div>
+        </div>
+
+        <!-- Q6 -->
+        <div class="question-card">
+            <div class="q-header">
+                <span class="q-num-badge">Q06</span>
+                <div class="q-title-group">
+                    <div class="q-title"><code class="code-inline">on_delete=CASCADE</code> ka kya matlab hai?</div>
+                    <span class="q-tag">Integrity</span>
+                </div>
+            </div>
+            <div class="q-actions">
+                <button type="button" class="btn-q-action btn-view-ans" onclick="toggleAns(this)">
+                    <i class="bi bi-eye"></i> View Answer
+                </button>
+                <button type="button" class="btn-q-action btn-view-example" onclick="toggleExample(this)">
+                    <i class="bi bi-code-square"></i> Practical Example
+                </button>
+            </div>
+            <div class="ans-box d-none">
+                <p>
+                    <code class="code-inline">on_delete=CASCADE</code> ensure karta hai ke jab parent model instance (e.g. Category) delete hoga, to us par dependent tamam child model instances (e.g. Tasks) automatically database se remove ho jayenge to prevent orphan data.
+                </p>
+            </div>
+            <div class="example-box d-none">
+                <strong>📌 Real Project Application:</strong> Deleting a Category automatically cascades and purges all associated Tasks belonging to that category.
+            </div>
+        </div>
+
+        <!-- Q7 -->
+        <div class="question-card">
+            <div class="q-header">
+                <span class="q-num-badge">Q07</span>
+                <div class="q-title-group">
+                    <div class="q-title"><code class="code-inline">select_related</code> aur <code class="code-inline">prefetch_related</code> mein kya farq hai?</div>
+                    <span class="q-tag">Optimization</span>
+                </div>
+            </div>
+            <div class="q-actions">
+                <button type="button" class="btn-q-action btn-view-ans" onclick="toggleAns(this)">
+                    <i class="bi bi-eye"></i> View Answer
+                </button>
+                <button type="button" class="btn-q-action btn-view-example" onclick="toggleExample(this)">
+                    <i class="bi bi-code-square"></i> Practical Example
+                </button>
+            </div>
+            <div class="ans-box d-none">
+                <p>
+                    Dono database query performance optimization ke liye use hote hain (N+1 query problem resolve karne ke liye):<br /><br />
+                    • <code class="code-inline">select_related</code>: SQL <strong>JOIN</strong> perform karta hai (Single-valued relationships jaise ForeignKey &amp; OneToOne).<br />
+                    • <code class="code-inline">prefetch_related</code>: Alag SQL queries run karke Python layer par relationships join karta hai (Multi-valued relationships jaise ManyToMany &amp; Reverse FKs).
+                </p>
+            </div>
+            <div class="example-box d-none">
+                <strong>📌 Real Project Application:</strong> Using <code class="code-inline">Task.objects.select_related('category').prefetch_related('tags')</code> reduced page query count from 25+ SQL queries down to just 2 queries.
+            </div>
+        </div>
+
+        <!-- Q8 -->
+        <div class="question-card">
+            <div class="q-header">
+                <span class="q-num-badge">Q08</span>
+                <div class="q-title-group">
+                    <div class="q-title"><code class="code-inline">__str__</code> method model mein kyun define karte hain?</div>
+                    <span class="q-tag">Representation</span>
+                </div>
+            </div>
+            <div class="q-actions">
+                <button type="button" class="btn-q-action btn-view-ans" onclick="toggleAns(this)">
+                    <i class="bi bi-eye"></i> View Answer
+                </button>
+                <button type="button" class="btn-q-action btn-view-example" onclick="toggleExample(this)">
+                    <i class="bi bi-code-square"></i> Practical Example
+                </button>
+            </div>
+            <div class="ans-box d-none">
+                <p>
+                    <code class="code-inline">__str__</code> method Model instance ki human-readable string representation return karta hai. Is ke bina Django Admin Panel aur Python Shell mein objects generic output jaise <code class="code-inline">&lt;Task object (1)&gt;</code> display karte hain.
+                </p>
+            </div>
+            <div class="example-box d-none">
+                <strong>📌 Real Project Application:</strong> Defining <code class="code-inline">def __str__(self): return self.title</code> displays the actual task title directly in the Django Admin interface.
+            </div>
+        </div>
+
+    </div>
+</section>

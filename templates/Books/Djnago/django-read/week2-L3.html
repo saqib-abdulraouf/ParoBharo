@@ -1,0 +1,344 @@
+{% extends "Books/Djnago/django-read/index.html" %}
+{% load static %}
+
+{% block title %}Week 02 — Lesson 3: Full CRUD Implementation{% endblock %}
+
+{% block content %}
+                <div class="breadcrumb">
+                    <a href="{% url 'products:django-book' %}">Django Course</a>
+                    <span class="sep">›</span>
+                    <span>Week 2</span>
+                    <span class="sep">›</span>
+                    <span>Lesson 3</span>
+                </div>
+
+                <div class="lesson-header">
+                    <span class="tag">📖 Week 2 · Lesson 3</span>
+                    <h1>Full CRUD Implementation</h1>
+                    <div class="sub"><i class="fas fa-code" style="color:#0c4b33;margin-right:4px;"></i> Create, Read, Update, Delete — Complete Task Manager from browser</div>
+                </div>
+
+                <div class="reading-content">
+                    {% verbatim %}
+
+                    <p>
+                        CRUD functionality apni website pe (browser se) implement karna. 
+                        Ye <strong>4 parts</strong> mein hoga: <strong>Create, Read, Update, Delete</strong>.
+                    </p>
+
+                    <!-- CRUD OVERVIEW TABLE -->
+                    <div class="crud-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width:80px;">Operation</th>
+                                    <th>View Function</th>
+                                    <th>URL Pattern</th>
+                                    <th>Template</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="crud-label read">READ</span></td>
+                                    <td><code>task_list</code></td>
+                                    <td><code>/</code></td>
+                                    <td><code>task_list.html</code></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="crud-label create">CREATE</span></td>
+                                    <td><code>task_create</code></td>
+                                    <td><code>/create/</code></td>
+                                    <td><code>task_form.html</code></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="crud-label update">UPDATE</span></td>
+                                    <td><code>task_update</code></td>
+                                    <td><code>/&lt;id&gt;/update/</code></td>
+                                    <td><code>task_form.html</code></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="crud-label delete">DELETE</span></td>
+                                    <td><code>task_delete</code></td>
+                                    <td><code>/&lt;id&gt;/delete/</code></td>
+                                    <td><code>task_confirm_delete.html</code></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- STEP 22 -->
+                    <h2>
+                        <span class="step-number">22</span> List View (Read — Sab Tasks Dikhana)
+                    </h2>
+
+                    <p>
+                        <code style="background:rgba(0,0,0,0.06);padding:2px 6px;border-radius:4px;">tasks/views.py</code> mein <code>home</code> function ko update karein:
+                    </p>
+
+                    <div class="code-block">
+                        <div class="code-label"><i class="fab fa-python"></i> tasks/views.py</div>
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                        <pre><code class="language-python">from django.shortcuts import render, redirect, get_object_or_404
+from .models import Task
+
+def task_list(request):
+    tasks = Task.objects.all()
+    return render(request, 'tasks/task_list.html', {'tasks': tasks})</code></pre>
+                    </div>
+
+                    <p>
+                        <code style="background:rgba(0,0,0,0.06);padding:2px 6px;border-radius:4px;">tasks/templates/tasks/task_list.html</code> banayein:
+                    </p>
+
+                    <div class="html-snippet">
+                        <div class="code-label"><i class="fab fa-html5"></i> tasks/templates/tasks/task_list.html</div>
+                        <button class="copy-btn" onclick="copyHtmlCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                        <pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Task Manager&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;My Tasks&lt;/h1&gt;
+    &lt;a href="{% url 'task_create' %}"&gt;+ Add New Task&lt;/a&gt;
+    &lt;ul&gt;
+        {% for task in tasks %}
+            &lt;li&gt;
+                {{ task.title }} - {% if task.completed %}✅{% else %}❌{% endif %}
+                &lt;a href="{% url 'task_update' task.id %}"&gt;Edit&lt;/a&gt;
+                &lt;a href="{% url 'task_delete' task.id %}"&gt;Delete&lt;/a&gt;
+            &lt;/li&gt;
+        {% empty %}
+            &lt;li&gt;Koi task nahi hai abhi.&lt;/li&gt;
+        {% endfor %}
+    &lt;/ul&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+                    </div>
+
+                    <div class="info-box">
+                        <i class="fas fa-info-circle" style="color:#0c4b33;margin-right:8px;"></i>
+                        <strong>Samjhein:</strong> 
+                        <code>{% for %}</code> template mein <strong>Python jaisa loop</strong> hai. 
+                        <code>{% url 'name' %}</code> URL ko <strong>naam se generate</strong> karta hai (hardcode nahi karna padta).
+                    </div>
+
+                    <!-- STEP 23 -->
+                    <h2>
+                        <span class="step-number">23</span> Create View
+                    </h2>
+
+                    <p>
+                        <code style="background:rgba(0,0,0,0.06);padding:2px 6px;border-radius:4px;">tasks/views.py</code> mein add karein:
+                    </p>
+
+                    <div class="code-block">
+                        <div class="code-label"><i class="fab fa-python"></i> tasks/views.py</div>
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                        <pre><code class="language-python">def task_create(request):
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        description = request.POST.get('description')
+        Task.objects.create(title=title, description=description)
+        return redirect('task_list')
+    return render(request, 'tasks/task_form.html')</code></pre>
+                    </div>
+
+                    <p>
+                        <code style="background:rgba(0,0,0,0.06);padding:2px 6px;border-radius:4px;">tasks/templates/tasks/task_form.html</code> banayein:
+                    </p>
+
+                    <div class="html-snippet">
+                        <div class="code-label"><i class="fab fa-html5"></i> tasks/templates/tasks/task_form.html</div>
+                        <button class="copy-btn" onclick="copyHtmlCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                        <pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Add Task&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Add New Task&lt;/h1&gt;
+    &lt;form method="POST"&gt;
+        {% csrf_token %}
+        &lt;label&gt;Title:&lt;/label&gt;&lt;br&gt;
+        &lt;input type="text" name="title" required&gt;&lt;br&gt;
+        &lt;label&gt;Description:&lt;/label&gt;&lt;br&gt;
+        &lt;textarea name="description"&gt;&lt;/textarea&gt;&lt;br&gt;
+        &lt;button type="submit"&gt;Save&lt;/button&gt;
+    &lt;/form&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+                    </div>
+
+                    <div class="info-box" style="border-left-color:#10b981;background:rgba(16,185,129,0.06);">
+                        <i class="fas fa-lightbulb" style="color:#10b981;margin-right:8px;"></i>
+                        <strong>Samjhein:</strong> 
+                        <code>{% csrf_token %}</code> Django ka <strong>security feature</strong> hai — har form mein zaroori hai warna error aayega.
+                        <br /><br />
+                        <code>request.method == 'POST'</code> check karta hai form submit hua ya sirf page load hui.
+                    </div>
+
+                    <!-- STEP 24 -->
+                    <h2>
+                        <span class="step-number">24</span> Update View
+                    </h2>
+
+                    <div class="code-block">
+                        <div class="code-label"><i class="fab fa-python"></i> tasks/views.py</div>
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                        <pre><code class="language-python">def task_update(request, pk):
+    task = get_object_or_404(Task, pk=pk)
+    if request.method == 'POST':
+        task.title = request.POST.get('title')
+        task.description = request.POST.get('description')
+        task.save()
+        return redirect('task_list')
+    return render(request, 'tasks/task_form.html', {'task': task})</code></pre>
+                    </div>
+
+                    <p>
+                        <code style="background:rgba(0,0,0,0.06);padding:2px 6px;border-radius:4px;">task_form.html</code> ko thoda update karein taake edit ke waqt purani values bhi dikhein:
+                    </p>
+
+                    <div class="html-snippet">
+                        <div class="code-label"><i class="fab fa-html5"></i> tasks/templates/tasks/task_form.html (Updated)</div>
+                        <button class="copy-btn" onclick="copyHtmlCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                        <pre><code class="language-html">&lt;input type="text" name="title" value="{{ task.title|default:'' }}" required&gt;&lt;br&gt;
+&lt;label&gt;Description:&lt;/label&gt;&lt;br&gt;
+&lt;textarea name="description"&gt;{{ task.description|default:'' }}&lt;/textarea&gt;&lt;br&gt;</code></pre>
+                    </div>
+
+                    <!-- STEP 25 -->
+                    <h2>
+                        <span class="step-number">25</span> Delete View
+                    </h2>
+
+                    <div class="code-block">
+                        <div class="code-label"><i class="fab fa-python"></i> tasks/views.py</div>
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                        <pre><code class="language-python">def task_delete(request, pk):
+    task = get_object_or_404(Task, pk=pk)
+    if request.method == 'POST':
+        task.delete()
+        return redirect('task_list')
+    return render(request, 'tasks/task_confirm_delete.html', {'task': task})</code></pre>
+                    </div>
+
+                    <p>
+                        <code style="background:rgba(0,0,0,0.06);padding:2px 6px;border-radius:4px;">tasks/templates/tasks/task_confirm_delete.html</code>:
+                    </p>
+
+                    <div class="html-snippet">
+                        <div class="code-label"><i class="fab fa-html5"></i> tasks/templates/tasks/task_confirm_delete.html</div>
+                        <button class="copy-btn" onclick="copyHtmlCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                        <pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;body&gt;
+    &lt;h1&gt;Delete "{{ task.title }}"?&lt;/h1&gt;
+    &lt;form method="POST"&gt;
+        {% csrf_token %}
+        &lt;button type="submit"&gt;Yes, Delete&lt;/button&gt;
+        &lt;a href="{% url 'task_list' %}"&gt;Cancel&lt;/a&gt;
+    &lt;/form&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+                    </div>
+
+                    <!-- STEP 26 -->
+                    <h2>
+                        <span class="step-number">26</span> Sab URLs Connect Karein
+                    </h2>
+
+                    <p>
+                        <code style="background:rgba(0,0,0,0.06);padding:2px 6px;border-radius:4px;">tasks/urls.py</code> ko replace karein:
+                    </p>
+
+                    <div class="code-block">
+                        <div class="code-label"><i class="fas fa-link"></i> tasks/urls.py</div>
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                        <pre><code class="language-python">from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.task_list, name='task_list'),
+    path('create/', views.task_create, name='task_create'),
+    path('&lt;int:pk&gt;/update/', views.task_update, name='task_update'),
+    path('&lt;int:pk&gt;/delete/', views.task_delete, name='task_delete'),
+]</code></pre>
+                    </div>
+
+                    <!-- SUMMARY -->
+                    <div class="success-box">
+                        <div class="success-title">
+                            <i class="fas fa-check-circle"></i> ✅ Summary — What We Built
+                        </div>
+                        <p>
+                            <strong>📋 List View (READ):</strong> Sab tasks dikhana — <code>task_list</code>
+                            <br />
+                            <strong>➕ Create View (CREATE):</strong> Naya task add karna — <code>task_create</code>
+                            <br />
+                            <strong>✏️ Update View (UPDATE):</strong> Task edit karna — <code>task_update</code>
+                            <br />
+                            <strong>🗑️ Delete View (DELETE):</strong> Task delete karna — <code>task_delete</code>
+                            <br />
+                            <strong>🔗 URLs:</strong> Sab views ko URLs se connect karna
+                        </p>
+                    </div>
+
+                    <div class="info-box" style="border-left-color:#4b4dd8;background:rgba(75,77,216,0.04);">
+                        <i class="fas fa-rocket" style="color:#4b4dd8;margin-right:8px;"></i>
+                        <strong>Congratulations! 🎉</strong> 
+                        Aap ne <strong>complete CRUD</strong> application bana li hai! 
+                        <br /><br />
+                        Ye <strong>Django ka core</strong> hai — ab aap kisi bhi project mein CRUD implement kar sakte hain!
+                    </div>
+
+                    {% endverbatim %}
+                </div>
+
+                <!-- Navigation Footer -->
+                <div class="lesson-nav-bar">
+                    <div class="d-flex align-items-center justify-content-between gap-3">
+                        <a href="{% url 'products:django-week2-l2' %}" class="btn-lesson-nav btn-lesson-prev">
+                            <i class="bi bi-arrow-left me-2"></i>
+                            <span>Previous (L2)</span>
+                        </a>
+
+                        <div class="d-none d-sm-block text-center">
+                            <span class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill font-monospace" style="font-size: 0.8rem; font-weight:500;">
+                                Week 2 • Lesson 3 of 4
+                            </span>
+                        </div>
+
+                        <a href="{% url 'products:django-week2-l4' %}" class="btn-lesson-nav btn-lesson-next">
+                            <span>Next Lesson (L4)</span>
+                            <i class="bi bi-arrow-right ms-2"></i>
+                        </a>
+                    </div>
+                </div>
+{% endblock %}
+
+{% block right_sidebar %}
+            <div class="right-section">
+                <h4>📊 Your Progress</h4>
+                <div class="progress-ring">
+                    <div class="circle"><span>75%</span></div>
+                    <div class="info">
+                        <strong>3/4</strong> Week 2 done
+                    </div>
+                </div>
+            </div>
+
+            <div class="right-section">
+                <h4>⚡ Quick Actions</h4>
+                <div class="quick-actions">
+                    <button class="quick-btn"><span class="icon">⭐</span> Bookmark</button>
+                    <button class="quick-btn"><span class="icon">📝</span> Add Note</button>
+                </div>
+            </div>
+
+            <div class="right-section" style="flex:1;">
+                <h4>📝 Your Notes</h4>
+                <textarea class="notes-area" id="djangoNotes" placeholder="Write your notes here..."></textarea>
+            </div>
+{% endblock %}

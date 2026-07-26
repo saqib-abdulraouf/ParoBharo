@@ -1,0 +1,1239 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="hi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trading Course - Lesson</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet" />
+
+    <!-- Bootstrap 5.3 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Custom design system CSS -->
+    <link href="{% static 'css/home/home.css' %}" rel="stylesheet">
+
+    <style>
+        /* ===== RESET & BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f9f9ff;
+            color: #111c2d;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* ===== APP LAYOUT ===== */
+        .app {
+            display: flex;
+            flex: 1;
+            height: calc(100vh - 72px);
+            overflow: hidden;
+        }
+
+        /* ===== LEFT SIDEBAR ===== */
+        .sidebar-left {
+            width: 320px;
+            min-width: 320px;
+            background: #ffffff;
+            border-right: 1px solid #d8e3fb;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: visible !important;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .sidebar-left.collapsed {
+            width: 0;
+            min-width: 0;
+            border-right: none;
+        }
+
+        .sidebar-left.collapsed .sidebar-header,
+        .sidebar-left.collapsed .sidebar-scroll {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 0.2s ease, visibility 0.2s ease;
+        }
+
+        .sidebar-toggle-arrow {
+            position: absolute;
+            top: 50%;
+            right: -14px;
+            transform: translateY(-50%);
+            width: 28px;
+            height: 28px;
+            background: #ffffff;
+            border: 1px solid #c7d7fe;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+            color: #4f46e5;
+            font-size: 13px;
+            z-index: 120;
+            transition: all 0.25s ease;
+            padding: 0;
+        }
+
+        .sidebar-toggle-arrow:hover {
+            background: #4f46e5;
+            color: #ffffff;
+            border-color: #4f46e5;
+            transform: translateY(-50%) scale(1.1);
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
+
+        .sidebar-left.collapsed .sidebar-toggle-arrow {
+            right: -28px;
+        }
+
+        .sidebar-header {
+            padding: 20px 20px 12px;
+            border-bottom: 1px solid #e7eeff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .sidebar-header h2 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #111c2d;
+        }
+
+        .sidebar-header .badge {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            font-weight: 500;
+            background: #4f46e5;
+            color: #ffffff;
+            padding: 2px 10px;
+            border-radius: 9999px;
+        }
+
+        .sidebar-scroll {
+            flex: 1;
+            overflow-y: auto;
+            padding: 8px 12px 20px;
+        }
+
+        .sidebar-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .sidebar-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .sidebar-scroll::-webkit-scrollbar-thumb {
+            background: #c7c4d8;
+            border-radius: 9999px;
+        }
+
+        /* Module group */
+        .module-group {
+            margin-bottom: 4px;
+        }
+
+        .module-toggle {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 12px;
+            background: transparent;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            color: #111c2d;
+            transition: background 0.15s ease;
+            text-align: left;
+        }
+
+        .module-toggle:hover {
+            background: #f0f3ff;
+        }
+
+        .module-toggle .arrow {
+            font-size: 12px;
+            color: #777587;
+            transition: transform 0.25s ease;
+            margin-left: 8px;
+        }
+
+        .module-toggle .arrow.open {
+            transform: rotate(90deg);
+        }
+
+        .module-lessons {
+            overflow: hidden;
+            max-height: 0;
+            transition: max-height 0.3s ease, opacity 0.25s ease;
+            opacity: 0;
+            padding-left: 8px;
+        }
+
+        .module-lessons.open {
+            max-height: 800px;
+            opacity: 1;
+        }
+
+        .lesson-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 7px 12px 7px 20px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 400;
+            color: #464555;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            position: relative;
+        }
+
+        .lesson-item:hover {
+            background: #f0f3ff;
+            color: #111c2d;
+        }
+
+        .lesson-item.active {
+            background: #e7eeff;
+            color: #3525cd;
+            font-weight: 500;
+        }
+
+        .lesson-item .num {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: #777587;
+            min-width: 24px;
+        }
+
+        .lesson-item.active .num {
+            color: #3525cd;
+        }
+
+        .lesson-item .check {
+            margin-left: auto;
+            color: #006c49;
+            font-size: 14px;
+        }
+
+        /* ===== TOGGLE BUTTON (overlay) ===== */
+        .toggle-btn {
+            position: fixed;
+            top: 16px;
+            left: 16px;
+            z-index: 100;
+            background: #ffffff;
+            border: 1px solid #d8e3fb;
+            border-radius: 8px;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 18px;
+            color: #111c2d;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            transition: all 0.2s ease;
+            display: none;
+        }
+
+        .toggle-btn:hover {
+            background: #f0f3ff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .toggle-btn.visible {
+            display: flex;
+        }
+
+        /* ===== CENTER CONTENT ===== */
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 32px 48px 48px;
+            background: #f9f9ff;
+        }
+
+        .main-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .main-content::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .main-content::-webkit-scrollbar-thumb {
+            background: #c7c4d8;
+            border-radius: 9999px;
+        }
+
+        .content-container {
+            max-width: 780px;
+            margin: 0 auto;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #777587;
+            margin-bottom: 20px;
+            font-weight: 400;
+        }
+
+        .breadcrumb span {
+            color: #111c2d;
+            font-weight: 500;
+        }
+
+        .breadcrumb .sep {
+            color: #c7c4d8;
+        }
+
+        /* Lesson header */
+        .lesson-header {
+            margin-bottom: 28px;
+        }
+
+        .lesson-header .tag {
+            display: inline-block;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            font-weight: 500;
+            color: #3525cd;
+            background: #e7eeff;
+            padding: 2px 12px;
+            border-radius: 9999px;
+            margin-bottom: 10px;
+            letter-spacing: 0.3px;
+        }
+
+        .lesson-header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+            color: #111c2d;
+            margin-bottom: 6px;
+        }
+
+        .lesson-header .sub {
+            font-size: 16px;
+            color: #464555;
+            font-weight: 400;
+        }
+
+        /* Reading content */
+        .reading-content {
+            font-size: 17px;
+            line-height: 1.8;
+            color: #111c2d;
+        }
+
+        .reading-content p {
+            margin-bottom: 18px;
+        }
+
+        .reading-content .highlight-box {
+            background: #f0f3ff;
+            border-left: 4px solid #4f46e5;
+            padding: 18px 24px;
+            border-radius: 0 8px 8px 0;
+            margin: 24px 0;
+        }
+
+        .reading-content .highlight-box strong {
+            color: #3525cd;
+        }
+
+        .reading-content h2 {
+            font-size: 20px;
+            font-weight: 600;
+            margin: 30px 0 14px;
+            color: #111c2d;
+        }
+
+        /* Roadmap grid */
+        .roadmap-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin: 20px 0 24px;
+        }
+
+        .roadmap-card {
+            background: #ffffff;
+            border: 1px solid #e7eeff;
+            border-radius: 12px;
+            padding: 16px 18px;
+            transition: all 0.2s ease;
+        }
+
+        .roadmap-card:hover {
+            border-color: #4f46e5;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.06);
+        }
+
+        .roadmap-card .phase {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            font-weight: 500;
+            color: #4f46e5;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .roadmap-card .title {
+            font-weight: 600;
+            font-size: 15px;
+            color: #111c2d;
+        }
+
+        .roadmap-card .desc {
+            font-size: 13px;
+            color: #464555;
+            margin-top: 4px;
+            line-height: 1.5;
+        }
+
+        /* ===== RIGHT SIDEBAR ===== */
+        .sidebar-right {
+            width: 260px;
+            min-width: 260px;
+            background: #ffffff;
+            border-left: 1px solid #d8e3fb;
+            padding: 24px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            overflow-y: auto;
+        }
+
+        .sidebar-right::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .sidebar-right::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .sidebar-right::-webkit-scrollbar-thumb {
+            background: #c7c4d8;
+            border-radius: 9999px;
+        }
+
+        .right-section h4 {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #777587;
+            margin-bottom: 12px;
+        }
+
+        /* Progress */
+        .progress-ring {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .progress-ring .circle {
+            width: 52px;
+            height: 52px;
+            border-radius: 9999px;
+            background: conic-gradient(#4f46e5 0deg 216deg, #e7eeff 216deg 360deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 15px;
+            font-weight: 600;
+            color: #111c2d;
+            position: relative;
+        }
+
+        .progress-ring .circle::after {
+            content: '';
+            width: 40px;
+            height: 40px;
+            background: #ffffff;
+            border-radius: 9999px;
+            position: absolute;
+        }
+
+        .progress-ring .circle span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .progress-ring .info {
+            font-size: 13px;
+            color: #464555;
+            line-height: 1.4;
+        }
+
+        .progress-ring .info strong {
+            color: #111c2d;
+        }
+
+        /* Quick actions */
+        .quick-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .quick-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            background: #f9f9ff;
+            border: 1px solid #e7eeff;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            font-weight: 500;
+            color: #111c2d;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .quick-btn:hover {
+            background: #f0f3ff;
+            border-color: #4f46e5;
+        }
+
+        .quick-btn .icon {
+            font-size: 18px;
+        }
+
+        /* Notes */
+        .notes-area {
+            background: #f9f9ff;
+            border: 1px solid #e7eeff;
+            border-radius: 8px;
+            padding: 12px 14px;
+            min-height: 80px;
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            color: #464555;
+            resize: vertical;
+            width: 100%;
+        }
+
+        .notes-area:focus {
+            outline: 2px solid #4f46e5;
+            outline-offset: 2px;
+            border-color: transparent;
+        }
+
+        .notes-area::placeholder {
+            color: #a8a6b8;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1200px) {
+            .sidebar-right {
+                width: 220px;
+                min-width: 220px;
+                padding: 20px 16px;
+            }
+
+            .main-content {
+                padding: 24px 32px 40px;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .sidebar-right {
+                display: none;
+            }
+
+            .sidebar-left {
+                width: 280px;
+                min-width: 280px;
+            }
+
+            .main-content {
+                padding: 20px 24px 32px;
+            }
+
+            .roadmap-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar-left {
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100vh;
+                width: 300px;
+                min-width: 300px;
+                z-index: 200;
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+                box-shadow: 0 8px 40px rgba(0, 0, 0, 0.12);
+                border-right: none;
+            }
+
+            .sidebar-left.mobile-open {
+                transform: translateX(0);
+            }
+
+            .sidebar-left.collapsed {
+                transform: translateX(-100%);
+            }
+
+            .toggle-btn {
+                display: flex !important;
+            }
+
+            .main-content {
+                padding: 16px 16px 32px;
+                padding-top: 68px;
+            }
+
+            .content-container {
+                max-width: 100%;
+            }
+
+            .lesson-header h1 {
+                font-size: 24px;
+            }
+
+            .reading-content {
+                font-size: 16px;
+            }
+
+            .reading-content .highlight-box {
+                padding: 14px 16px;
+                margin: 16px 0;
+            }
+
+            .roadmap-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar-right {
+                display: none;
+            }
+        }
+
+        /* Mobile overlay */
+        .overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.25);
+            z-index: 150;
+        }
+
+        .overlay.visible {
+            display: block;
+        }
+
+        @media (min-width: 769px) {
+            .overlay {
+                display: none !important;
+            }
+        }
+
+        /* Lesson Navigation Bar */
+        .lesson-nav-bar {
+            border-top: 1px solid #e7eeff;
+            padding-top: 24px;
+            margin-top: 36px;
+        }
+
+        .btn-lesson-nav {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 22px;
+            border-radius: 12px;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.25s ease;
+            cursor: pointer;
+            text-decoration: none !important;
+        }
+
+        .btn-lesson-prev {
+            background: #ffffff;
+            color: #464555 !important;
+            border: 1px solid #d8e3fb;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+        }
+
+        .btn-lesson-prev:hover {
+            background: #f0f3ff;
+            color: #3525cd !important;
+            border-color: #4f46e5;
+            transform: translateX(-4px);
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.12);
+        }
+
+        .btn-lesson-next {
+            background: linear-gradient(135deg, #4f46e5, #3525cd);
+            color: #ffffff !important;
+            border: none;
+            box-shadow: 0 4px 14px rgba(79, 70, 229, 0.3);
+        }
+
+        .btn-lesson-next:hover {
+            background: linear-gradient(135deg, #3525cd, #22159a);
+            color: #ffffff !important;
+            transform: translateX(4px);
+            box-shadow: 0 6px 18px rgba(79, 70, 229, 0.45);
+        }
+    </style>
+</head>
+
+<body {% if user.is_authenticated %}class="has-bottom-nav"{% endif %}>
+
+    <!-- ==================== Top Navigation Bar (Desktop) ==================== -->
+    <header class="sticky-top bg-surface shadow-sm d-none d-md-block">
+        <nav class="navbar navbar-expand-md">
+            <div class="container-fluid max-w-container px-margin-mobile" style="margin-left:auto; margin-right:auto;">
+                <div class="d-flex align-items-center gap-4 w-100">
+
+                    <a class="navbar-brand d-flex align-items-center gap-2 mb-0" href="{% url 'core:home' %}">
+                        <img src="{% static 'images/logos/ParoBharo-name.png' %}" alt="ParoBharo"
+                            style="height: 60px; width: auto;">
+                    </a>
+
+                    <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false"
+                        aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="mainNavbar">
+                        <div class="d-md-flex gap-4 align-items-md-center ms-md-4 mb-3 mb-md-0">
+                            <a class="d-block d-md-inline-block nav-link-custom mb-2 mb-md-0"
+                                href="{% url 'core:home' %}">Home</a>
+                            <a class="d-block d-md-inline-block nav-link-custom mb-2 mb-md-0"
+                                href="{% url 'products:shop' %}">Exams</a>
+                            <a class="d-block d-md-inline-block nav-link-active mb-2 mb-md-0"
+                                href="{% url 'products:books' %}">Books</a>
+                            <a class="d-block d-md-inline-block nav-link-custom mb-2 mb-md-0"
+                                href="{% url 'core:home' %}#pricing-section">Pricing</a>
+                            <a class="d-block d-md-inline-block nav-link-custom" href="#">Blog</a>
+                        </div>
+
+                        <div class="d-flex flex-column flex-md-row align-items-md-center gap-3 ms-md-auto mt-3 mt-md-0">
+                            <div
+                                class="d-none d-lg-flex align-items-center bg-surface-container-low px-3 py-2 rounded-pill border border-outline-variant js-search-wrapper">
+                                <i class="bi bi-search text-outline me-2"></i>
+                                <input
+                                    class="form-control form-control-sm border-0 bg-transparent shadow-none js-search-input"
+                                    style="width: 12rem;" type="text" placeholder="Search exams...">
+                            </div>
+                            {% if user.is_authenticated %}
+                            <div class="d-flex gap-3 align-items-center">
+                                <i class="bi bi-bell text-on-surface-variant fs-5" role="button"
+                                    aria-label="Notifications"></i>
+                                <a href="{% url 'dashboard:index' %}"
+                                    class="text-decoration-none text-on-surface-variant fs-4" aria-label="Account">
+                                    <i class="bi bi-person-circle" role="button"></i>
+                                </a>
+                            </div>
+                            {% else %}
+                            <a class="btn d-none d-md-inline-block fw-medium text-primary p-0 text-start text-decoration-none"
+                                href="{% url 'accounts:signin' %}">Sign In</a>
+
+                            <a href="{% url 'accounts:signin' %}"><button class="btn btn-pill-primary"
+                                    type="button">Start Free Trial</button></a>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ==================== Top Navigation Bar (Mobile) ==================== -->
+    <header class="sticky-top bg-surface shadow-sm d-block d-md-none mobile-nav-header">
+        {% if user.is_authenticated %}
+        <!-- Logged In Mobile Header -->
+        <div class="container-fluid py-2 px-margin-mobile">
+            <div class="d-flex align-items-center justify-content-between" style="min-height: 40px;">
+                <!-- Left side: Website Name -->
+                <a class="navbar-brand d-flex align-items-center gap-2 mb-0" href="{% url 'core:home' %}">
+                    <img src="{% static 'images/logos/ParoBharo-logo.png' %}" alt="ParoBharo Logo"
+                        style="height: 40px; width: auto;">
+                    <img src="{% static 'images/logos/ParoBharo-name.png' %}" alt="ParoBharo"
+                        style="height: 30px; width: auto;">
+                </a>
+
+                <!-- Right side: Search & Wishlist icons -->
+                <div class="d-flex align-items-center gap-3 text-on-surface-variant">
+                    <button class="btn p-0 border-0 text-on-surface-variant" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#mobileSearchCollapse" aria-expanded="false"
+                        aria-controls="mobileSearchCollapse">
+                        <i class="bi bi-search fs-5"></i>
+                    </button>
+                    <a href="#" class="text-decoration-none text-on-surface-variant">
+                        <i class="bi bi-heart fs-5"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Collapsible Mobile Search -->
+        <div class="collapse bg-surface-container-low border-bottom border-outline-variant px-margin-mobile py-2"
+            id="mobileSearchCollapse">
+            <div
+                class="d-flex align-items-center bg-surface px-3 py-2 rounded-pill border border-outline-variant js-search-wrapper">
+                <i class="bi bi-search text-outline me-2"></i>
+                <input class="form-control form-control-sm border-0 bg-transparent shadow-none js-search-input"
+                    type="text" placeholder="Search exams...">
+            </div>
+        </div>
+        {% else %}
+        <!-- Logged Out Mobile Header -->
+        <div class="container-fluid py-2 px-margin-mobile">
+            <div class="d-flex align-items-center justify-content-between" style="min-height: 40px;">
+                <!-- Left side: Website Name -->
+                <a class="navbar-brand d-flex align-items-center gap-2 mb-0" href="{% url 'core:home' %}">
+                    <img src="{% static 'images/logos/ParoBharo-logo.png' %}" alt="ParoBharo Logo"
+                        style="height: 32px; width: auto;">
+                    <img src="{% static 'images/logos/ParoBharo-name.png' %}" alt="ParoBharo"
+                        style="height: 22px; width: auto;">
+                </a>
+
+                <!-- Right side: Sign In & Start Free Trial -->
+                <div class="d-flex align-items-center gap-3">
+                    <a class="fw-medium text-primary text-decoration-none" href="{% url 'accounts:signin' %}">Sign
+                        In</a>
+                    <button class="btn btn-pill-primary py-1 px-3 text-label-sm" type="button"
+                        style="font-family: inherit;">Start Free Trial</button>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </header>
+
+    <!-- ===== OVERLAY (mobile) ===== -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- ===== APP ===== -->
+    <div class="app">
+
+        <!-- ===== LEFT SIDEBAR ===== -->
+        <aside class="sidebar-left" id="sidebarLeft">
+            <!-- Sidebar Center Toggle Button -->
+            <button class="sidebar-toggle-arrow" id="sidebarArrowBtn" title="Toggle Sidebar">
+                <i class="bi bi-chevron-left" id="sidebarArrowIcon"></i>
+            </button>
+
+            <div class="sidebar-header">
+                <h2>📚 Course Menu</h2>
+                <span class="badge">30 Lessons</span>
+            </div>
+            <div class="sidebar-scroll" id="menuScroll">
+
+                <!-- Module 1 -->
+                <div class="module-group">
+                    <button class="module-toggle" data-target="m1">
+                        <a href="{% url 'products:bitcoin-book' %}" class="text-decoration-none text-dark"><span>📖 Module 1 – Trading Foundation</span></a>
+                        <span class="arrow open">▶</span>
+                    </button>
+                    <div class="module-lessons open" id="m1">
+                        <a href="{% url 'products:bitcoin-lesson-1' %}" class="text-decoration-none">
+                            <div class="lesson-item active"><span class="num">1</span>Trading kya hai?</div>
+                        </a>
+                        <div class="lesson-item"><span class="num">2</span>Crypto market kaise kaam karta hai?</div>
+                        <div class="lesson-item"><span class="num">3</span>Spot vs Futures vs Margin</div>
+                        <div class="lesson-item"><span class="num">4</span>Binance interface A–Z</div>
+                        <div class="lesson-item"><span class="num">5</span>Market Order, Limit Order, Stop Limit</div>
+                    </div>
+                </div>
+
+                <!-- Module 2 -->
+                <div class="module-group">
+                    <button class="module-toggle" data-target="m2">
+                        <span>📊 Module 2 – Candlestick Mastery</span>
+                        <span class="arrow">▶</span>
+                    </button>
+                    <div class="module-lessons" id="m2">
+                        <div class="lesson-item"><span class="num">6</span>Candlestick kya hoti hai?</div>
+                        <div class="lesson-item"><span class="num">7</span>Bullish aur Bearish candles</div>
+                        <div class="lesson-item"><span class="num">8</span>Doji</div>
+                        <div class="lesson-item"><span class="num">9</span>Hammer</div>
+                        <div class="lesson-item"><span class="num">10</span>Shooting Star</div>
+                        <div class="lesson-item"><span class="num">11</span>Engulfing Pattern</div>
+                        <div class="lesson-item"><span class="num">12</span>Morning Star</div>
+                        <div class="lesson-item"><span class="num">13</span>Evening Star</div>
+                    </div>
+                </div>
+
+                <!-- Module 3 -->
+                <div class="module-group">
+                    <button class="module-toggle" data-target="m3">
+                        <span>📈 Module 3 – Price Action</span>
+                        <span class="arrow">▶</span>
+                    </button>
+                    <div class="module-lessons" id="m3">
+                        <div class="lesson-item"><span class="num">14</span>Support</div>
+                        <div class="lesson-item"><span class="num">15</span>Resistance</div>
+                        <div class="lesson-item"><span class="num">16</span>Trend</div>
+                        <div class="lesson-item"><span class="num">17</span>Breakout</div>
+                        <div class="lesson-item"><span class="num">18</span>Fake Breakout</div>
+                        <div class="lesson-item"><span class="num">19</span>Retest</div>
+                        <div class="lesson-item"><span class="num">20</span>Market Structure</div>
+                    </div>
+                </div>
+
+                <!-- Module 4 -->
+                <div class="module-group">
+                    <button class="module-toggle" data-target="m4">
+                        <span>📉 Module 4 – Indicators</span>
+                        <span class="arrow">▶</span>
+                    </button>
+                    <div class="module-lessons" id="m4">
+                        <div class="lesson-item"><span class="num">21</span>RSI</div>
+                        <div class="lesson-item"><span class="num">22</span>MACD</div>
+                        <div class="lesson-item"><span class="num">23</span>EMA</div>
+                        <div class="lesson-item"><span class="num">24</span>Volume</div>
+                        <div class="lesson-item"><span class="num">25</span>VWAP</div>
+                    </div>
+                </div>
+
+                <!-- Module 5 -->
+                <div class="module-group">
+                    <button class="module-toggle" data-target="m5">
+                        <span>⚡ Module 5 – Strategies</span>
+                        <span class="arrow">▶</span>
+                    </button>
+                    <div class="module-lessons" id="m5">
+                        <div class="lesson-item"><span class="num">26</span>Scalping</div>
+                        <div class="lesson-item"><span class="num">27</span>Intraday Trading</div>
+                        <div class="lesson-item"><span class="num">28</span>Swing Trading</div>
+                        <div class="lesson-item"><span class="num">29</span>Breakout Strategy</div>
+                        <div class="lesson-item"><span class="num">30</span>Pullback Strategy</div>
+                    </div>
+                </div>
+
+                <!-- Module 6 -->
+                <div class="module-group">
+                    <button class="module-toggle" data-target="m6">
+                        <span>🛡️ Module 6 – Risk Management</span>
+                        <span class="arrow">▶</span>
+                    </button>
+                    <div class="module-lessons" id="m6">
+                        <div class="lesson-item"><span class="num">31</span>Stop Loss</div>
+                        <div class="lesson-item"><span class="num">32</span>Take Profit</div>
+                        <div class="lesson-item"><span class="num">33</span>Risk/Reward Ratio</div>
+                        <div class="lesson-item"><span class="num">34</span>Position Size</div>
+                        <div class="lesson-item"><span class="num">35</span>Capital Management</div>
+                    </div>
+                </div>
+
+                <!-- Module 7 -->
+                <div class="module-group">
+                    <button class="module-toggle" data-target="m7">
+                        <span>🧠 Module 7 – Psychology</span>
+                        <span class="arrow">▶</span>
+                    </button>
+                    <div class="module-lessons" id="m7">
+                        <div class="lesson-item"><span class="num">36</span>Fear</div>
+                        <div class="lesson-item"><span class="num">37</span>Greed</div>
+                        <div class="lesson-item"><span class="num">38</span>FOMO</div>
+                        <div class="lesson-item"><span class="num">39</span>Revenge Trading</div>
+                        <div class="lesson-item"><span class="num">40</span>Discipline</div>
+                    </div>
+                </div>
+
+                <!-- Module 8 -->
+                <div class="module-group">
+                    <button class="module-toggle" data-target="m8">
+                        <span>💻 Module 8 – Live Trading</span>
+                        <span class="arrow">▶</span>
+                    </button>
+                    <div class="module-lessons" id="m8">
+                        <div class="lesson-item"><span class="num">41</span>Real chart analysis</div>
+                        <div class="lesson-item"><span class="num">42</span>Entry</div>
+                        <div class="lesson-item"><span class="num">43</span>Exit</div>
+                        <div class="lesson-item"><span class="num">44</span>Trade review</div>
+                        <div class="lesson-item"><span class="num">45</span>Trading journal</div>
+                    </div>
+                </div>
+
+            </div>
+        </aside>
+
+        <!-- ===== MAIN CONTENT ===== -->
+        <main class="main-content" id="mainContent">
+            <div class="content-container">
+
+                <!-- Breadcrumb -->
+                <!-- <div class="breadcrumb">
+                    📚 Trading Course <span class="sep">›</span> Module 1 <span class="sep">›</span> <span>Lesson 1</span>
+                </div> -->
+
+                <!-- Lesson Header -->
+                <div class="lesson-header">
+                    <span class="tag">📖 Lesson</span>
+                    <h1>Trading Foundation</h1>
+                    <div class="sub">Basics se shuru — pehla qadam</div>
+                </div>
+
+                <!-- Reading Content -->
+                <div class="reading-content">
+
+                    <p>
+                        Sirf <strong>Buy/Sell</strong> button dabana trading nahi hoti.
+                    </p>
+
+                    <p>
+                        Main tumhe <strong>A to Z sikha sakta hoon.</strong>
+                    </p>
+
+                    <div class="highlight-box">
+                        <strong>📌 Sach ye hai:</strong> Jo "bade traders" hote hain, wo din bhar charts dekhte hain,
+                        rules follow karte hain, har trade nahi lete, aur kabhi profit hota hai, kabhi loss. Unka maqsad
+                        <strong>har trade jeetna nahi</strong>, balki lambe time mein consistently profit mein rehna
+                        hota hai.
+                    </div>
+
+                    <h2>📋 Roadmap</h2>
+
+                    <div class="roadmap-grid">
+                        <div class="roadmap-card">
+                            <span class="phase">📖 Phase 1 – 2-3 din</span>
+                            <div class="title">Basics</div>
+                            <div class="desc">Trading kya hai? Spot vs Futures, Candlesticks, Support &amp; Resistance
+                            </div>
+                        </div>
+                        <div class="roadmap-card">
+                            <span class="phase">📈 Phase 2 – 5-7 din</span>
+                            <div class="title">Chart Reading</div>
+                            <div class="desc">Trend, Entry/Exit, Stop Loss, Take Profit, Volume</div>
+                        </div>
+                        <div class="roadmap-card">
+                            <span class="phase">💹 Phase 3</span>
+                            <div class="title">Real Strategies</div>
+                            <div class="desc">Scalping, Swing Trading, Breakout, Pullback, Risk Management</div>
+                        </div>
+                        <div class="roadmap-card">
+                            <span class="phase">💰 Phase 4</span>
+                            <div class="title">Real Trading</div>
+                            <div class="desc">$20–50 se shuru, 1-2% risk, Trading journal, Emotions control</div>
+                        </div>
+                    </div>
+
+                    <h2>📌 Mera Plan</h2>
+
+                    <p>
+                        Main tumhe <strong>free complete trading course</strong> de sakta hoon, step by step. Har lesson
+                        ke baad practice hogi, phir agla lesson.
+                    </p>
+
+                    <p>
+                        Hum <strong>Lesson 1</strong> se shuru karenge:
+                    </p>
+
+                    <ul style="list-style: none; padding: 0; margin: 12px 0 20px;">
+                        <li style="padding: 6px 0; display: flex; align-items: center; gap: 10px;">✅ Binance interface
+                        </li>
+                        <li style="padding: 6px 0; display: flex; align-items: center; gap: 10px;">✅ Candlestick chart
+                        </li>
+                        <li style="padding: 6px 0; display: flex; align-items: center; gap: 10px;">✅ Market Order aur
+                            Limit Order</li>
+                        <li style="padding: 6px 0; display: flex; align-items: center; gap: 10px;">✅ Live chart dekhna
+                        </li>
+                        <li style="padding: 6px 0; display: flex; align-items: center; gap: 10px;">✅ Pehli practice
+                            trade</li>
+                    </ul>
+
+                    <div class="highlight-box" style="border-left-color: #006c49;">
+                        <strong>🎯 Is tarah agar tum roz 30–45 minutes do</strong>, to 1 mahine mein trading ki strong
+                        foundation bana sakte ho. Phir tum khud charts dekh kar decisions lena seekh jaoge, na ke sirf
+                        kisi ki calls follow karoge.
+                    </div>
+
+                    <!-- Lesson Navigation Bar -->
+                    <div class="lesson-nav-bar">
+                        <div class="d-flex align-items-center justify-content-between gap-3">
+                            <a href="{% url 'products:books' %}" class="btn-lesson-nav btn-lesson-prev">
+                                <i class="bi bi-arrow-left me-2"></i>
+                                <span>Previous (Books)</span>
+                            </a>
+
+                            <div class="d-none d-sm-block text-center">
+                                <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill font-monospace" style="font-size: 0.8rem; font-weight:500;">
+                                    ⏱️ ~3 min • Course Overview
+                                </span>
+                            </div>
+
+                            <a href="{% url 'products:bitcoin-lesson-1' %}" class="btn-lesson-nav btn-lesson-next">
+                                <span>Next Lesson</span>
+                                <i class="bi bi-arrow-right ms-2"></i>
+                            </a>
+                        </div>
+                    </div>
+
+
+
+                </div>
+            </div>
+        </main>
+
+        <!-- ===== RIGHT SIDEBAR ===== -->
+        <aside class="sidebar-right">
+            <!-- Progress -->
+            <div class="right-section">
+                <h4>📊 Your Progress</h4>
+                <div class="progress-ring">
+                    <div class="circle"><span>60%</span></div>
+                    <div class="info">
+                        <strong>3/5</strong> lessons done<br />
+                        <span style="font-size:12px; color:#777587;">Module 1</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="right-section">
+                <h4>⚡ Quick Actions</h4>
+                <div class="quick-actions">
+                    <button class="quick-btn"><span class="icon">⭐</span> Bookmark</button>
+                    <button class="quick-btn"><span class="icon">📝</span> Add Note</button>
+                    <button class="quick-btn"><span class="icon">📌</span> Highlight</button>
+                    <button class="quick-btn"><span class="icon">📤</span> Share</button>
+                </div>
+            </div>
+
+            <!-- Notes -->
+            <div class="right-section" style="flex:1;">
+                <h4>📝 Your Notes</h4>
+                <textarea class="notes-area"
+                    placeholder="Write your notes here... Trading is not about buying/selling randomly. It's about strategy...">Trading = strategy + discipline. Sirf Buy/Sell nahi.</textarea>
+            </div>
+        </aside>
+
+    </div>
+
+    <script>
+        // ===== MODULE TOGGLE =====
+        document.querySelectorAll('.module-toggle').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const target = document.getElementById(this.dataset.target);
+                const arrow = this.querySelector('.arrow');
+                if (target) {
+                    target.classList.toggle('open');
+                    if (arrow) {
+                        arrow.classList.toggle('open');
+                    }
+                }
+            });
+        });
+
+        // ===== MOBILE & DESKTOP SIDEBAR TOGGLE =====
+        const toggleBtn = document.getElementById('toggleBtn');
+        const sidebar = document.getElementById('sidebarLeft');
+        const overlay = document.getElementById('overlay');
+        const sidebarArrowBtn = document.getElementById('sidebarArrowBtn');
+        const sidebarArrowIcon = document.getElementById('sidebarArrowIcon');
+
+        if (sidebarArrowBtn && sidebar) {
+            sidebarArrowBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                sidebar.classList.toggle('collapsed');
+                if (sidebar.classList.contains('collapsed')) {
+                    sidebarArrowIcon.className = 'bi bi-chevron-right';
+                } else {
+                    sidebarArrowIcon.className = 'bi bi-chevron-left';
+                }
+            });
+        }
+
+        function toggleMobileMenu() {
+            const isOpen = sidebar.classList.contains('mobile-open');
+            sidebar.classList.toggle('mobile-open');
+            overlay.classList.toggle('visible');
+            toggleBtn.textContent = isOpen ? '☰' : '✕';
+        }
+
+        toggleBtn.addEventListener('click', toggleMobileMenu);
+
+        overlay.addEventListener('click', function () {
+            sidebar.classList.remove('mobile-open');
+            overlay.classList.remove('visible');
+            toggleBtn.textContent = '☰';
+        });
+
+        // Close on resize to desktop
+        window.addEventListener('resize', function () {
+            if (window.innerWidth > 768) {
+                sidebar.classList.remove('mobile-open');
+                overlay.classList.remove('visible');
+                toggleBtn.textContent = '☰';
+            }
+        });
+
+        // ===== LESSON CLICK (demo) =====
+        document.querySelectorAll('.lesson-item').forEach(item => {
+            item.addEventListener('click', function () {
+                document.querySelectorAll('.lesson-item').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+
+                // On mobile, close sidebar after selection
+                if (window.innerWidth <= 768) {
+                    sidebar.classList.remove('mobile-open');
+                    overlay.classList.remove('visible');
+                    toggleBtn.textContent = '☰';
+                }
+            });
+        });
+
+        // ===== KEYBOARD SHORTCUT: ESC to close mobile menu =====
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && sidebar.classList.contains('mobile-open')) {
+                sidebar.classList.remove('mobile-open');
+                overlay.classList.remove('visible');
+                toggleBtn.textContent = '☰';
+            }
+        });
+    </script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,239 @@
+{% extends "Books/Djnago/django-read/index.html" %}
+{% load static %}
+
+{% block title %}Week 01 — Lesson 4: MVT Flow + First View{% endblock %}
+
+{% block content %}
+                <div class="breadcrumb">
+                    <a href="{% url 'products:django-book' %}">Django Course</a>
+                    <span class="sep">›</span><span>Week 1</span>
+                    <span class="sep">›</span><span>Lesson 4</span>
+                </div>
+
+                <div class="lesson-header">
+                    <span class="tag">📖 Week 1 · Lesson 4</span>
+                    <h1>MVT Flow + First View</h1>
+                    <div class="sub"><i class="fas fa-arrows-spin" style="color:#0c4b33;margin-right:4px;"></i> Understand Django's Model-View-Template pattern &amp; display "Hello World"</div>
+                </div>
+
+                <div class="reading-content">
+
+                    <!-- MVT FLOW -->
+                    <h2>
+                        <span class="step-number" style="background:#4b4dd8;"><i class="fas fa-sitemap" style="font-size:14px;"></i></span> Django ka MVT Flow
+                    </h2>
+
+                    <p>
+                        <strong>MVT</strong> = <strong>M</strong>odel · <strong>V</strong>iew · <strong>T</strong>emplate
+                        <br />
+                        <span style="color:#464555;font-size:15px;">
+                            Django ka pattern (MVC jaisa, lekin thoda alag). Abhi hum <strong>View</strong> aur <strong>URL</strong> 
+                            seekh rahe hain — Model baad mein aayega (Week 2).
+                        </span>
+                    </p>
+
+                    <!-- MVT Flow Diagram -->
+                    <div class="mvt-flow">
+                        <div class="step">
+                            <span class="icon" style="color:#4f46e5;"><i class="fas fa-database"></i></span>
+                            <div class="name">Model</div>
+                            <div class="desc">Database tables<br />(Week 2)</div>
+                        </div>
+                        <div class="step highlight">
+                            <span class="icon" style="color:#10b981;"><i class="fas fa-eye"></i></span>
+                            <div class="name" style="color:#0c4b33;">View</div>
+                            <div class="desc">Logic + Business Rules<br /><strong style="color:#0c4b33;">← We are here!</strong></div>
+                        </div>
+                        <div class="step">
+                            <span class="icon" style="color:#4b4dd8;"><i class="fas fa-file-code"></i></span>
+                            <div class="name">Template</div>
+                            <div class="desc">HTML (Frontend)<br />(Coming soon)</div>
+                        </div>
+                    </div>
+
+                    <div class="info-box">
+                        <i class="fas fa-lightbulb" style="color:#0c4b33;margin-right:8px;"></i>
+                        <strong>MVT Explained:</strong>
+                        <br />
+                        <strong>View</strong> = Python function jo <strong>request</strong> leta hai aur <strong>response</strong> wapas bhejta hai.
+                        <br />
+                        <strong>Template</strong> = HTML file jo frontend dikhati hai.
+                        <br />
+                        <strong>Model</strong> = Database structure (aage aayega).
+                        <br /><br />
+                        <em style="color:#464555;">Abhi hum simple HTTP response bhej rahe hain — <strong>Hello, Django is working!</strong></em>
+                    </div>
+
+                    <!-- STEP 7 -->
+                    <h2>
+                        <span class="step-number">7</span> Pehla View Banayein
+                    </h2>
+
+                    <p><code style="background:rgba(0,0,0,0.06);padding:2px 6px;border-radius:4px;">tasks/views.py</code> file kholein — abhi khali hogi. Ismein ye code likhein:</p>
+
+                    <div class="code-block">
+                        <div class="code-label"><i class="fab fa-python"></i> tasks/views.py</div>
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                        <pre><code class="language-python">from django.http import HttpResponse
+
+def home(request):
+    return HttpResponse("Hello, Django is working!")</code></pre>
+                    </div>
+
+                    <div class="info-box" style="border-left-color:#10b981;background:rgba(16,185,129,0.06);">
+                        <i class="fas fa-info-circle" style="color:#10b981;margin-right:8px;"></i>
+                        <strong>Samjhein:</strong> View ek <strong>Python function</strong> hai jo 
+                        <code>request</code> leta hai (browser se aane wali call) aur <strong>response</strong> wapas bhejta hai (jo browser mein dikhta hai).
+                    </div>
+
+                    <!-- STEP 8 -->
+                    <h2>
+                        <span class="step-number">8</span> App ke Andar URLs File Banayein
+                    </h2>
+
+                    <p><code style="background:rgba(0,0,0,0.06);padding:2px 6px;border-radius:4px;">tasks</code> folder ke andar ek nayi file banayein: <code style="background:rgba(0,0,0,0.06);padding:2px 6px;border-radius:4px;">tasks/urls.py</code></p>
+
+                    <div class="code-block">
+                        <div class="code-label"><i class="fas fa-link"></i> tasks/urls.py</div>
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                        <pre><code class="language-python">from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.home, name='home'),
+]</code></pre>
+                    </div>
+
+                    <div class="info-box">
+                        <i class="fas fa-info-circle" style="color:#0c4b33;margin-right:8px;"></i>
+                        <strong>Samjhein:</strong> Ye file batati hai ke jab koi specific URL aaye, to <strong>konsi view</strong> chalani hai.
+                    </div>
+
+                    <!-- STEP 9 -->
+                    <h2>
+                        <span class="step-number">9</span> Main Project ke URLs se Connect Karein
+                    </h2>
+
+                    <p><code style="background:rgba(0,0,0,0.06);padding:2px 6px;border-radius:4px;">config/urls.py</code> file kholein (ye already Django ne bana rakhi thi). Isko is tarah edit karein:</p>
+
+                    <div class="code-block">
+                        <div class="code-label"><i class="fas fa-link"></i> config/urls.py</div>
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                        <pre><code class="language-python">from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', include('tasks.urls')),
+]</code></pre>
+                    </div>
+
+                    <div class="info-box" style="border-left-color:#4b4dd8;background:rgba(75,77,216,0.04);">
+                        <i class="fas fa-info-circle" style="color:#4b4dd8;margin-right:8px;"></i>
+                        <strong>Samjhein:</strong> 
+                        <code>config/urls.py</code> <strong>main entry point</strong> hai — ye batata hai ke agar URL tasks app se related hai to 
+                        <code>tasks/urls.py</code> ko dekho.
+                    </div>
+
+                    <!-- STEP 10 -->
+                    <h2>
+                        <span class="step-number">10</span> Server Run Karein
+                    </h2>
+
+                    <div class="terminal-command">
+                        <span class="prompt">$</span>
+                        <span class="command">python manage.py runserver</span>
+                    </div>
+
+                    <!-- SUCCESS -->
+                    <div class="success-box">
+                        <div class="success-title">
+                            <i class="fas fa-check-circle"></i> ✅ Success!
+                        </div>
+                        <p>
+                            Browser mein <code style="background:rgba(0,0,0,0.06);padding:2px 6px;border-radius:4px;">http://127.0.0.1:8000/</code> open karein — 
+                            ab wahan <strong>"Hello, Django is working!"</strong> likha aana chahiye 
+                            (rocket page ki jagah)! 🎉
+                        </p>
+                    </div>
+
+                    <!-- Screenshot Placeholder -->
+                    <div class="screenshot-placeholder">
+                        <i class="fas fa-check-circle" style="font-size:48px;color:#10b981;"></i>
+                        <p>
+                            <strong style="color:#111c2d;">Your First Django Output!</strong>
+                            <br />
+                            <span style="font-size:14px;color:#464555;">Browser mein ye dikhna chahiye:</span>
+                        </p>
+                        <div class="output-text">
+                            <i class="fas fa-quote-left" style="font-size:12px;color:#777587;"></i>
+                            Hello, Django is working!
+                            <i class="fas fa-quote-right" style="font-size:12px;color:#777587;"></i>
+                        </div>
+                        <div class="url">
+                            <i class="fas fa-globe" style="font-size:12px;"></i>
+                            http://127.0.0.1:8000/
+                        </div>
+                    </div>
+
+                    <!-- WEEK COMPLETE -->
+                    <div class="success-box" style="background:rgba(12,75,51,0.06);border-left-color:#0c4b33;">
+                        <div class="success-title" style="color:#0c4b33;">
+                            <i class="fas fa-trophy"></i> 🎉 Week 01 Complete!
+                        </div>
+                        <p>
+                            <strong>Mubarak ho!</strong> Aap ne Week 01 complete kar liya. 
+                            Ab aap jaante hain:
+                            <br />
+                            ✅ Virtual Environment + Django Install
+                            <br />
+                            ✅ Django Project + Server Run
+                            <br />
+                            ✅ App Creation + Registration
+                            <br />
+                            ✅ MVT Pattern + First View (Hello World!)
+                            <br /><br />
+                            <strong style="color:#0c4b33;">Agla step:</strong> Week 2 — Models &amp; Database! 🚀
+                        </p>
+                    </div>
+
+                    <!-- Navigation Footer -->
+                    <div class="lesson-nav-bar">
+                        <div class="d-flex align-items-center justify-content-between gap-3">
+                            <a href="{% url 'products:django-week1-l3' %}" class="btn-lesson-nav btn-lesson-prev">
+                                <i class="bi bi-arrow-left me-2"></i><span>Previous (L3)</span>
+                            </a>
+                            <div class="d-none d-sm-block text-center">
+                                <span class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill font-monospace" style="font-size: 0.8rem; font-weight:500;">
+                                    Week 1 • Lesson 4 of 5
+                                </span>
+                            </div>
+                            <a href="{% url 'products:django-week1-l5' %}" class="btn-lesson-nav btn-lesson-next">
+                                <span>Next Lesson (L5)</span><i class="bi bi-arrow-right ms-2"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+{% endblock %}
+
+{% block right_sidebar %}
+            <div class="right-section">
+                <h4>📊 Your Progress</h4>
+                <div class="progress-ring">
+                    <div class="circle"><span>100%</span></div>
+                    <div class="info"><strong>4/4</strong> Week 1 done</div>
+                </div>
+            </div>
+            <div class="right-section">
+                <h4>⚡ Quick Actions</h4>
+                <div class="quick-actions">
+                    <button class="quick-btn"><span class="icon">⭐</span> Bookmark</button>
+                    <button class="quick-btn"><span class="icon">📝</span> Add Note</button>
+                </div>
+            </div>
+            <div class="right-section" style="flex:1;">
+                <h4>📝 Your Notes</h4>
+                <textarea class="notes-area" id="djangoNotes" placeholder="Write your notes here..."></textarea>
+            </div>
+{% endblock %}

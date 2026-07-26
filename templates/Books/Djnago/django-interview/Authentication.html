@@ -1,0 +1,119 @@
+<!-- SECTION 4: AUTHENTICATION -->
+<section class="section">
+    <div class="section-header">
+        <h2>Authentication &amp; Security</h2>
+    </div>
+
+    <div class="question-grid">
+
+        <!-- Q13 -->
+        <div class="question-card">
+            <div class="q-header">
+                <span class="q-num-badge">Q13</span>
+                <div class="q-title-group">
+                    <div class="q-title"><code class="code-inline">LoginRequiredMixin</code> kya karta hai?</div>
+                    <span class="q-tag">Authorization</span>
+                </div>
+            </div>
+            <div class="q-actions">
+                <button type="button" class="btn-q-action btn-view-ans" onclick="toggleAns(this)">
+                    <i class="bi bi-eye"></i> View Answer
+                </button>
+                <button type="button" class="btn-q-action btn-view-example" onclick="toggleExample(this)">
+                    <i class="bi bi-code-square"></i> Practical Example
+                </button>
+            </div>
+            <div class="ans-box d-none">
+                <p>
+                    <code class="code-inline">LoginRequiredMixin</code> Class-Based Views ko protect karne ke liye use hota hai. Agar unauthenticated user us view ko access karne ki koshish kare to ye automatic login URL par redirect kar deta hai.
+                </p>
+            </div>
+            <div class="example-box d-none">
+                <strong>📌 Real Project Application:</strong> In Task Manager: <code class="code-inline">class TaskListView(LoginRequiredMixin, ListView)</code> ensures guest users cannot access task pages without logging in first.
+            </div>
+        </div>
+
+        <!-- Q14 -->
+        <div class="question-card">
+            <div class="q-header">
+                <span class="q-num-badge">Q14</span>
+                <div class="q-title-group">
+                    <div class="q-title">Django user passwords ko kaise store karta hai?</div>
+                    <span class="q-tag">Security</span>
+                </div>
+            </div>
+            <div class="q-actions">
+                <button type="button" class="btn-q-action btn-view-ans" onclick="toggleAns(this)">
+                    <i class="bi bi-eye"></i> View Answer
+                </button>
+                <button type="button" class="btn-q-action btn-view-example" onclick="toggleExample(this)">
+                    <i class="bi bi-code-square"></i> Practical Example
+                </button>
+            </div>
+            <div class="ans-box d-none">
+                <p>
+                    Django plain-text passwords kabhi store nahi karta. Default setting mein Django <strong>PBKDF2 with SHA-256</strong> password hashing algorithm and cryptographic salt use karta hai. Is se database leak hone ki surat mein bhi passwords recover nahi kiye ja sakte.
+                </p>
+            </div>
+            <div class="example-box d-none">
+                <strong>📌 Real Project Application:</strong> User passwords in our database look like <code class="code-inline">pbkdf2_sha256$260000$saltsalt$hashhash...</code> instead of raw strings.
+            </div>
+        </div>
+
+        <!-- Q15 -->
+        <div class="question-card">
+            <div class="q-header">
+                <span class="q-num-badge">Q15</span>
+                <div class="q-title-group">
+                    <div class="q-title"><code class="code-inline">UserCreationForm</code> kya provide karta hai?</div>
+                    <span class="q-tag">User Auth</span>
+                </div>
+            </div>
+            <div class="q-actions">
+                <button type="button" class="btn-q-action btn-view-ans" onclick="toggleAns(this)">
+                    <i class="bi bi-eye"></i> View Answer
+                </button>
+                <button type="button" class="btn-q-action btn-view-example" onclick="toggleExample(this)">
+                    <i class="bi bi-code-square"></i> Practical Example
+                </button>
+            </div>
+            <div class="ans-box d-none">
+                <p>
+                    <code class="code-inline">UserCreationForm</code> Django ka built-in <code class="code-inline">ModelForm</code> hai jo user registration handle karta hai. Ye Username, Password, aur Password Confirmation fields, password strength validation, aur user saving out-of-the-box manage karta hai.
+                </p>
+            </div>
+            <div class="example-box d-none">
+                <strong>📌 Real Project Application:</strong> Used <code class="code-inline">form = UserCreationForm(request.POST)</code> in signup view to register new users with built-in password validation.
+            </div>
+        </div>
+
+        <!-- Q16 -->
+        <div class="question-card">
+            <div class="q-header">
+                <span class="q-num-badge">Q16</span>
+                <div class="q-title-group">
+                    <div class="q-title">Sirf current logged-in user ka data Views mein kaise filter karte hain?</div>
+                    <span class="q-tag">Data Isolation</span>
+                </div>
+            </div>
+            <div class="q-actions">
+                <button type="button" class="btn-q-action btn-view-ans" onclick="toggleAns(this)">
+                    <i class="bi bi-eye"></i> View Answer
+                </button>
+                <button type="button" class="btn-q-action btn-view-example" onclick="toggleExample(this)">
+                    <i class="bi bi-code-square"></i> Practical Example
+                </button>
+            </div>
+            <div class="ans-box d-none">
+                <p>
+                    Class-Based View mein <code class="code-inline">get_queryset()</code> method ko override karke current request user par filter lagatay hain:<br />
+                    <code class="code-inline">return Task.objects.filter(user=self.request.user)</code>
+                </p>
+            </div>
+            <div class="example-box d-none">
+                <strong>📌 Real Project Application:</strong> Overriding <code class="code-inline">get_queryset()</code> in <code class="code-inline">TaskListView</code> guarantees each authenticated user only sees their own tasks.
+            </div>
+        </div>
+
+    </div>
+</section>

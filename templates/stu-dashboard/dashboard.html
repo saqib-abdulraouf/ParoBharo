@@ -1,0 +1,675 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard | ExamPrep</title>
+    <meta name="description"
+        content="ExamPrep Student Dashboard — track your exam prep progress, mock tests, study streaks, and performance analytics.">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Bootstrap 5.3 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+    <!-- Custom Dashboard CSS -->
+    <link rel="stylesheet" href="{% static 'css/stu-dashboard/dashboard.css' %}">
+</head>
+
+<body>
+    <a class="skip-link" href="#mainContent">Skip to main content</a>
+
+    <div class="app-shell">
+
+        <!-- =========================================================
+         SIDEBAR (Desktop)
+         ========================================================= -->
+        <aside class="app-sidebar" aria-label="Primary navigation">
+            <div class="sidebar-brand-header">
+                <a href="{% url 'dashboard:index' %}" class="sidebar-brand text-decoration-none" style="color: inherit;">
+                    <div class="sidebar-brand-mark" aria-hidden="true">
+                        <i class="bi bi-mortarboard-fill"></i>
+                    </div>
+                    <div class="sidebar-brand-text">
+                        <h1 class="sidebar-brand-title">ExamPrep</h1>
+                        <p class="sidebar-brand-subtitle">Student Portal</p>
+                    </div>
+                </a>
+                <div role="button" class="ds-button ds-button--iconLabelTertiary ds-button--icon ds-button--capsule ds-button--m ds-button--icon-relative-m ds-button--sizing-content _7d1f5e2" tabindex="0" style="--dsl-button-height: 34px;" id="desktopSidebarToggle" aria-label="Toggle sidebar">
+                    <div class="ds-button__background"></div>
+                    <div class="ds-button__icon ds-button__icon--last-child">
+                        <div class="ds-icon" style="font-size: inherit;">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M9.67272 0.522841C10.8339 0.522841 11.76 0.522714 12.4963 0.602493C13.2453 0.683657 13.8789 0.854248 14.4264 1.25197C14.7504 1.48739 15.0355 1.77247 15.2709 2.0965C15.6686 2.64394 15.8392 3.27758 15.9204 4.02655C16.0002 4.7629 16 5.68895 16 6.85014V9.14986C16 10.3111 16.0002 11.2371 15.9204 11.9735C15.8392 12.7224 15.6686 13.3561 15.2709 13.9035C15.0355 14.2275 14.7504 14.5126 14.4264 14.748C13.8789 15.1458 13.2453 15.3163 12.4963 15.3975C11.76 15.4773 10.8339 15.4772 9.67272 15.4772H6.3273C5.16611 15.4772 4.24006 15.4773 3.50371 15.3975C2.75474 15.3163 2.1211 15.1458 1.57366 14.748C1.24963 14.5126 0.964549 14.2275 0.729131 13.9035C0.331407 13.3561 0.160817 12.7224 0.0796529 11.9735C-0.000126137 11.2371 1.25338e-09 10.3111 1.25338e-09 9.14986V6.85014C1.25329e-09 5.68895 -0.000126137 4.7629 0.0796529 4.02655C0.160817 3.27758 0.331407 2.64394 0.729131 2.0965C0.964549 1.77247 1.24963 1.48739 1.57366 1.25197C2.1211 0.854248 2.75474 0.683657 3.50371 0.602493C4.24006 0.522714 5.16611 0.522841 6.3273 0.522841H9.67272ZM5.54303 1.88715V14.1118C5.78636 14.1128 6.04709 14.1169 6.3273 14.1169H9.67272C10.8639 14.1169 11.7032 14.1164 12.3493 14.0465C12.9824 13.9779 13.3497 13.8494 13.6268 13.6482C13.8354 13.4966 14.0195 13.3125 14.1711 13.1039C14.3723 12.8268 14.5007 12.4595 14.5693 11.8264C14.6393 11.1803 14.6398 10.341 14.6398 9.14986V6.85014C14.6398 5.65896 14.6393 4.81967 14.5693 4.1736C14.5007 3.54048 14.3723 3.17318 14.1711 2.89609C14.0195 2.68747 13.8354 2.50337 13.6268 2.35179C13.3497 2.1506 12.9824 2.02212 12.3493 1.95353C11.7032 1.88358 10.8639 1.88307 9.67272 1.88307H6.3273C6.04709 1.88307 5.78636 1.8862 5.54303 1.88715ZM4.1828 1.91166C3.99125 1.9216 3.8148 1.93577 3.65076 1.95353C3.01764 2.02212 2.65034 2.1506 2.37325 2.35179C2.16463 2.50337 1.98052 2.68747 1.82895 2.89609C1.62776 3.17318 1.49928 3.54048 1.43069 4.1736C1.36074 4.81967 1.36023 5.65896 1.36023 6.85014V9.14986C1.36023 10.341 1.36074 11.1803 1.43069 11.8264C1.49928 12.4595 1.62776 12.8268 1.82895 13.1039C1.98052 13.3125 2.16463 13.4966 2.37325 13.6482C2.65034 13.8494 3.01764 13.9779 3.65076 14.0465C3.81478 14.0642 3.99127 14.0774 4.1828 14.0873V1.91166Z" fill="currentColor"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav" aria-label="Dashboard sections">
+                <a class="sidebar-nav-link active" href="{% url 'dashboard:index' %}" tabindex="0">
+                    <i class="bi bi-grid-1x2-fill" aria-hidden="true"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a class="sidebar-nav-link" href="{% url 'dashboard:my_exams' %}" tabindex="0">
+                    <i class="bi bi-journal-bookmark-fill" aria-hidden="true"></i>
+                    <span>My Exams</span>
+                </a>
+                <a class="sidebar-nav-link" href="{% url 'dashboard:my_favorites' %}" tabindex="0">
+                    <i class="bi bi-heart" aria-hidden="true"></i>
+                    <span>My Favorites</span>
+                </a>
+                <a class="sidebar-nav-link" href="{% url 'dashboard:results' %}" tabindex="0">
+                    <i class="bi bi-check2-square" aria-hidden="true"></i>
+                    <span>Results</span>
+                </a>
+                <a class="sidebar-nav-link" href="#" tabindex="0">
+                    <i class="bi bi-graph-up-arrow" aria-hidden="true"></i>
+                    <span>Analytics</span>
+                </a>
+                <a class="sidebar-nav-link" href="#" tabindex="0">
+                    <i class="bi bi-gear-fill" aria-hidden="true"></i>
+                    <span>Settings</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-upgrade">
+                <div class="sidebar-upgrade-card">
+                    <h4>Upgrade to Pro</h4>
+                    <p>Get unlimited practice tests and expert insights.</p>
+                    <button type="button" class="btn-upgrade">Upgrade Now</button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- =========================================================
+         SIDEBAR (Mobile Offcanvas Slide Drawer)
+         ========================================================= -->
+        <div class="offcanvas offcanvas-start app-sidebar-mobile" tabindex="-1" id="mobileSidebar"
+            aria-labelledby="mobileSidebarLabel">
+            <div class="offcanvas-header sidebar-brand">
+                <a href="{% url 'dashboard:index' %}" class="d-flex text-decoration-none flex-grow-1 align-items-center" style="color: inherit; gap: 12px;">
+                    <div class="sidebar-brand-mark" aria-hidden="true" style="margin-right: 0;"><i class="bi bi-mortarboard-fill"></i></div>
+                    <div>
+                        <h2 class="sidebar-brand-title" id="mobileSidebarLabel">ExamPrep</h2>
+                        <p class="sidebar-brand-subtitle">Student Portal</p>
+                    </div>
+                </a>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close menu"></button>
+            </div>
+            <div class="offcanvas-body d-flex flex-column">
+                <nav class="sidebar-nav" aria-label="Dashboard sections (mobile)">
+                    <a class="sidebar-nav-link active" href="{% url 'dashboard:index' %}"><i class="bi bi-grid-1x2-fill"
+                            aria-hidden="true"></i><span>Dashboard</span></a>
+                    <a class="sidebar-nav-link" href="{% url 'dashboard:my_exams' %}"><i class="bi bi-journal-bookmark-fill"
+                            aria-hidden="true"></i><span>My Exams</span></a>
+                    <a class="sidebar-nav-link" href="{% url 'dashboard:my_favorites' %}"><i class="bi bi-heart"
+                            aria-hidden="true"></i><span>My Favorites</span></a>
+                    <a class="sidebar-nav-link" href="{% url 'dashboard:results' %}"><i class="bi bi-check2-square"
+                            aria-hidden="true"></i><span>Results</span></a>
+                    <a class="sidebar-nav-link" href="#"><i class="bi bi-graph-up-arrow"
+                            aria-hidden="true"></i><span>Analytics</span></a>
+                    <a class="sidebar-nav-link" href="#"><i class="bi bi-gear-fill"
+                            aria-hidden="true"></i><span>Settings</span></a>
+                </nav>
+                <div class="sidebar-upgrade mt-auto px-0">
+                    <div class="sidebar-upgrade-card">
+                        <h4>Upgrade to Pro</h4>
+                        <p>Get unlimited practice tests and expert insights.</p>
+                        <button type="button" class="btn-upgrade">Upgrade Now</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- =========================================================
+         MAIN CONTENT
+         ========================================================= -->
+        <div class="main-content">
+
+            <!-- Header -->
+            <header class="app-header" id="appHeader">
+                <div class="app-header-inner">
+                    <div class="d-flex align-items-center gap-2 flex-grow-1">
+                        <button class="sidebar-toggle-btn d-md-none" type="button" data-bs-toggle="offcanvas"
+                            data-bs-target="#mobileSidebar" aria-controls="mobileSidebar"
+                            aria-label="Open navigation menu" id="sidebarToggle">
+                            <svg width="20" height="20" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M9.67272 0.522841C10.8339 0.522841 11.76 0.522714 12.4963 0.602493C13.2453 0.683657 13.8789 0.854248 14.4264 1.25197C14.7504 1.48739 15.0355 1.77247 15.2709 2.0965C15.6686 2.64394 15.8392 3.27758 15.9204 4.02655C16.0002 4.7629 16 5.68895 16 6.85014V9.14986C16 10.3111 16.0002 11.2371 15.9204 11.9735C15.8392 12.7224 15.6686 13.3561 15.2709 13.9035C15.0355 14.2275 14.7504 14.5126 14.4264 14.748C13.8789 15.1458 13.2453 15.3163 12.4963 15.3975C11.76 15.4773 10.8339 15.4772 9.67272 15.4772H6.3273C5.16611 15.4772 4.24006 15.4773 3.50371 15.3975C2.75474 15.3163 2.1211 15.1458 1.57366 14.748C1.24963 14.5126 0.964549 14.2275 0.729131 13.9035C0.331407 13.3561 0.160817 12.7224 0.0796529 11.9735C-0.000126137 11.2371 0 10.3111 0 9.14986V6.85014C0 5.68895 -0.000126137 4.7629 0.0796529 4.02655C0.160817 3.27758 0.331407 2.64394 0.729131 2.0965C0.964549 1.77247 1.24963 1.48739 1.57366 1.25197C2.1211 0.854248 2.75474 0.683657 3.50371 0.602493C4.24006 0.522714 5.16611 0.522841 6.3273 0.522841H9.67272ZM5.54303 1.88715V14.1118C5.78636 14.1128 6.04709 14.1169 6.3273 14.1169H9.67272C10.8639 14.1169 11.7032 14.1164 12.3493 14.0465C12.9824 13.9779 13.3497 13.8494 13.6268 13.6482C13.8354 13.4966 14.0195 13.3125 14.1711 13.1039C14.3723 12.8268 14.5007 12.4595 14.5693 11.8264C14.6393 11.1803 14.6398 10.341 14.6398 9.14986V6.85014C14.6398 5.65896 14.6393 4.81967 14.5693 4.1736C14.5007 3.54048 14.3723 3.17318 14.1711 2.89609C14.0195 2.68747 13.8354 2.50337 13.6268 2.35179C13.3497 2.1506 12.9824 2.02212 12.3493 1.95353C11.7032 1.88358 10.8639 1.88307 9.67272 1.88307H6.3273C6.04709 1.88307 5.78636 1.8862 5.54303 1.88715ZM4.1828 1.91166C3.99125 1.9216 3.8148 1.93577 3.65076 1.95353C3.01764 2.02212 2.65034 2.1506 2.37325 2.35179C2.16463 2.50337 1.98052 2.68747 1.82895 2.89609C1.62776 3.17318 1.49928 3.54048 1.43069 4.1736C1.36074 4.81967 1.36023 5.65896 1.36023 6.85014V9.14986C1.36023 10.341 1.36074 11.1803 1.43069 11.8264C1.49928 12.4595 1.62776 12.8268 1.82895 13.1039C1.98052 13.3125 2.16463 13.4966 2.37325 13.6482C2.65034 13.8494 3.01764 13.9779 3.65076 14.0465C3.81478 14.0642 3.99127 14.0774 4.1828 14.0873V1.91166Z" fill="currentColor"></path></svg>
+                        </button>
+
+                        <form class="header-search d-none d-md-block" role="search">
+                            <label for="globalSearch" class="visually-hidden">Search exams and lessons</label>
+                            <i class="bi bi-search" aria-hidden="true"></i>
+                            <input type="search" id="globalSearch" placeholder="Search exams, lessons..." />
+                        </form>
+                    </div>
+
+                    <div class="header-actions">
+                        <!-- Dark mode toggle -->
+                        <button class="icon-btn" type="button" id="darkModeToggle" aria-pressed="false"
+                            aria-label="Toggle dark mode">
+                            <i class="bi bi-moon-stars" aria-hidden="true"></i>
+                        </button>
+
+                        <!-- Notification dropdown -->
+                        <div class="dropdown">
+                            <button class="icon-btn" type="button" id="notifDropdownBtn" data-bs-toggle="dropdown"
+                                aria-expanded="false" aria-label="View notifications">
+                                <i class="bi bi-bell" aria-hidden="true"></i>
+                                <span class="notif-dot" aria-hidden="true"></span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-custom"
+                                aria-labelledby="notifDropdownBtn">
+                                <li class="dropdown-header-custom">Notifications</li>
+                                <li>
+                                    <a class="dropdown-item-custom" href="#">
+                                        <i class="bi bi-check-circle-fill" aria-hidden="true"></i>
+                                        <div>
+                                            <p class="item-title">Mathematics Advanced graded</p>
+                                            <p class="item-desc">You scored 48/50 — 2 minutes ago</p>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item-custom" href="#">
+                                        <i class="bi bi-trophy-fill" aria-hidden="true"></i>
+                                        <div>
+                                            <p class="item-title">New leaderboard rank</p>
+                                            <p class="item-desc">You moved up to #124 globally</p>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item-custom" href="#">
+                                        <i class="bi bi-calendar-event-fill" aria-hidden="true"></i>
+                                        <div>
+                                            <p class="item-title">Today's Mock Test is live</p>
+                                            <p class="item-desc">Starts in 45 minutes</p>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <button class="icon-btn" type="button" aria-label="Help and support">
+                            <i class="bi bi-question-circle" aria-hidden="true"></i>
+                        </button>
+
+                        <div class="header-divider" aria-hidden="true"></div>
+
+                        <!-- User profile dropdown -->
+                        <div class="dropdown">
+                            <button class="user-menu-btn dropdown-toggle" type="button" id="userDropdownBtn"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                <span class="d-none d-sm-block text-end">
+                                    <p class="user-menu-name">Alex Johnson</p>
+                                    <p class="user-menu-plan">Premium Student</p>
+                                </span>
+                                <img class="user-avatar" src="https://i.pravatar.cc/150?img=47"
+                                    alt="Alex Johnson's profile photo" width="40" height="40" />
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-custom"
+                                aria-labelledby="userDropdownBtn">
+                                <li>
+                                    <a class="dropdown-item-custom" href="#">
+                                        <i class="bi bi-person-circle" aria-hidden="true"></i>
+                                        <div>
+                                            <p class="item-title">My Profile</p>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item-custom" href="#">
+                                        <i class="bi bi-credit-card" aria-hidden="true"></i>
+                                        <div>
+                                            <p class="item-title">Billing &amp; Plan</p>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item-custom" href="#">
+                                        <i class="bi bi-gear" aria-hidden="true"></i>
+                                        <div>
+                                            <p class="item-title">Account Settings</p>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider my-1" />
+                                </li>
+                                <li>
+                                    <a class="dropdown-item-custom" href="{% url 'accounts:signin' %}">
+                                        <i class="bi bi-box-arrow-right" aria-hidden="true"></i>
+                                        <div>
+                                            <p class="item-title">Sign Out</p>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <main class="content-canvas" id="mainContent">
+            <div class="row g-4">
+
+                <!-- ============ CENTER COLUMN ============ -->
+                <div class="col-12 col-lg-8 d-flex flex-column gap-4">
+
+                    <!-- Welcome Banner -->
+                    <section class="welcome-banner reveal-on-scroll" aria-labelledby="welcomeHeading">
+                        <div class="banner-content">
+                            <h1 id="welcomeHeading" class="text-display">Good Morning, Alex <span
+                                    aria-hidden="true">👋</span></h1>
+                            <p class="lead-text text-body-lg">You're on a 15-day study streak. Keep it up and you'll
+                                reach your goal for the GRE in no time!</p>
+                            <div class="d-flex flex-wrap gap-3">
+                                <button type="button" class="btn-primary-solid">
+                                    <i class="bi bi-play-circle-fill" aria-hidden="true"></i> Continue Learning
+                                </button>
+                                <button type="button" class="btn-outline-surface">Take Mock Test</button>
+                            </div>
+                        </div>
+                        <div class="banner-pattern" aria-hidden="true"></div>
+                    </section>
+
+                    <!-- Statistics Grid -->
+                    <section class="reveal-on-scroll" aria-label="Your exam statistics">
+                        <div class="stats-grid">
+                            <div class="stat-col">
+                                <div class="stat-card h-100">
+                                    <p class="stat-label">Total Exams</p>
+                                    <div class="d-flex align-items-end justify-content-between">
+                                        <h3 class="stat-value mb-0">24</h3>
+                                        <span class="stat-trend"><i class="bi bi-graph-up-arrow" aria-hidden="true"></i>
+                                            12%</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="stat-col">
+                                <div class="stat-card h-100">
+                                    <p class="stat-label">Completed</p>
+                                    <div class="d-flex align-items-end justify-content-between">
+                                        <h3 class="stat-value mb-0">18</h3>
+                                        <span class="stat-trend"><i class="bi bi-graph-up-arrow" aria-hidden="true"></i>
+                                            5%</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="stat-col">
+                                <div class="stat-card h-100">
+                                    <p class="stat-label">Avg Score</p>
+                                    <div class="d-flex align-items-end justify-content-between">
+                                        <h3 class="stat-value mb-0">82%</h3>
+                                        <span class="stat-trend"><i class="bi bi-graph-up-arrow" aria-hidden="true"></i>
+                                            3%</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="stat-col">
+                                <div class="stat-card h-100">
+                                    <p class="stat-label">Streak</p>
+                                    <div class="d-flex align-items-end justify-content-between">
+                                        <h3 class="stat-value mb-0">15d</h3>
+                                        <i class="bi bi-fire text-error-token fs-5" aria-hidden="true"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="stat-col">
+                                <div class="stat-card h-100">
+                                    <p class="stat-label">Accuracy</p>
+                                    <div class="d-flex align-items-end justify-content-between">
+                                        <h3 class="stat-value mb-0">92%</h3>
+                                        <span class="stat-trend"><i class="bi bi-graph-up-arrow" aria-hidden="true"></i>
+                                            1%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Featured: Today's Mock Test -->
+                    <section
+                        class="featured-test-bar d-flex flex-column flex-md-row align-items-center gap-4 reveal-on-scroll"
+                        aria-labelledby="mockTestHeading">
+                        <div class="featured-icon" aria-hidden="true">
+                            <i class="bi bi-stopwatch"></i>
+                        </div>
+                        <div class="flex-grow-1 text-center text-md-start">
+                            <h4 id="mockTestHeading" class="fw-bold fs-5 mb-1">Today's Mock Test: Advanced Quantitative
+                            </h4>
+                            <p class="text-on-surface-variant mb-0">Recommended based on your recent errors in Calculus.
+                            </p>
+                        </div>
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="timer-box">
+                                <p class="timer-label mb-0">ENDS IN</p>
+                                <p class="timer-value mb-0" id="timer" aria-live="off">02:45:08</p>
+                            </div>
+                            <button type="button" class="btn-start-test">Start Test</button>
+                        </div>
+                    </section>
+
+                    <!-- Continue Learning -->
+                    <section class="reveal-on-scroll" aria-labelledby="continueLearningHeading">
+                        <div class="section-heading">
+                            <h2 id="continueLearningHeading" class="text-headline mb-0">Continue Learning</h2>
+                            <a class="view-all" href="{% url 'products:shop' %}">View All</a>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-12 col-md-6">
+                                <article class="exam-card">
+                                    <div class="d-flex align-items-start justify-content-between mb-3">
+                                        <div class="exam-icon-wrap text-primary-token">
+                                            <i class="bi bi-bank" aria-hidden="true"></i>
+                                        </div>
+                                        <span class="exam-status-badge active">Active</span>
+                                    </div>
+                                    <h5>Civil Services Exam Prep</h5>
+                                    <p class="exam-meta">34 Modules &bull; 12 Tests remaining</p>
+                                    <div class="mt-auto">
+                                        <div class="progress-row">
+                                            <span class="fw-bold">Progress</span>
+                                            <span>65%</span>
+                                        </div>
+                                        <div class="progress" role="progressbar"
+                                            aria-label="Civil Services Exam Prep progress" aria-valuenow="65"
+                                            aria-valuemin="0" aria-valuemax="100">
+                                            <div class="progress-bar progress-bar-primary" style="width: 65%"></div>
+                                        </div>
+                                        <button type="button" class="btn-resume">Resume Study</button>
+                                    </div>
+                                </article>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <article class="exam-card">
+                                    <div class="d-flex align-items-start justify-content-between mb-3">
+                                        <div class="exam-icon-wrap text-tertiary-token">
+                                            <i class="bi bi-flask" aria-hidden="true"></i>
+                                        </div>
+                                        <span class="exam-status-badge resume">Resume Soon</span>
+                                    </div>
+                                    <h5>MCAT: Organic Chemistry</h5>
+                                    <p class="exam-meta">12 Modules &bull; 4 Mastery tests</p>
+                                    <div class="mt-auto">
+                                        <div class="progress-row">
+                                            <span class="fw-bold">Progress</span>
+                                            <span>22%</span>
+                                        </div>
+                                        <div class="progress" role="progressbar"
+                                            aria-label="MCAT Organic Chemistry progress" aria-valuenow="22"
+                                            aria-valuemin="0" aria-valuemax="100">
+                                            <div class="progress-bar progress-bar-tertiary" style="width: 22%"></div>
+                                        </div>
+                                        <button type="button" class="btn-resume">Resume Study</button>
+                                    </div>
+                                </article>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Weekly Performance -->
+                    <section class="card-surface p-4 reveal-on-scroll" aria-labelledby="weeklyPerfHeading">
+                        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+                            <h2 id="weeklyPerfHeading" class="text-headline mb-0">Weekly Performance</h2>
+                            <div>
+                                <label for="perfRangeSelect" class="visually-hidden">Select performance date
+                                    range</label>
+                                <select id="perfRangeSelect" class="chart-select">
+                                    <option>Last 7 Days</option>
+                                    <option>Last 30 Days</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="bar-chart" role="img"
+                            aria-label="Bar chart of study minutes per day this week, values approximate: Monday low, Tuesday moderate, Wednesday high, Thursday moderate, Friday high, Saturday highest, Sunday low">
+                            <div class="bar-col">
+                                <div class="bar-track" style="height: 40%;">
+                                    <div class="bar-fill" style="height: 60%;"></div>
+                                </div>
+                                <span class="bar-day-label">MON</span>
+                            </div>
+                            <div class="bar-col">
+                                <div class="bar-track" style="height: 60%;">
+                                    <div class="bar-fill" style="height: 80%;"></div>
+                                </div>
+                                <span class="bar-day-label">TUE</span>
+                            </div>
+                            <div class="bar-col">
+                                <div class="bar-track" style="height: 85%;">
+                                    <div class="bar-fill" style="height: 95%;"></div>
+                                </div>
+                                <span class="bar-day-label">WED</span>
+                            </div>
+                            <div class="bar-col">
+                                <div class="bar-track" style="height: 50%;">
+                                    <div class="bar-fill" style="height: 40%;"></div>
+                                </div>
+                                <span class="bar-day-label">THU</span>
+                            </div>
+                            <div class="bar-col">
+                                <div class="bar-track" style="height: 70%;">
+                                    <div class="bar-fill" style="height: 85%;"></div>
+                                </div>
+                                <span class="bar-day-label">FRI</span>
+                            </div>
+                            <div class="bar-col">
+                                <div class="bar-track" style="height: 95%;">
+                                    <div class="bar-fill" style="height: 90%;"></div>
+                                </div>
+                                <span class="bar-day-label">SAT</span>
+                            </div>
+                            <div class="bar-col">
+                                <div class="bar-track" style="height: 45%;">
+                                    <div class="bar-fill" style="height: 30%;"></div>
+                                </div>
+                                <span class="bar-day-label">SUN</span>
+                            </div>
+                        </div>
+                    </section>
+
+                </div>
+                <!-- ============ END CENTER COLUMN ============ -->
+
+                <!-- ============ RIGHT SIDEBAR ============ -->
+                <div class="col-12 col-lg-4 d-flex flex-column gap-4">
+
+                    <!-- Quick Actions -->
+                    <section class="reveal-on-scroll" aria-label="Quick actions">
+                        <div class="row row-cols-2 g-3">
+                            <div class="col">
+                                <button type="button" class="quick-action-btn qa-primary">
+                                    <i class="bi bi-list-check" aria-hidden="true"></i>
+                                    <span class="label">Practice MCQs</span>
+                                </button>
+                            </div>
+                            <div class="col">
+                                <button type="button" class="quick-action-btn qa-secondary">
+                                    <i class="bi bi-lightning-charge-fill" aria-hidden="true"></i>
+                                    <span class="label">Daily Quiz</span>
+                                </button>
+                            </div>
+                            <div class="col">
+                                <button type="button" class="quick-action-btn qa-tertiary">
+                                    <i class="bi bi-bookmark-fill" aria-hidden="true"></i>
+                                    <span class="label">Bookmarks</span>
+                                </button>
+                            </div>
+                            <div class="col">
+                                <button type="button" class="quick-action-btn qa-error">
+                                    <i class="bi bi-lightbulb-fill" aria-hidden="true"></i>
+                                    <span class="label">Smart Tips</span>
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Study Goal -->
+                    <section class="card-surface p-4 reveal-on-scroll" aria-labelledby="studyGoalHeading">
+                        <h3 id="studyGoalHeading" class="fw-bold mb-3">Study Goal</h3>
+                        <div class="study-goal-ring-wrap" role="img" aria-label="Weekly study goal 75 percent complete">
+                            <svg viewBox="0 0 128 128" aria-hidden="true">
+                                <circle class="study-goal-ring-track" cx="64" cy="64" r="56" fill="transparent"
+                                    stroke-width="12"></circle>
+                                <circle class="study-goal-ring-progress" cx="64" cy="64" r="56" fill="transparent"
+                                    stroke-width="12" stroke-dasharray="351.8" stroke-dashoffset="88"></circle>
+                            </svg>
+                            <div class="study-goal-center">
+                                <span class="pct">75%</span>
+                                <span class="lbl">Weekly Target</span>
+                            </div>
+                        </div>
+                        <p class="text-center text-on-surface-variant mb-0" style="font-size:12px;">
+                            3h 45m studied today.<br>Only 1h 15m left to reach your goal!
+                        </p>
+                    </section>
+
+                    <!-- Upcoming Tests -->
+                    <section class="card-surface p-4 reveal-on-scroll" aria-labelledby="upcomingTestsHeading">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h3 id="upcomingTestsHeading" class="fw-bold mb-0">Upcoming Tests</h3>
+                            <button type="button" class="icon-btn" style="width:32px;height:32px;"
+                                aria-label="More upcoming test options">
+                                <i class="bi bi-three-dots" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                        <div class="d-flex flex-column gap-3">
+                            <div class="upcoming-test-item">
+                                <div class="upcoming-test-date">
+                                    <p class="month mb-0">OCT</p>
+                                    <p class="day mb-0">14</p>
+                                </div>
+                                <div>
+                                    <p class="test-title">Full Mock SAT #5</p>
+                                    <p class="test-meta">09:00 AM &bull; Duration: 3h</p>
+                                </div>
+                            </div>
+                            <div class="upcoming-test-item">
+                                <div class="upcoming-test-date">
+                                    <p class="month mb-0">OCT</p>
+                                    <p class="day mb-0">17</p>
+                                </div>
+                                <div>
+                                    <p class="test-title">Vocabulary Drill</p>
+                                    <p class="test-meta">02:30 PM &bull; Duration: 45m</p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Leaderboard Preview -->
+                    <section class="card-surface p-4 reveal-on-scroll" aria-labelledby="leaderboardHeading">
+                        <h3 id="leaderboardHeading" class="fw-bold mb-3">Top Peers</h3>
+                        <div class="d-flex flex-column gap-2">
+                            <div class="leaderboard-row">
+                                <span class="rank">1</span>
+                                <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDp9YOH7tIgW6CrylBEawmxLXB3qNZKVonRhAzIm5mFl44iG24mmU50Nly7AvzlXUj51XIA2IBlJCb2lDZ7sZi1DR7w9BhNsI0iGpGNF1-0UDhbFBtBidlsZPTMGTPnY9C0F5duGATFDVyGIIyCmCRGLWr2ULQCJUacK6toeM4sXN2GhRdknyOn809JAfLyYi4AY1_jqIln7_V17oHT8awfHV2ZJLMn41hIwJpSJsGlBYrGVbeE3U7Qw6cXxpYyiQCg3_wDSwynshs"
+                                    alt="Sarah W. avatar">
+                                <span class="lb-name">Sarah W.</span>
+                                <span class="lb-pts">2,450 pts</span>
+                            </div>
+                            <div class="leaderboard-row is-you">
+                                <span class="rank">4</span>
+                                <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCPrsOQaAgW0Y8paJX6qLo3aY2xPk8Mimz2ivhp0AXAQQiGa3pteRX1HMdoxaJ-6zUij0aZyCazQ6tIVza5x99C2d4zo9a4z9NtDxel-OIFq7f2Rc6k96Q3IUden0UjRZc0mKjXoxDQnUnSyUnP2CeSeCtEAi5eEfUHLpuEHBs4m6ZcdlHsZk7Z9HqBgHB6kf4xP2DX70y8hGlRfPDuSB-NjyKXEfh8zIjd7s6DGFOS_ZPcd68wB0rpKBQsnDMJ9lq_InApbDF3jPE"
+                                    alt="Alex Johnson avatar">
+                                <span class="lb-name">Alex J. (You)</span>
+                                <span class="lb-pts">1,920 pts</span>
+                            </div>
+                            <div class="leaderboard-row">
+                                <span class="rank">5</span>
+                                <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCSjy5PIhsLIY8troJC0e8hllpHk9efk8csaefMqIDqao2auwI5lWHJJ_4MLC0iztFcFL4YO7NxQin4YJ7hMNWySGQevV2W4Oh2y7JofeVA1Asq6NSfgXjl-lcfJXfcEofauscWF31OZ_aOVFTRZ1U4fIpV-98E3TsBAqul86EaoAWM0j1dfDWqKCHoLUVBHs9IWhAnIGlJxVPlY00oVGVexk3jVHp6W64_ewzSuGUtNfIIqJeR_rw3hfMsTrD7h8c5YkANmvohevY"
+                                    alt="Kevin M. avatar">
+                                <span class="lb-name">Kevin M.</span>
+                                <span class="lb-pts">1,880 pts</span>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Recent Activity Timeline -->
+                    <section class="card-surface p-4 reveal-on-scroll" aria-labelledby="recentActivityHeading">
+                        <h3 id="recentActivityHeading" class="fw-bold mb-3">Recent Activity</h3>
+                        <div class="activity-timeline">
+                            <div class="activity-item">
+                                <span class="activity-icon icon-success"><i class="bi bi-check-circle-fill"
+                                        aria-hidden="true"></i></span>
+                                <p class="activity-title">Completed Mock SAT #4</p>
+                                <p class="activity-meta">2 hours ago &bull; Score: 1450/1600</p>
+                            </div>
+                            <div class="activity-item">
+                                <span class="activity-icon icon-primary"><i class="bi bi-bookmark-fill"
+                                        aria-hidden="true"></i></span>
+                                <p class="activity-title">Saved Organic Chemistry</p>
+                                <p class="activity-meta">Yesterday &bull; Module 4: Amines</p>
+                            </div>
+                            <div class="activity-item">
+                                <span class="activity-icon icon-neutral"><i class="bi bi-award"
+                                        aria-hidden="true"></i></span>
+                                <p class="activity-title">Earned 7-Day Streak Badge</p>
+                                <p class="activity-meta">3 days ago</p>
+                            </div>
+                        </div>
+                    </section>
+
+                </div>
+                <!-- ============ END RIGHT SIDEBAR ============ -->
+
+            </div>
+        </main>
+        </div>
+    </div>
+
+    <!-- =========================================================
+     MOBILE BOTTOM NAVIGATION
+     ========================================================= -->
+    <nav class="mobile-bottom-nav" aria-label="Mobile primary navigation">
+        <a href="{% url 'dashboard:index' %}" class="active" aria-current="page">
+            <i class="bi bi-grid-1x2-fill" aria-hidden="true"></i>
+            <span>Home</span>
+        </a>
+        <a href="{% url 'dashboard:my_exams' %}">
+            <i class="bi bi-journal-bookmark" aria-hidden="true"></i>
+            <span>Exams</span>
+        </a>
+        <a href="{% url 'dashboard:results' %}">
+            <i class="bi bi-graph-up-arrow" aria-hidden="true"></i>
+            <span>Stats</span>
+        </a>
+        <a href="#">
+            <i class="bi bi-person" aria-hidden="true"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <!-- =========================================================
+     FOOTER
+     ========================================================= -->
+    <footer class="app-footer">
+        <div class="footer-inner">
+            <p>&copy; 2024 ExamPrep Educational Platforms Inc.</p>
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Contact Support</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5.3 Bundle JS (Popper included) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom Dashboard JS -->
+    <script src="{% static 'js/stu-dashboard/dashboard.js' %}"></script>
+</body>
+
+</html>

@@ -1,0 +1,276 @@
+{% extends "Books/Djnago/django-read/index.html" %}
+{% load static %}
+
+{% block title %}Week 04 — GitHub Upload &amp; Professional README{% endblock %}
+
+{% block content %}
+<!-- ===== BREADCRUMB ===== -->
+<div class="breadcrumb">
+    <a href="{% url 'products:django-book' %}">Django Course</a>
+    <span class="sep">›</span>
+    <span>Week 4</span>
+    <span class="sep">›</span>
+    <span>Lesson 4</span>
+</div>
+
+<!-- ===== LESSON HEADER ===== -->
+<div class="lesson-header">
+    <span class="tag">📖 Week 4 · Lesson 4</span>
+    <h1>GitHub Upload &amp; Professional README</h1>
+    <div class="sub">
+        <i class="fab fa-github" style="color:#0c4b33;margin-right:4px;"></i>
+        Upload your project to GitHub with a professional README — portfolio-ready!
+    </div>
+</div>
+
+<!-- ===== CONTENT ===== -->
+<div class="reading-content">
+{% verbatim %}
+
+    <!-- ===== INTRODUCTION ===== -->
+    <div class="info-box success-box">
+        <i class="bi bi-trophy me-2 text-success"></i>
+        <strong>🎉 Bahut khoob!</strong> Ab app <strong>professional</strong> dikh rahi hai.
+        Chaliye aakhri step — <strong>GitHub pe upload</strong> aur <strong>deployment</strong> (live link banane) ka
+        process karte hain.
+    </div>
+
+    <!-- ============================================================
+                    PART 5: GITHUB UPLOAD
+                    ============================================================ -->
+    <h2>Part 5: GitHub Pe Upload Karna</h2>
+
+    <!-- ===== STEP 1: .GITIGNORE ===== -->
+    <h2><span class="step-number">1</span> .gitignore File Banayein</h2>
+
+    <p>
+        Root folder mein <code>.gitignore</code> naam ki file banayein (kuch files <strong>GitHub pe nahi jaani
+            chahiye</strong>):
+    </p>
+
+    <div class="code-block">
+        <div class="code-label">
+            <i class="fas fa-file-alt"></i> .gitignore
+        </div>
+        <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i> Copy</button>
+        <pre><code class="language-bash"># Virtual Environment
+venv/
+practice/
+env/
+.env
+
+# Python Cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Database
+db.sqlite3
+*.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Environment Variables
+.env
+.env.local
+
+# Logs
+*.log
+logs/
+
+# Static Files (collected)
+staticfiles/
+static/
+
+# Media Files
+media/
+
+# OS
+.DS_Store
+Thumbs.db</code></pre>
+    </div>
+
+    <div class="info-box">
+        <i class="bi bi-shield-check me-2 text-success"></i>
+        <strong>Why .gitignore?</strong> Yeh files <strong>GitHub pe nahi jayengi</strong> —
+        <span style="color:var(--success);font-weight:600;">✅ Security + Clean repo!</span>
+        <br /><br />
+        <strong>Important:</strong> <code>.env</code> file mein <strong>SECRET_KEY</strong> aur sensitive data hota hai
+        — is liye isko <strong>never</strong> commit karein!
+    </div>
+
+    <!-- ===== STEP 2: REQUIREMENTS.TXT ===== -->
+    <h2><span class="step-number">2</span> requirements.txt Banayein</h2>
+
+    <p>
+        Ye file batati hai project ko <strong>kaun se packages</strong> chahiye — taake koi aur (ya recruiter) aasani se
+        project run kar sake:
+    </p>
+
+    <div class="terminal-command">
+        <span class="prompt">$</span>
+        <span class="command">pip freeze > requirements.txt</span>
+    </div>
+
+    <div class="code-block">
+        <div class="code-label">
+            <i class="fas fa-file-alt"></i> requirements.txt (Example)
+        </div>
+        <pre><code class="language-bash">Django==4.2.7
+gunicorn==21.2.0
+whitenoise==6.6.0
+dj-database-url==2.1.0
+psycopg2-binary==2.9.9
+python-decouple==3.8</code></pre>
+    </div>
+
+    <!-- ===== STEP 3: GIT SETUP ===== -->
+    <h2><span class="step-number">3</span> Git Setup Aur Push Karein</h2>
+
+    <div class="terminal-command">
+        <span class="prompt">$</span>
+        <span class="command">git init</span>
+    </div>
+    <div class="terminal-command">
+        <span class="prompt">$</span>
+        <span class="command">git add .</span>
+    </div>
+    <div class="terminal-command">
+        <span class="prompt">$</span>
+        <span class="command">git commit -m "Task Manager - Django CRUD project"</span>
+    </div>
+
+    <div class="info-box teal-box">
+        <i class="bi bi-github me-2 text-success"></i>
+        <strong>Next:</strong> GitHub.com pe jake ek <strong>naya repository</strong> banayein (bina README/gitignore
+        initialize kiye), aur wo commands copy karein jo GitHub khud dikhata hai:
+    </div>
+
+    <div class="code-block" style="border:2px solid var(--success);">
+        <div class="code-label">
+            <i class="fab fa-github" style="color:var(--success);"></i>
+            <span style="color:var(--success);">GitHub Commands</span>
+        </div>
+        <pre><code class="language-bash">git remote add origin https://github.com/aapka-username/task-manager.git
+git branch -M main
+git push -u origin main</code></pre>
+    </div>
+
+    <!-- ============================================================
+                    STEP 4: README
+                    ============================================================ -->
+    <h2><span class="step-number">4</span> Achi README Likhein</h2>
+
+    <p>
+        <code>README.md</code> mein ye include karein:
+    </p>
+
+    <div class="code-block" style="border:2px solid var(--primary);">
+        <div class="code-label">
+            <i class="fas fa-file-alt" style="color:var(--primary);"></i>
+            <span style="color:var(--primary);">README.md — Professional Template</span>
+        </div>
+        <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i> Copy</button>
+        <pre><code class="language-markdown"># Task Manager
+
+A complete Django CRUD application with user authentication, categories, and tags.
+
+## 🚀 Features
+
+- ✅ **Full CRUD** — Create, Read, Update, Delete tasks
+- ✅ **User Authentication** — Signup, Login, Logout
+- ✅ **User-Specific Data** — Each user sees only their own tasks
+- ✅ **Categories** — Organize tasks by category
+- ✅ **Tags** — Add multiple tags to tasks
+- ✅ **Admin Panel** — Customized with search, filters, and editable fields
+- ✅ **Responsive Design** — Bootstrap 5 styling
+- ✅ **Deployed** — Live on Render.com
+
+## 🛠️ Tech Stack
+
+- **Backend:** Django 4.2
+- **Database:** SQLite (dev) / PostgreSQL (prod)
+- **Frontend:** Bootstrap 5
+- **Deployment:** Render.com
+- **Version Control:** Git & GitHub
+
+## 📦 Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/your-username/task-manager.git
+cd task-manager
+
+# Create virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Apply migrations
+python manage.py migrate
+
+# Create superuser (optional)
+python manage.py createsuperuser
+
+# Run development server
+python manage.py runserver
+```</code></pre>
+    </div>
+
+{% endverbatim %}
+</div>
+
+<!-- ===== NAVIGATION FOOTER ===== -->
+<div class="lesson-nav-bar">
+    <div class="d-flex align-items-center justify-content-between gap-3">
+        <a href="{% url 'products:django-week4-l3' %}" class="btn-lesson-nav btn-lesson-prev">
+            <i class="bi bi-arrow-left me-2"></i>
+            <span>Previous (L3)</span>
+        </a>
+
+        <div class="d-none d-sm-block text-center">
+            <span class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill font-monospace" style="font-size: 0.8rem; font-weight:500;">
+                Week 4 • Lesson 4 of 4
+            </span>
+        </div>
+
+        <a href="{% url 'products:django-book' %}" class="btn-lesson-nav btn-lesson-next">
+            <span>Course Complete 🎉</span>
+            <i class="bi bi-arrow-right ms-2"></i>
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block right_sidebar %}
+<div class="right-section">
+    <h4>📊 Your Progress</h4>
+    <div class="progress-ring">
+        <div class="circle"><span>100%</span></div>
+        <div class="info">
+            <strong>4/4</strong> Week 4 done
+        </div>
+    </div>
+</div>
+
+<div class="right-section">
+    <h4>⚡ Quick Actions</h4>
+    <div class="quick-actions">
+        <button class="quick-btn"><span class="icon">⭐</span> Bookmark</button>
+        <button class="quick-btn"><span class="icon">📝</span> Add Note</button>
+    </div>
+</div>
+
+<div class="right-section" style="flex:1;">
+    <h4>📝 Your Notes</h4>
+    <textarea class="notes-area" id="djangoNotes" placeholder="Write your notes here..."></textarea>
+</div>
+{% endblock %}

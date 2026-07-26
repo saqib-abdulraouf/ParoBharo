@@ -1,0 +1,163 @@
+{% extends "Books/Djnago/django-read/index.html" %}
+{% load static %}
+
+{% block title %}Week 01 — Virtual Environment + Django Installation{% endblock %}
+
+{% block content %}
+                <div class="breadcrumb">
+                    <a href="{% url 'products:django-book' %}">Django Course</a>
+                    <span class="sep">›</span>
+                    <span>Week 1</span>
+                    <span class="sep">›</span>
+                    <span>Lesson 1</span>
+                </div>
+
+                <div class="lesson-header">
+                    <span class="tag">📖 Week 1 · Lesson 1</span>
+                    <h1>Virtual Environment + Django Installation</h1>
+                    <div class="sub"><i class="fas fa-rocket" style="color:#0c4b33;margin-right:4px;"></i> Step-by-step guide to set up your Django development environment</div>
+                </div>
+
+                <div class="reading-content">
+
+                    <!-- ===== STEP 1 ===== -->
+                    <h2>
+                        <span class="step-number">1</span> Virtual Environment Banana
+                    </h2>
+
+                    <p>
+                        Har Django project ke liye alag virtual environment banana <strong>best practice</strong> hai 
+                        (taake projects ke packages mix na hon). Apna terminal/CMD kholein aur ye commands chalayein:
+                    </p>
+
+                    <div class="code-block">
+                        <div class="code-label">
+                            <i class="fas fa-terminal"></i> Terminal / Command Prompt
+                        </div>
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                        <pre><code class="language-bash"># Ek folder banayein apne project ke liye
+mkdir django_projects
+cd django_projects
+
+# Virtual environment banayein
+python -m venv venv
+
+# Activate karein
+# Windows pe:
+venv\Scripts\activate
+
+# Mac/Linux pe:
+source venv/bin/activate</code></pre>
+                    </div>
+
+                    <div class="info-box">
+                        <i class="fas fa-info-circle" style="color:#0c4b33;margin-right:8px;"></i>
+                        <strong>Tip:</strong> Activate hone ke baad terminal ke start mein <code>(venv)</code> 
+                        likha nazar aayega — iska matlab hai ye successfully ho gaya.
+                    </div>
+
+                    <!-- ===== STEP 2 ===== -->
+                    <h2>
+                        <span class="step-number">2</span> Django Install Karna
+                    </h2>
+
+                    <div class="terminal-command">
+                        <span class="prompt">$</span>
+                        <span class="command">pip install django</span>
+                    </div>
+
+                    <p>
+                        Install hone ke baad check karein version:
+                    </p>
+
+                    <div class="terminal-command">
+                        <span class="prompt">$</span>
+                        <span class="command">django-admin --version</span>
+                    </div>
+
+                    <!-- ===== ERROR SECTION ===== -->
+                    <h2 style="margin-top:2rem;">
+                        <span class="step-number" style="background:#ba1a1a;">!</span> Common Error &amp; Fix
+                    </h2>
+
+                    <div class="error-box">
+                        <div class="error-title">
+                            <i class="fas fa-triangle-exclamation"></i> Fatal Error
+                        </div>
+                        <p>
+                            <code style="background:rgba(0,0,0,0.06);padding:2px 6px;border-radius:4px;font-size:14px;">
+                            Fatal error in launcher: Unable to create process using "...": The system cannot find the file specified.
+                            </code>
+                        </p>
+                    </div>
+
+                    <p>
+                        <strong>Diagnosis:</strong> Ye error isliye aa raha hai kyunke aapka virtual environment pehle kisi aur location pe bana tha, 
+                        phir aapne folder move/rename kar diya. Venv ke andar paths hardcoded hoti hain, isliye jab folder move hota hai 
+                        to venv <strong>toot jaata hai</strong>.
+                    </p>
+
+                    <p>
+                        <strong>Fix simple hai — purana venv delete karke, sahi jagah se naya banayein.</strong>
+                    </p>
+
+                    <!-- ===== SUCCESS ===== -->
+                    <div class="success-box">
+                        <div class="success-title">
+                            <i class="fas fa-check-circle"></i> ✅ Expected Result
+                        </div>
+                        <p>
+                            <strong>✅ (practice)</strong> terminal ke shuru mein nazar aana chahiye activate hone ke baad.
+                            <br />
+                            <strong>✅</strong> Django successfully installed with version number.
+                        </p>
+                    </div>
+
+                    <!-- Navigation Footer -->
+                    <div class="lesson-nav-bar">
+                        <div class="d-flex align-items-center justify-content-between gap-3">
+                            <a href="{% url 'products:django-book' %}" class="btn-lesson-nav btn-lesson-prev">
+                                <i class="bi bi-arrow-left me-2"></i>
+                                <span>Overview</span>
+                            </a>
+
+                            <div class="d-none d-sm-block text-center">
+                                <span class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill font-monospace" style="font-size: 0.8rem; font-weight:500;">
+                                    Week 1 • Lesson 1 of 4
+                                </span>
+                            </div>
+
+                            <a href="{% url 'products:django-week1-l2' %}" class="btn-lesson-nav btn-lesson-next">
+                                <span>Next Lesson (L2)</span>
+                                <i class="bi bi-arrow-right ms-2"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+{% endblock %}
+
+{% block right_sidebar %}
+            <div class="right-section">
+                <h4>📊 Your Progress</h4>
+                <div class="progress-ring">
+                    <div class="circle"><span>25%</span></div>
+                    <div class="info">
+                        <strong>1/4</strong> Week 1 done
+                    </div>
+                </div>
+            </div>
+
+            <div class="right-section">
+                <h4>⚡ Quick Actions</h4>
+                <div class="quick-actions">
+                    <button class="quick-btn"><span class="icon">⭐</span> Bookmark</button>
+                    <button class="quick-btn"><span class="icon">📝</span> Add Note</button>
+                </div>
+            </div>
+
+            <div class="right-section" style="flex:1;">
+                <h4>📝 Your Notes</h4>
+                <textarea class="notes-area" id="djangoNotes" placeholder="Write your notes here... python -m venv venv"></textarea>
+            </div>
+{% endblock %}

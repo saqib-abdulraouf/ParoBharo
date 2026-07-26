@@ -1,0 +1,1027 @@
+/* ==========================================================================
+   ExamPrep - Design System Tokens
+   Mapped from the source design spec into CSS custom properties and
+   Bootstrap 5.3 theme variable overrides.
+   ========================================================================== */
+
+:root {
+    /* Color tokens (from design spec) */
+    --color-background: #f9f9ff;
+    --color-surface-container-lowest: #ffffff;
+    --color-surface-container-highest: #d8e3fb;
+    --color-error: #ba1a1a;
+    --color-on-primary: #ffffff;
+    --color-secondary-fixed: #6ffbbe;
+    --color-surface: #f9f9ff;
+    --color-surface-container-high: #dee8ff;
+    --color-surface-container-low: #f0f3ff;
+    --color-secondary-container: #6cf8bb;
+    --color-inverse-surface: #263143;
+    --color-tertiary-fixed: #e1e0ff;
+    --color-on-primary-fixed: #0f0069;
+    --color-surface-bright: #f9f9ff;
+    --color-on-secondary-fixed-variant: #005236;
+    --color-primary-fixed-dim: #c3c0ff;
+    --color-on-primary-container: #dad7ff;
+    --color-on-secondary-container: #00714d;
+    --color-primary-container: #4f46e5;
+    --color-on-primary-fixed-variant: #3323cc;
+    --color-inverse-primary: #c3c0ff;
+    --color-on-secondary: #ffffff;
+    --color-on-surface: #111c2d;
+    --color-surface-dim: #cfdaf2;
+    --color-tertiary: #3130c0;
+    --color-secondary-fixed-dim: #4edea3;
+    --color-primary: #3525cd;
+    --color-surface-tint: #4d44e3;
+    --color-error-container: #ffdad6;
+    --color-surface-variant: #d8e3fb;
+    --color-tertiary-container: #4b4dd8;
+    --color-surface-container: #e7eeff;
+    --color-tertiary-fixed-dim: #c0c1ff;
+    --color-on-background: #111c2d;
+    --color-on-secondary-fixed: #002113;
+    --color-on-tertiary: #ffffff;
+    --color-on-tertiary-fixed: #07006c;
+    --color-outline-variant: #c7c4d8;
+    --color-on-error-container: #93000a;
+    --color-on-tertiary-fixed-variant: #2f2ebe;
+    --color-secondary: #006c49;
+    --color-primary-fixed: #e2dfff;
+    --color-outline: #777587;
+    --color-on-tertiary-container: #d9d8ff;
+    --color-on-error: #ffffff;
+    --color-inverse-on-surface: #ecf1ff;
+    --color-on-surface-variant: #464555;
+
+    /* Spacing tokens */
+    --space-stack-sm: 8px;
+    --space-stack-md: 16px;
+    --space-stack-lg: 32px;
+    --space-unit: 8px;
+    --space-margin-desktop: 40px;
+    --space-margin-mobile: 16px;
+    --space-container-max: 1280px;
+    --space-gutter: 24px;
+
+    /* Border radius tokens */
+    --radius-default: 0.25rem;
+    --radius-lg: 0.5rem;
+    --radius-xl: 0.75rem;
+    --radius-full: 9999px;
+
+    /* ---- Bootstrap 5.3 theme variable overrides ---- */
+    --bs-body-bg: var(--color-background);
+    --bs-body-color: var(--color-on-background);
+    --bs-primary: var(--color-primary);
+    --bs-primary-rgb: 53, 37, 205;
+    --bs-secondary: var(--color-secondary);
+    --bs-secondary-rgb: 0, 108, 73;
+    --bs-border-color: var(--color-outline-variant);
+    --bs-link-color: var(--color-primary);
+    --bs-link-hover-color: var(--color-tertiary);
+    --bs-font-sans-serif: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--color-background);
+    color: var(--color-on-background);
+}
+
+.font-mono-label {
+    font-family: 'JetBrains Mono', monospace;
+}
+
+/* ==========================================================================
+   Typography scale (from design spec fontSize tokens)
+   ========================================================================== */
+.text-display-lg {
+    font-size: 48px;
+    line-height: 56px;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+}
+
+.text-display-lg-mobile {
+    font-size: 36px;
+    line-height: 44px;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+}
+
+.text-headline-md {
+    font-size: 24px;
+    line-height: 32px;
+    letter-spacing: -0.01em;
+    font-weight: 600;
+}
+
+.text-body-lg {
+    font-size: 18px;
+    line-height: 28px;
+    font-weight: 400;
+}
+
+.text-body-md {
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 400;
+}
+
+.text-label-sm {
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 500;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+@media (min-width: 768px) {
+    .text-display-lg-responsive {
+        font-size: 48px;
+        line-height: 56px;
+    }
+}
+
+/* ==========================================================================
+   Color utility classes
+   ========================================================================== */
+.bg-background {
+    background-color: var(--color-background) !important;
+}
+
+.bg-surface {
+    background-color: var(--color-surface) !important;
+}
+
+.bg-surface-container-lowest {
+    background-color: var(--color-surface-container-lowest) !important;
+}
+
+.bg-surface-container-low {
+    background-color: var(--color-surface-container-low) !important;
+}
+
+.bg-surface-container {
+    background-color: var(--color-surface-container) !important;
+}
+
+.bg-surface-container-high {
+    background-color: var(--color-surface-container-high) !important;
+}
+
+.bg-surface-container-highest {
+    background-color: var(--color-surface-container-highest) !important;
+}
+
+.bg-inverse-surface {
+    background-color: var(--color-inverse-surface) !important;
+}
+
+.bg-secondary-container {
+    background-color: var(--color-secondary-container) !important;
+}
+
+.bg-primary-fixed {
+    background-color: var(--color-primary-fixed) !important;
+}
+
+.bg-primary-soft {
+    background-color: rgba(53, 37, 205, 0.1) !important;
+}
+
+.bg-white-soft {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.text-on-background {
+    color: var(--color-on-background) !important;
+}
+
+.text-on-surface {
+    color: var(--color-on-surface) !important;
+}
+
+.text-on-surface-variant {
+    color: var(--color-on-surface-variant) !important;
+}
+
+.text-on-secondary-container {
+    color: var(--color-on-secondary-container) !important;
+}
+
+.text-on-primary {
+    color: var(--color-on-primary) !important;
+}
+
+.text-inverse-on-surface {
+    color: var(--color-inverse-on-surface) !important;
+}
+
+.text-outline {
+    color: var(--color-outline) !important;
+}
+
+.text-tertiary {
+    color: var(--color-tertiary) !important;
+}
+
+.border-outline-variant {
+    border-color: var(--color-outline-variant) !important;
+}
+
+.border-primary-fixed-dim {
+    border-color: var(--color-primary-fixed-dim) !important;
+}
+
+a.nav-link-custom {
+    color: var(--color-on-surface-variant);
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+a.nav-link-custom:hover {
+    color: var(--color-primary);
+}
+
+a.nav-link-active {
+    color: var(--color-primary);
+    font-weight: 700;
+    border-bottom: 2px solid var(--color-primary);
+    padding-bottom: 4px;
+    text-decoration: none;
+}
+
+/* ==========================================================================
+   Spacing helpers matching design tokens
+   ========================================================================== */
+.px-margin-desktop {
+    padding-left: var(--space-margin-desktop);
+    padding-right: var(--space-margin-desktop);
+}
+
+.px-margin-mobile {
+    padding-left: var(--space-margin-mobile);
+    padding-right: var(--space-margin-mobile);
+}
+
+@media (min-width: 768px) {
+    .px-margin-mobile {
+        padding-left: var(--space-margin-desktop);
+        padding-right: var(--space-margin-desktop);
+    }
+}
+
+.max-w-container {
+    max-width: var(--space-container-max);
+}
+
+.gap-gutter {
+    gap: var(--space-gutter);
+}
+
+.py-stack-lg {
+    padding-top: var(--space-stack-lg);
+    padding-bottom: var(--space-stack-lg);
+}
+
+/* ==========================================================================
+   Buttons
+   ========================================================================== */
+.btn-primary-custom {
+    background-color: var(--color-primary);
+    color: var(--color-on-primary);
+    font-weight: 700;
+    border: none;
+    border-radius: var(--radius-xl);
+    padding: 1rem 2rem;
+    box-shadow: 0 10px 15px -3px rgba(53, 37, 205, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.btn-primary-custom:hover {
+    transform: translateY(-2px);
+    color: var(--color-on-primary);
+    box-shadow: 0 15px 20px -3px rgba(53, 37, 205, 0.25);
+}
+
+.btn-outline-custom {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-outline-variant);
+    color: var(--color-on-surface);
+    font-weight: 700;
+    border-radius: var(--radius-xl);
+    padding: 1rem 2rem;
+    transition: background-color 0.2s ease;
+}
+
+.btn-outline-custom:hover {
+    background-color: var(--color-surface-container-low);
+    color: var(--color-on-surface);
+}
+
+.btn-pill-primary {
+    background-color: var(--color-primary);
+    color: var(--color-on-primary);
+    font-weight: 700;
+    border-radius: var(--radius-lg);
+    padding: 0.65rem 1.5rem;
+    border: none;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    transition: transform 0.15s ease;
+}
+
+.btn-pill-primary:hover {
+    transform: scale(0.97);
+    color: var(--color-on-primary);
+}
+
+/* ==========================================================================
+   Glassmorphism card (hero image overlay)
+   ========================================================================== */
+.glass-card {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+/* ==========================================================================
+   Bento grid (Featured Exams)
+   ========================================================================== */
+.bento-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 24px;
+}
+
+.bento-item-large {
+    grid-column: span 8;
+}
+
+.bento-item-small {
+    grid-column: span 4;
+}
+
+@media (max-width: 768px) {
+
+    .bento-item-large,
+    .bento-item-small {
+        grid-column: span 12;
+    }
+}
+
+.icon-tile {
+    width: 3rem;
+    height: 3rem;
+    border-radius: var(--radius-xl);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.feature-icon-circle {
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(53, 37, 205, 0.1);
+    color: var(--color-primary);
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.feature-card:hover .feature-icon-circle {
+    background-color: var(--color-primary);
+    color: var(--color-on-primary);
+}
+
+.feature-card {
+    border: 1px solid var(--color-outline-variant);
+    border-radius: 1rem;
+    transition: border-color 0.2s ease;
+    background-color: var(--color-surface);
+}
+
+.feature-card:hover {
+    border-color: var(--color-primary);
+}
+
+.avatar-stack img {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    border: 2px solid var(--color-surface);
+    object-fit: cover;
+    margin-left: -12px;
+}
+
+.avatar-stack img:first-child {
+    margin-left: 0;
+}
+
+/* ==========================================================================
+   Testimonials marquee
+   ========================================================================== */
+.marquee-track {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 2rem;
+    animation: marquee 40s linear infinite;
+}
+
+.marquee-track:hover {
+    animation-play-state: paused;
+}
+
+@keyframes marquee {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+.testimonial-card {
+    min-width: 400px;
+    background-color: var(--color-surface);
+    padding: 2.5rem;
+    border-radius: 1.5rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
+    border: 1px solid var(--color-outline-variant);
+}
+
+/* ==========================================================================
+   Pricing
+   ========================================================================== */
+.pricing-card-basic {
+    background-color: var(--color-surface);
+    border-radius: 1.5rem;
+    border: 1px solid var(--color-outline-variant);
+    padding: 2.5rem;
+    transition: border-color 0.2s ease;
+}
+
+.pricing-card-basic:hover {
+    border-color: var(--color-primary-fixed-dim);
+}
+
+.pricing-card-pro {
+    background-color: var(--color-inverse-surface);
+    color: var(--color-inverse-on-surface);
+    border-radius: 1.5rem;
+    padding: 2.5rem;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+}
+
+.pricing-badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: var(--color-primary);
+    color: var(--color-on-primary);
+    padding: 0.5rem 1.5rem;
+    border-bottom-left-radius: 1.5rem;
+    font-size: 12px;
+    font-weight: 500;
+    font-family: 'JetBrains Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+#billing-toggle {
+    width: 56px;
+    height: 28px;
+    border-radius: var(--radius-full);
+    background-color: var(--color-primary);
+    border: none;
+    position: relative;
+    padding: 4px;
+    transition: background-color 0.2s ease;
+}
+
+#billing-toggle .toggle-knob {
+    width: 20px;
+    height: 20px;
+    background-color: #ffffff;
+    border-radius: 50%;
+    transition: transform 0.2s ease;
+    transform: translateX(28px);
+}
+
+/* ==========================================================================
+   Hero
+   ========================================================================== */
+.hero-image-wrap {
+    position: relative;
+}
+
+.hero-image-glow {
+    position: absolute;
+    inset: -16px;
+    background-color: rgba(53, 37, 205, 0.1);
+    border-radius: 1.5rem;
+    filter: blur(40px);
+    transition: background-color 0.5s ease;
+    z-index: 0;
+}
+
+.hero-image-wrap:hover .hero-image-glow {
+    background-color: rgba(53, 37, 205, 0.2);
+}
+
+.hero-image-card {
+    position: relative;
+    z-index: 1;
+    background-color: var(--color-surface);
+    border-radius: 1.5rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    border: 1px solid rgba(199, 196, 216, 0.3);
+}
+
+/* ==========================================================================
+   Featured exam cards
+   ========================================================================== */
+.exam-card-image {
+    position: relative;
+    overflow: hidden;
+    border-radius: 1.5rem;
+    border: 1px solid var(--color-outline-variant);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08);
+    min-height: 420px;
+}
+
+.exam-card-image img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.7s ease;
+}
+
+.exam-card-image:hover img {
+    transform: scale(1.05);
+}
+
+.exam-card-image::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.2), transparent);
+    z-index: 1;
+}
+
+.exam-card-image .exam-card-content {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 2rem;
+}
+
+.exam-card-simple {
+    border-radius: 1.5rem;
+    border: 1px solid var(--color-outline-variant);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08);
+    background-color: var(--color-surface);
+    padding: 2rem;
+    height: 100%;
+    transition: box-shadow 0.3s ease;
+}
+
+.exam-card-simple:hover {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.12);
+}
+
+.exam-card-highlight {
+    border-radius: 1.5rem;
+    background-color: var(--color-surface-container-high);
+    border: 1px solid var(--color-outline-variant);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08);
+    padding: 2rem;
+    height: 100%;
+    transition: box-shadow 0.3s ease;
+}
+
+.exam-card-highlight:hover {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.12);
+}
+
+.exam-card-dark {
+    border-radius: 1.5rem;
+    background-color: var(--color-inverse-surface);
+    color: var(--color-inverse-on-surface);
+    border: 1px solid var(--color-outline-variant);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+}
+
+.progress-bar-track {
+    height: 4px;
+    background-color: var(--color-outline-variant);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background-color: var(--color-secondary-fixed-dim);
+    width: 75%;
+}
+
+.rotate-3 {
+    transform: rotate(3deg);
+    transition: transform 0.5s ease;
+}
+
+.exam-card-dark:hover .rotate-3 {
+    transform: rotate(0deg);
+}
+
+/* ==========================================================================
+   Find Your Exam page - additional color utilities
+   ========================================================================== */
+.bg-tertiary {
+    background-color: var(--color-tertiary) !important;
+}
+
+.bg-primary-container {
+    background-color: var(--color-primary-container) !important;
+}
+
+.bg-secondary-fixed-dim {
+    background-color: var(--color-secondary-fixed-dim) !important;
+}
+
+.bg-secondary-soft {
+    background-color: rgba(0, 108, 73, 0.1) !important;
+}
+
+.bg-primary-soft-5 {
+    background-color: rgba(53, 37, 205, 0.05) !important;
+}
+
+.bg-outline-variant-soft {
+    background-color: rgba(199, 196, 216, 0.2) !important;
+}
+
+.border-primary-soft {
+    border-color: rgba(53, 37, 205, 0.1) !important;
+}
+
+.border-outline-variant-soft {
+    border-color: rgba(199, 196, 216, 0.3) !important;
+}
+
+/* ==========================================================================
+   Find Your Exam page - hero search
+   ========================================================================== */
+.exam-hero {
+    background-color: var(--color-primary);
+    border-radius: 1rem;
+    padding: 2.5rem;
+    position: relative;
+    overflow: hidden;
+}
+
+@media (min-width: 768px) {
+    .exam-hero {
+        padding: 4rem;
+    }
+}
+
+.exam-hero .form-control {
+    border: none;
+    background-color: transparent;
+    box-shadow: none;
+}
+
+.exam-hero .form-control:focus {
+    box-shadow: none;
+}
+
+.exam-search-bar {
+    background-color: var(--color-surface-container-lowest);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.15);
+    padding: 0.75rem 1rem;
+}
+
+/* ==========================================================================
+   Find Your Exam page - category filter pills
+   ========================================================================== */
+.filter-pill {
+    border-radius: var(--radius-full);
+    padding: 0.5rem 1.5rem;
+    font-weight: 500;
+    border: 1px solid var(--color-outline-variant);
+    background-color: var(--color-surface);
+    color: var(--color-on-surface);
+    transition: all 0.2s ease;
+}
+
+.filter-pill:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+.filter-pill.active {
+    border-color: var(--color-primary);
+    background-color: var(--color-primary);
+    color: var(--color-on-primary);
+    font-weight: 700;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* ==========================================================================
+   Find Your Exam page - sidebar filters
+   ========================================================================== */
+.filters-sidebar {
+    position: sticky;
+    top: 6rem;
+    background-color: var(--color-surface-container-low);
+    border: 1px solid var(--color-outline-variant);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.filter-checkbox {
+    width: 1.25rem;
+    height: 1.25rem;
+    accent-color: var(--color-primary);
+}
+
+.filter-sort-link {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 0.5rem;
+    border-radius: var(--radius-default);
+    border: none;
+    background: transparent;
+    color: var(--color-on-surface-variant);
+}
+
+.filter-sort-link:hover {
+    background-color: var(--color-surface-container-high);
+}
+
+.update-callout {
+    background-color: rgba(53, 37, 205, 0.05);
+    border: 1px solid rgba(53, 37, 205, 0.1);
+    border-radius: var(--radius-lg);
+    padding: 1rem;
+}
+
+/* ==========================================================================
+   Find Your Exam page - exam cards
+   ========================================================================== */
+.exam-list-card {
+    background-color: var(--color-surface-container-lowest);
+    border: 1px solid rgba(199, 196, 216, 0.3);
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0px 4px 6px -1px rgba(30, 41, 59, 0.05), 0px 2px 4px -2px rgba(30, 41, 59, 0.05);
+    transition: border-color 0.3s ease, transform 0.3s ease;
+    height: 100%;
+}
+
+.exam-list-card:hover {
+    border-color: rgba(53, 37, 205, 0.4);
+    transform: translateY(-4px);
+}
+
+.exam-list-card .card-top-bar {
+    height: 0.75rem;
+}
+
+.exam-category-chip {
+    background-color: rgba(0, 108, 73, 0.1);
+    color: var(--color-secondary);
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--radius-default);
+    font-size: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    text-transform: uppercase;
+}
+
+.exam-fav-icon {
+    color: var(--color-outline);
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.exam-fav-icon:hover {
+    color: var(--color-error);
+}
+
+.exam-meta-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--color-on-surface-variant);
+    font-size: 12px;
+}
+
+.exam-meta-row i {
+    color: var(--color-primary);
+}
+
+.avatar-mini {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    border: 2px solid var(--color-surface-container-lowest);
+    overflow: hidden;
+    margin-left: -8px;
+}
+
+.avatar-mini:first-child {
+    margin-left: 0;
+}
+
+.avatar-mini img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.avatar-count-badge {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    border: 2px solid var(--color-surface-container-lowest);
+    background-color: rgba(53, 37, 205, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-left: -8px;
+}
+
+.exam-card-placeholder {
+    background-color: var(--color-surface-container);
+    border: 1px dashed var(--color-outline-variant);
+    border-radius: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    text-align: center;
+    opacity: 0.7;
+    height: 100%;
+}
+
+/* ==========================================================================
+   Find Your Exam page - pagination
+   ========================================================================== */
+.exam-pagination .page-btn {
+    width: 2.5rem;
+    height: 2.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-outline-variant);
+    color: var(--color-on-surface);
+    background-color: transparent;
+    transition: background-color 0.2s ease;
+}
+
+.exam-pagination .page-btn:hover {
+    background-color: var(--color-surface-container-high);
+}
+
+.exam-pagination .page-btn.active {
+    background-color: var(--color-primary);
+    color: var(--color-on-primary);
+    font-weight: 700;
+    border-color: var(--color-primary);
+}
+
+/* ==========================================================================
+   Search input focus ring (JS-toggled state)
+   ========================================================================== */
+.search-focus-ring {
+    box-shadow: 0 0 0 3px rgba(53, 37, 205, 0.2);
+    border-color: var(--color-primary) !important;
+}
+
+/* ==========================================================================
+   Mobile Responsive Navigation & Header Overrides
+   ========================================================================== */
+.mobile-nav-header {
+  border-bottom: 1px solid var(--color-outline-variant);
+  background-color: var(--color-surface);
+}
+
+/* Bottom Navigation Bar for Mobile */
+.mobile-bottom-nav {
+  height: 64px;
+  background-color: var(--color-surface);
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05) !important;
+}
+
+.mobile-bottom-nav a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-on-surface-variant);
+  text-decoration: none;
+  font-family: var(--bs-font-sans-serif);
+  font-weight: 500;
+  transition: color 0.2s ease, transform 0.2s ease;
+  flex: 1;
+  height: 100%;
+}
+
+.mobile-bottom-nav a i {
+  font-size: 1.25rem;
+  transition: transform 0.2s ease;
+}
+
+.mobile-bottom-nav a:hover,
+.mobile-bottom-nav a.active-bottom-nav {
+  color: var(--color-primary);
+}
+
+.mobile-bottom-nav a:hover i,
+.mobile-bottom-nav a.active-bottom-nav i {
+  transform: translateY(-2px);
+}
+
+/* Body adjustments to prevent bottom navigation bar overlaying content */
+@media (max-width: 767.98px) {
+  body.has-bottom-nav {
+    padding-bottom: 72px !important;
+  }
+}
+
+/* Category Quick Filters Layout */
+.category-quick-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+@media (max-width: 767.98px) {
+  .category-quick-filters {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, auto);
+    gap: 8px;
+  }
+
+  .category-quick-filters .filter-pill {
+    padding: 0.5rem 0.25rem;
+    font-size: 0.8rem;
+    text-align: center;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+/* Sidebar Filters Mobile Layout overrides */
+@media (max-width: 991.98px) {
+  .filters-sidebar {
+    position: static !important;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem 1rem;
+    padding: 1.25rem;
+    margin-bottom: 2rem !important;
+  }
+
+  .filters-sidebar hr {
+    display: none !important;
+  }
+
+  .filters-sidebar .update-callout {
+    grid-column: span 2;
+    margin-top: 0.5rem;
+  }
+  
+  /* Compact quick filters margins on mobile */
+  .category-quick-filters {
+    margin-bottom: 2rem !important;
+  }
+}

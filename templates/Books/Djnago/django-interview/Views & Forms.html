@@ -1,0 +1,124 @@
+<!-- SECTION 3: VIEWS & FORMS -->
+<section class="section">
+    <div class="section-header">
+        <h2>Views &amp; Forms</h2>
+    </div>
+
+    <div class="question-grid">
+
+        <!-- Q9 -->
+        <div class="question-card">
+            <div class="q-header">
+                <span class="q-num-badge">Q09</span>
+                <div class="q-title-group">
+                    <div class="q-title">FBV (Function-Based Views) aur CBV (Class-Based Views) mein farq?</div>
+                    <span class="q-tag">Views</span>
+                </div>
+            </div>
+            <div class="q-actions">
+                <button type="button" class="btn-q-action btn-view-ans" onclick="toggleAns(this)">
+                    <i class="bi bi-eye"></i> View Answer
+                </button>
+                <button type="button" class="btn-q-action btn-view-example" onclick="toggleExample(this)">
+                    <i class="bi bi-code-square"></i> Practical Example
+                </button>
+            </div>
+            <div class="ans-box d-none">
+                <p>
+                    • <strong>FBV:</strong> Simple, explicit, and easy to read for custom or small logic.<br />
+                    • <strong>CBV:</strong> Object-Oriented, reusable, DRY (Don't Repeat Yourself) principle follow karta hai, aur generic features (jaise <code class="code-inline">ListView</code>, <code class="code-inline">CreateView</code>) leverage karta hai. Standard CRUD operations ke liye CBVs prefer kiye jatay hain.
+                </p>
+            </div>
+            <div class="example-box d-none">
+                <strong>📌 Real Project Application:</strong> Used <code class="code-inline">TaskListView(ListView)</code> and <code class="code-inline">TaskCreateView(CreateView)</code> in Task Manager to reduce view boilerplate to under 5 lines per view.
+            </div>
+        </div>
+
+        <!-- Q10 -->
+        <div class="question-card">
+            <div class="q-header">
+                <span class="q-num-badge">Q10</span>
+                <div class="q-title-group">
+                    <div class="q-title"><code class="code-inline">get_object_or_404</code> kyun use karte hain?</div>
+                    <span class="q-tag">Error Handling</span>
+                </div>
+            </div>
+            <div class="q-actions">
+                <button type="button" class="btn-q-action btn-view-ans" onclick="toggleAns(this)">
+                    <i class="bi bi-eye"></i> View Answer
+                </button>
+                <button type="button" class="btn-q-action btn-view-example" onclick="toggleExample(this)">
+                    <i class="bi bi-code-square"></i> Practical Example
+                </button>
+            </div>
+            <div class="ans-box d-none">
+                <p>
+                    Agar requested object database mein exist na ho, to ye shortcut function unhandled server exception (<code class="code-inline">DoesNotExist</code> 500 error) throw karne ke bajaye clean HTTP 404 Not Found response render karta hai.
+                </p>
+            </div>
+            <div class="example-box d-none">
+                <strong>📌 Real Project Application:</strong> Fetching a task via <code class="code-inline">task = get_object_or_404(Task, pk=pk)</code> returns an official 404 page if an invalid ID is passed in the URL.
+            </div>
+        </div>
+
+        <!-- Q11 -->
+        <div class="question-card">
+            <div class="q-header">
+                <span class="q-num-badge">Q11</span>
+                <div class="q-title-group">
+                    <div class="q-title"><code class="code-inline">Form</code> aur <code class="code-inline">ModelForm</code> mein kya farq hai?</div>
+                    <span class="q-tag">Forms</span>
+                </div>
+            </div>
+            <div class="q-actions">
+                <button type="button" class="btn-q-action btn-view-ans" onclick="toggleAns(this)">
+                    <i class="bi bi-eye"></i> View Answer
+                </button>
+                <button type="button" class="btn-q-action btn-view-example" onclick="toggleExample(this)">
+                    <i class="bi bi-code-square"></i> Practical Example
+                </button>
+            </div>
+            <div class="ans-box d-none">
+                <p>
+                    • <code class="code-inline">forms.Form</code>: Standard form jismein input fields manually define kiye jatay hain (e.g. Contact Form, Search Form).<br />
+                    • <code class="code-inline">forms.ModelForm</code>: Direct Model schema se inspect karke automatically form fields generate karta hai aur built-in <code class="code-inline">save()</code> method provide karta hai.
+                </p>
+            </div>
+            <div class="example-box d-none">
+                <strong>📌 Real Project Application:</strong> Defined <code class="code-inline">class TaskForm(forms.ModelForm)</code> with <code class="code-inline">Meta: model = Task</code> to automatically map form submissions directly to the database.
+            </div>
+        </div>
+
+        <!-- Q12 -->
+        <div class="question-card">
+            <div class="q-header">
+                <span class="q-num-badge">Q12</span>
+                <div class="q-title-group">
+                    {% verbatim %}
+                    <div class="q-title"><code class="code-inline">{% csrf_token %}</code> tag template mein kyun zaroori hai?</div>
+                    {% endverbatim %}
+                    <span class="q-tag">Security</span>
+                </div>
+            </div>
+            <div class="q-actions">
+                <button type="button" class="btn-q-action btn-view-ans" onclick="toggleAns(this)">
+                    <i class="bi bi-eye"></i> View Answer
+                </button>
+                <button type="button" class="btn-q-action btn-view-example" onclick="toggleExample(this)">
+                    <i class="bi bi-code-square"></i> Practical Example
+                </button>
+            </div>
+            <div class="ans-box d-none">
+                <p>
+                    Ye tag <strong>CSRF (Cross-Site Request Forgery)</strong> protection token generate karta hai. Is ke zariye Django verify karta hai ke POST/PUT form submissions legitimate app site se aayi hain, kisi malicious third-party site se nahi.
+                </p>
+            </div>
+            <div class="example-box d-none">
+                {% verbatim %}
+                <strong>📌 Real Project Application:</strong> Every task creation form embeds <code class="code-inline">{% csrf_token %}</code> inside the <code class="code-inline">&lt;form method="POST"&gt;</code> element to pass security checks.
+                {% endverbatim %}
+            </div>
+        </div>
+
+    </div>
+</section>

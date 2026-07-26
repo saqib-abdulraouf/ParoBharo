@@ -1,0 +1,872 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}Django Masterclass — 4-Week Course Roadmap{% endblock %}</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+    <!-- Bootstrap 5.3 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons & Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <!-- Prism.js for code highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" />
+
+    <!-- Custom design system CSS -->
+    <link href="{% static 'css/home/home.css' %}" rel="stylesheet">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #f9f9ff; color: #111c2d; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+
+        .app { display: flex; flex: 1; height: calc(100vh - 72px); overflow: hidden; }
+
+        /* LEFT SIDEBAR */
+        .sidebar-left { width: 320px; min-width: 320px; background: #ffffff; border-right: 1px solid #d8e3fb; display: flex; flex-direction: column; position: relative; overflow: visible !important; transition: all 0.3s ease; z-index: 100; }
+        .sidebar-left.collapsed { width: 0; min-width: 0; border-right: none; }
+        .sidebar-left.collapsed .sidebar-header, .sidebar-left.collapsed .sidebar-scroll { opacity: 0; visibility: hidden; pointer-events: none; }
+
+        .sidebar-toggle-arrow { position: absolute; top: 50%; right: -14px; transform: translateY(-50%); width: 28px; height: 28px; background: #ffffff; border: 1px solid #c7d7fe; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12); color: #0c4b33; font-size: 13px; z-index: 120; transition: all 0.25s ease; padding: 0; }
+        .sidebar-toggle-arrow:hover { background: #0c4b33; color: #ffffff; border-color: #0c4b33; transform: translateY(-50%) scale(1.1); }
+        .sidebar-left.collapsed .sidebar-toggle-arrow { right: -28px; }
+
+        .sidebar-header { padding: 20px 20px 12px; border-bottom: 1px solid #e7eeff; display: flex; align-items: center; justify-content: space-between; }
+        .sidebar-header h2 { font-size: 16px; font-weight: 600; color: #111c2d; margin: 0; }
+        .sidebar-header .badge { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 500; background: #0c4b33; color: #ffffff; padding: 3px 10px; border-radius: 9999px; }
+
+        .sidebar-scroll { flex: 1; overflow-y: auto; padding: 8px 12px 20px; }
+        .sidebar-scroll::-webkit-scrollbar { width: 4px; }
+        .sidebar-scroll::-webkit-scrollbar-thumb { background: #c7c4d8; border-radius: 9999px; }
+
+        .module-group { margin-bottom: 4px; }
+        .module-toggle { width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; background: transparent; border: none; border-radius: 8px; cursor: pointer; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600; color: #111c2d; transition: background 0.15s ease; text-align: left; }
+        .module-toggle:hover { background: #e6f4ea; }
+        .module-toggle .arrow { font-size: 12px; color: #777587; transition: transform 0.25s ease; margin-left: 8px; }
+        .module-toggle .arrow.open { transform: rotate(90deg); }
+
+        .module-lessons { overflow: hidden; max-height: 0; transition: max-height 0.3s ease, opacity 0.25s ease; opacity: 0; padding-left: 8px; }
+        .module-lessons.open { max-height: 800px; opacity: 1; }
+
+        .lesson-item { display: flex; align-items: center; gap: 10px; padding: 7px 12px 7px 20px; border-radius: 6px; font-size: 13px; font-weight: 400; color: #464555; cursor: pointer; transition: all 0.15s ease; text-decoration: none !important; }
+        .lesson-item:hover { background: #e6f4ea; color: #0c4b33; }
+        .lesson-item.active { background: #cce8d8; color: #0c4b33; font-weight: 600; }
+        .lesson-item .num { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #777587; min-width: 24px; }
+        .lesson-item.active .num { color: #0c4b33; }
+
+        /* CENTER CONTENT */
+        .main-content { flex: 1; overflow-y: auto; padding: 32px 48px 48px; background: #f9f9ff; }
+        .main-content::-webkit-scrollbar { width: 6px; }
+        .main-content::-webkit-scrollbar-thumb { background: #c7c4d8; border-radius: 9999px; }
+        .content-container { max-width: 820px; margin: 0 auto; }
+
+        .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #777587; margin-bottom: 20px; }
+        .breadcrumb a { color: #0c4b33; text-decoration: none; }
+        .breadcrumb .sep { color: #c7c4d8; }
+
+        .lesson-header { margin-bottom: 28px; }
+        .lesson-header .tag { display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 500; color: #0c4b33; background: #e6f4ea; padding: 2px 12px; border-radius: 9999px; margin-bottom: 10px; }
+        .lesson-header h1 { font-size: 32px; font-weight: 700; color: #111c2d; margin-bottom: 6px; }
+        .lesson-header .sub { font-size: 16px; color: #464555; }
+
+        .reading-content { font-size: 16px; line-height: 1.8; color: #111c2d; }
+        .reading-content h2 { font-size: 20px; font-weight: 600; margin: 28px 0 14px; color: #111c2d; display: flex; align-items: center; gap: 10px; }
+        .step-number { display: inline-flex; align-items: center; justify-content: center; background: #0c4b33; color: #ffffff; width: 28px; height: 28px; border-radius: 50%; font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600; }
+
+        .info-box { background: #e6f4ea; border-left: 4px solid #0c4b33; padding: 16px 20px; border-radius: 0 8px 8px 0; margin: 20px 0; font-size: 15px; }
+        .info-box code { background: rgba(0,0,0,0.06); padding: 2px 6px; border-radius: 4px; font-size: 13px; font-family: 'JetBrains Mono', monospace; }
+
+        .error-box { background: #ffdad6; border-left: 4px solid #ba1a1a; padding: 16px 20px; border-radius: 0 8px 8px 0; margin: 20px 0; }
+        .error-box .error-title { font-size: 14px; font-weight: 600; color: #93000a; margin-bottom: 4px; }
+        .error-box p { color: #93000a; margin-bottom: 0; font-size: 15px; }
+
+        .success-box { background: rgba(16, 185, 129, 0.08); border-left: 4px solid #10b981; padding: 16px 20px; border-radius: 0 8px 8px 0; margin: 20px 0; }
+        .success-box .success-title { font-size: 14px; font-weight: 600; color: #006c49; margin-bottom: 4px; }
+        .success-box p { color: #111c2d; margin-bottom: 0; font-size: 15px; }
+
+        .code-block { background: #0d1117; border-radius: 12px; padding: 18px 20px; margin: 16px 0 24px; position: relative; overflow-x: auto; }
+        .code-block .code-label { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 500; color: #8b949e; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+        .code-block .code-label i { color: #10b981; }
+        .code-block pre { margin: 0; }
+        .code-block code { font-family: 'JetBrains Mono', monospace; font-size: 14px; line-height: 1.7; color: #e6edf3; }
+        .code-block .copy-btn { position: absolute; top: 12px; right: 12px; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.08); color: #8b949e; padding: 4px 12px; border-radius: 6px; font-size: 12px; cursor: pointer; transition: all 0.2s ease; }
+        .code-block .copy-btn:hover { background: rgba(255, 255, 255, 0.12); color: #e6edf3; }
+        .code-block .copy-btn.copied { background: #10b981; color: #ffffff; border-color: #10b981; }
+
+        .terminal-command { background: #0d1117; border-radius: 10px; padding: 12px 18px; margin: 8px 0 16px; font-family: 'JetBrains Mono', monospace; font-size: 14px; color: #e6edf3; display: flex; align-items: center; gap: 12px; overflow-x: auto; }
+        .terminal-command .prompt { color: #10b981; font-weight: 600; flex-shrink: 0; }
+        .terminal-command .command { color: #f0f6fc; }
+
+        .html-snippet { background: #0d1117; border-radius: 12px; padding: 18px 20px; margin: 16px 0 24px; overflow-x: auto; position: relative; }
+        .html-snippet .code-label { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 500; color: #8b949e; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+        .html-snippet .code-label i { color: #10b981; }
+        .html-snippet pre { margin: 0; }
+        .html-snippet code { font-family: 'JetBrains Mono', monospace; font-size: 14px; line-height: 1.8; color: #e6edf3; }
+        .html-snippet .copy-btn { position: absolute; top: 12px; right: 12px; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.08); color: #8b949e; padding: 4px 12px; border-radius: 6px; font-size: 12px; cursor: pointer; transition: all 0.2s ease; }
+        .html-snippet .copy-btn:hover { background: rgba(255, 255, 255, 0.12); color: #e6edf3; }
+        .html-snippet .copy-btn.copied { background: #10b981; color: #ffffff; border-color: #10b981; }
+
+        /* Folder Structure */
+        .folder-structure { background: #f0f3ff; border-radius: 12px; padding: 18px 22px; font-family: 'JetBrains Mono', monospace; font-size: 14px; line-height: 1.8; color: #111c2d; margin: 16px 0 24px; }
+        .folder-structure .folder { color: #4f46e5; font-weight: 600; }
+        .folder-structure .file { color: #464555; }
+        .folder-structure .highlight-file { color: #10b981; font-weight: 600; }
+        .folder-structure .comment { color: #777587; font-size: 12px; font-style: italic; }
+        .folder-structure .indent-1 { padding-left: 24px; }
+        .folder-structure .indent-2 { padding-left: 48px; }
+        .folder-structure .tree-icon { color: #777587; margin-right: 8px; font-size: 12px; }
+
+        /* Comparison Table */
+        .comparison-table { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0 24px; }
+        .comparison-table .col { background: #f0f3ff; border-radius: 12px; padding: 20px 24px; border: 1px solid #c7c4d8; transition: all 0.3s ease; }
+        .comparison-table .col:hover { border-color: #0c4b33; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(12,75,51,0.08); }
+        .comparison-table .col .title { font-size: 18px; font-weight: 700; color: #111c2d; margin-bottom: 8px; }
+        .comparison-table .col .title i { margin-right: 8px; }
+        .comparison-table .col .title .icon-project { color: #4f46e5; }
+        .comparison-table .col .title .icon-app { color: #10b981; }
+        .comparison-table .col .title .badge-old { background: #ffdad6; color: #93000a; padding: 2px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; }
+        .comparison-table .col .title .badge-new { background: rgba(16,185,129,0.15); color: #10b981; padding: 2px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; }
+        .comparison-table .col .desc { font-size: 15px; line-height: 24px; color: #464555; }
+        .comparison-table .col .example { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #4f46e5; background: #ffffff; padding: 4px 12px; border-radius: 8px; display: inline-block; margin-top: 8px; border: 1px solid #c7c4d8; }
+        @media (max-width: 640px) { .comparison-table { grid-template-columns: 1fr; } }
+
+        /* Settings Snippet */
+        .settings-snippet { background: #0d1117; border-radius: 12px; padding: 18px 20px; margin: 16px 0 24px; overflow-x: auto; position: relative; }
+        .settings-snippet .code-label { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 500; color: #8b949e; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+        .settings-snippet .code-label i { color: #10b981; }
+        .settings-snippet pre { margin: 0; }
+        .settings-snippet code { font-family: 'JetBrains Mono', monospace; font-size: 14px; line-height: 1.8; color: #e6edf3; }
+        .settings-snippet .added-line { background: rgba(16,185,129,0.15); border-left: 3px solid #10b981; padding-left: 8px; display: inline-block; width: 100%; }
+        .settings-snippet .added-line .comment-add { color: #10b981; font-size: 12px; font-style: italic; }
+        .settings-snippet .copy-btn { position: absolute; top: 12px; right: 12px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08); color: #8b949e; padding: 4px 12px; border-radius: 6px; font-size: 12px; cursor: pointer; transition: all 0.2s ease; }
+        .settings-snippet .copy-btn:hover { background: rgba(255,255,255,0.12); color: #e6edf3; }
+        .settings-snippet .copy-btn.copied { background: #10b981; color: #ffffff; border-color: #10b981; }
+
+        /* MVT Flow Diagram */
+        .mvt-flow { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 20px 0; }
+        .mvt-flow .step { background: #f0f3ff; border-radius: 12px; padding: 20px 16px; text-align: center; border: 2px solid transparent; transition: all 0.3s ease; }
+        .mvt-flow .step:hover { border-color: #0c4b33; transform: translateY(-4px); box-shadow: 0 8px 24px rgba(12,75,51,0.1); }
+        .mvt-flow .step.highlight { border-color: #0c4b33; background: rgba(12,75,51,0.04); }
+        .mvt-flow .step .icon { font-size: 32px; margin-bottom: 8px; display: block; }
+        .mvt-flow .step .name { font-size: 18px; font-weight: 700; color: #111c2d; }
+        .mvt-flow .step .desc { font-size: 13px; color: #464555; margin-top: 4px; line-height: 1.4; }
+        @media (max-width: 640px) { .mvt-flow { grid-template-columns: 1fr; } }
+
+        /* Screenshot Placeholder */
+        .screenshot-placeholder { background: #e7eeff; border: 2px dashed #c7c4d8; border-radius: 12px; padding: 40px 24px; text-align: center; margin: 20px 0; transition: all 0.3s ease; }
+        .screenshot-placeholder:hover { border-color: #0c4b33; background: #dee8ff; }
+        .screenshot-placeholder .output-text { font-family: 'JetBrains Mono', monospace; font-size: 20px; color: #4f46e5; background: #ffffff; padding: 12px 32px; border-radius: 8px; display: inline-block; margin-top: 8px; border: 1px solid #c7c4d8; }
+        .screenshot-placeholder .output-box { background: #ffffff; border-radius: 8px; padding: 24px 32px; display: inline-block; border: 1px solid #c7c4d8; text-align: left; min-width: 250px; }
+        .screenshot-placeholder .output-box h1 { font-size: 24px; font-weight: 700; color: #111c2d; margin-bottom: 4px; }
+        .screenshot-placeholder .output-box p { font-size: 16px; color: #464555; margin-bottom: 0; }
+        .screenshot-placeholder .url { font-family: 'JetBrains Mono', monospace; font-size: 14px; color: #4f46e5; background: #ffffff; padding: 4px 16px; border-radius: 8px; display: inline-block; margin-top: 8px; }
+
+        /* CRUD Table */
+        .crud-table { background: #f0f3ff; border-radius: 12px; padding: 18px 22px; margin: 16px 0 24px; overflow-x: auto; border: 1px solid #c7c4d8; }
+        .crud-table table { width: 100%; border-collapse: collapse; font-size: 14px; }
+        .crud-table th { text-align: left; padding: 8px 12px; font-weight: 600; color: #111c2d; border-bottom: 2px solid #c7c4d8; }
+        .crud-table td { padding: 10px 12px; color: #464555; border-bottom: 1px solid #e7eeff; }
+        .crud-table td code { background: #ffffff; padding: 2px 8px; border-radius: 6px; font-size: 13px; font-family: 'JetBrains Mono', monospace; color: #0c4b33; border: 1px solid #c7c4d8; }
+        .crud-table .crud-label { font-weight: 700; padding: 2px 10px; border-radius: 6px; font-size: 12px; }
+        .crud-table .crud-label.create { background: rgba(16, 185, 129, 0.15); color: #10b981; }
+        .crud-table .crud-label.read { background: rgba(79, 70, 229, 0.15); color: #4f46e5; }
+        .crud-table .crud-label.update { background: rgba(245, 158, 11, 0.15); color: #d97706; }
+        .crud-table .crud-label.delete { background: rgba(239, 68, 68, 0.15); color: #dc2626; }
+        .crud-table tr:last-child td { border-bottom: none; }
+
+        /* Model Table */
+        .model-table { background: #f0f3ff; border-radius: 12px; padding: 18px 22px; margin: 16px 0 24px; overflow-x: auto; border: 1px solid #c7c4d8; }
+        .model-table table { width: 100%; border-collapse: collapse; font-size: 14px; }
+        .model-table th { text-align: left; padding: 8px 12px; font-weight: 600; color: #111c2d; border-bottom: 2px solid #c7c4d8; }
+        .model-table td { padding: 10px 12px; color: #464555; border-bottom: 1px solid #e7eeff; }
+        .model-table td code { background: #ffffff; padding: 2px 8px; border-radius: 6px; font-size: 13px; font-family: 'JetBrains Mono', monospace; color: #0c4b33; border: 1px solid #c7c4d8; }
+        .model-table tr:last-child td { border-bottom: none; }
+
+        /* Week card styles (for index/roadmap page) */
+        .week-card { background: #ffffff; border: 1px solid #e7eeff; border-radius: 12px; margin-bottom: 16px; overflow: hidden; transition: all 0.2s ease; }
+        .week-card:hover { border-color: #10b981; box-shadow: 0 4px 12px rgba(12, 75, 51, 0.08); }
+        .week-header { padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; background: #ffffff; }
+        .week-header:hover { background: #f9f9ff; }
+        .week-title-area { display: flex; align-items: center; gap: 12px; }
+        .week-num-badge { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; background: #e6f4ea; color: #0c4b33; padding: 3px 10px; border-radius: 9999px; }
+        .week-title { font-size: 16px; font-weight: 600; color: #111c2d; margin: 0; }
+        .week-arrow { font-size: 12px; color: #777587; transition: transform 0.25s ease; }
+        .week-card.open .week-arrow { transform: rotate(180deg); }
+        .week-lessons-list { display: none; padding: 0 16px 16px; border-top: 1px solid #f0f3ff; }
+        .week-card.open .week-lessons-list { display: block; }
+        .roadmap-lesson-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; margin-top: 8px; border-radius: 8px; background: #f9f9ff; }
+        .roadmap-lesson-row:hover { background: #e6f4ea; }
+        .roadmap-lesson-left { display: flex; align-items: center; gap: 10px; }
+        .roadmap-lesson-title { font-size: 14px; font-weight: 500; color: #111c2d; }
+        .btn-roadmap-read { font-size: 12px; font-weight: 600; padding: 4px 14px; border-radius: 6px; background: #0c4b33; color: #ffffff !important; text-decoration: none !important; }
+        .btn-roadmap-read:hover { background: #10b981; }
+
+        /* RIGHT SIDEBAR */
+        .sidebar-right { width: 260px; min-width: 260px; background: #ffffff; border-left: 1px solid #d8e3fb; padding: 24px 20px; display: flex; flex-direction: column; gap: 20px; overflow-y: auto; }
+        .right-section h4 { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: #777587; margin-bottom: 12px; }
+
+        .progress-ring { display: flex; align-items: center; gap: 14px; }
+        .progress-ring .circle { width: 52px; height: 52px; border-radius: 9999px; background: conic-gradient(#0c4b33 0deg 90deg, #e7eeff 90deg 360deg); display: flex; align-items: center; justify-content: center; font-family: 'JetBrains Mono', monospace; font-size: 14px; font-weight: 600; color: #111c2d; position: relative; }
+        .progress-ring .circle::after { content: ''; width: 40px; height: 40px; background: #ffffff; border-radius: 9999px; position: absolute; }
+        .progress-ring .circle span { position: relative; z-index: 1; }
+
+        .quick-actions { display: flex; flex-direction: column; gap: 8px; }
+        .quick-btn { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: #f9f9ff; border: 1px solid #e7eeff; border-radius: 8px; font-size: 13px; font-weight: 500; color: #111c2d; cursor: pointer; }
+        .notes-area { background: #f9f9ff; border: 1px solid #e7eeff; border-radius: 8px; padding: 12px 14px; min-height: 100px; font-size: 13px; color: #464555; resize: vertical; width: 100%; }
+
+        .lesson-nav-bar { border-top: 1px solid #e7eeff; padding-top: 24px; margin-top: 36px; }
+        .btn-lesson-nav { display: inline-flex; align-items: center; justify-content: center; padding: 10px 22px; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; text-decoration: none !important; transition: all 0.25s ease; }
+        .btn-lesson-prev { background: #ffffff; color: #464555 !important; border: 1px solid #d8e3fb; }
+        .btn-lesson-prev:hover { background: #e6f4ea; color: #0c4b33 !important; border-color: #0c4b33; transform: translateX(-4px); }
+        .btn-lesson-next { background: linear-gradient(135deg, #0c4b33, #10b981); color: #ffffff !important; border: none; box-shadow: 0 4px 14px rgba(12, 75, 51, 0.3); }
+        .btn-lesson-next:hover { background: linear-gradient(135deg, #092e20, #0c4b33); transform: translateX(4px); }
+
+        .overlay { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.25); z-index: 150; }
+        .overlay.visible { display: block; }
+
+        @media (max-width: 992px) { .sidebar-right { display: none; } .sidebar-left { width: 280px; min-width: 280px; } .main-content { padding: 20px 24px 32px; } }
+        @media (max-width: 768px) { .sidebar-left { position: fixed; top: 0; left: 0; height: 100vh; width: 300px; min-width: 300px; z-index: 200; transform: translateX(-100%); } .sidebar-left.mobile-open { transform: translateX(0); } .main-content { padding: 16px 16px 32px; padding-top: 68px; } }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body class="has-bottom-nav">
+
+    <!-- ==================== Top Navigation Bar (Desktop) ==================== -->
+    <header class="sticky-top bg-surface shadow-sm d-none d-md-block">
+        <nav class="navbar navbar-expand-md">
+            <div class="container-fluid max-w-container px-margin-mobile" style="margin-left:auto; margin-right:auto;">
+                <div class="d-flex align-items-center gap-4 w-100">
+
+                    <a class="navbar-brand d-flex align-items-center gap-2 mb-0" href="{% url 'core:home' %}">
+                        <img src="{% static 'images/logos/ParoBharo-name.png' %}" alt="ParoBharo"
+                            style="height: 75px; width: auto;">
+                    </a>
+
+                    <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false"
+                        aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="mainNavbar">
+                        <div class="d-md-flex gap-4 align-items-md-center ms-md-4 mb-3 mb-md-0">
+                            <a class="d-block d-md-inline-block nav-link-custom mb-2 mb-md-0"
+                                href="{% url 'core:home' %}">Home</a>
+                            <a class="d-block d-md-inline-block nav-link-custom mb-2 mb-md-0"
+                                href="{% url 'products:shop' %}">Exams</a>
+                            <a class="d-block d-md-inline-block nav-link-active mb-2 mb-md-0"
+                                href="{% url 'products:books' %}">Books</a>
+                            <a class="d-block d-md-inline-block nav-link-custom mb-2 mb-md-0"
+                                href="{% url 'core:home' %}#pricing-section">Pricing</a>
+                            <a class="d-block d-md-inline-block nav-link-custom" href="#">Blog</a>
+                        </div>
+
+                        <div class="d-flex flex-column flex-md-row align-items-md-center gap-3 ms-md-auto mt-3 mt-md-0">
+                            <div
+                                class="d-none d-lg-flex align-items-center bg-surface-container-low px-3 py-2 rounded-pill border border-outline-variant js-search-wrapper">
+                                <i class="bi bi-search text-outline me-2"></i>
+                                <input
+                                    class="form-control form-control-sm border-0 bg-transparent shadow-none js-search-input"
+                                    style="width: 12rem;" type="text" placeholder="Search exams...">
+                            </div>
+                            <a href="{% url 'cart:cart_detail' %}"
+                                class="text-decoration-none text-on-surface-variant p-2 rounded-circle hover-bg-light"
+                                title="Shopping Cart">
+                                <i class="bi bi-cart3 fs-5"></i>
+                            </a>
+                            {% if user.is_authenticated %}
+                            <div class="d-flex gap-3 align-items-center">
+                                <i class="bi bi-bell text-on-surface-variant fs-5" role="button"
+                                    aria-label="Notifications"></i>
+                                <a href="{% url 'dashboard:index' %}"
+                                    class="text-decoration-none text-on-surface-variant fs-4" aria-label="Account">
+                                    <i class="bi bi-person-circle" role="button"></i>
+                                </a>
+                            </div>
+                            {% else %}
+                            <a class="btn d-none d-md-inline-block fw-medium text-primary p-0 text-start text-decoration-none"
+                                href="{% url 'accounts:signin' %}">Sign In</a>
+
+                            <a href="{% url 'accounts:signin' %}"><button class="btn btn-pill-primary"
+                                    type="button">Start Free Trial</button></a>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ==================== Top Navigation Bar (Mobile) ==================== -->
+    <header class="sticky-top bg-surface shadow-sm d-block d-md-none mobile-nav-header">
+        {% if user.is_authenticated %}
+        <!-- Logged In Mobile Header -->
+        <div class="container-fluid py-2 px-margin-mobile">
+            <div class="d-flex align-items-center justify-content-between" style="min-height: 40px;">
+                <!-- Left side: Website Name -->
+                <a class="navbar-brand d-flex align-items-center gap-2 mb-0" href="{% url 'core:home' %}">
+                    <img src="{% static 'images/logos/ParoBharo-name.png' %}" alt="ParoBharo"
+                        style="height: 30px; width: auto;">
+                </a>
+
+                <!-- Right side: Search, Cart & Wishlist icons -->
+                <div class="d-flex align-items-center gap-3 text-on-surface-variant">
+                    <button class="btn p-0 border-0 text-on-surface-variant" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#mobileSearchCollapse" aria-expanded="false"
+                        aria-controls="mobileSearchCollapse">
+                        <i class="bi bi-search fs-5"></i>
+                    </button>
+                    <a href="{% url 'cart:cart_detail' %}" class="text-decoration-none text-on-surface-variant">
+                        <i class="bi bi-cart3 fs-5"></i>
+                    </a>
+                    <a href="#" class="text-decoration-none text-on-surface-variant">
+                        <i class="bi bi-heart fs-5"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Collapsible Mobile Search -->
+        <div class="collapse bg-surface-container-low border-bottom border-outline-variant px-margin-mobile py-2"
+            id="mobileSearchCollapse">
+            <div
+                class="d-flex align-items-center bg-surface px-3 py-2 rounded-pill border border-outline-variant js-search-wrapper">
+                <i class="bi bi-search text-outline me-2"></i>
+                <input class="form-control form-control-sm border-0 bg-transparent shadow-none js-search-input"
+                    type="text" placeholder="Search exams...">
+            </div>
+        </div>
+        {% else %}
+        <!-- Logged Out Mobile Header -->
+        <div class="container-fluid py-2 px-margin-mobile">
+            <div class="d-flex align-items-center justify-content-between" style="min-height: 40px;">
+                <!-- Left side: Website Name -->
+                <a class="navbar-brand d-flex align-items-center gap-2 mb-0" href="{% url 'core:home' %}">
+                    <img src="{% static 'images/logos/ParoBharo-name.png' %}" alt="ParoBharo"
+                        style="height: 22px; width: auto;">
+                </a>
+
+                <!-- Right side: Search, Cart & Auth -->
+                <div class="d-flex align-items-center gap-3">
+                    <button class="btn p-0 border-0 text-on-surface-variant" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#mobileSearchCollapse" aria-expanded="false"
+                        aria-controls="mobileSearchCollapse">
+                        <i class="bi bi-search fs-5"></i>
+                    </button>
+                    <a href="{% url 'cart:cart_detail' %}" class="text-decoration-none text-on-surface-variant">
+                        <i class="bi bi-cart3 fs-5"></i>
+                    </a>
+                    <a class="fw-medium text-primary text-decoration-none" href="{% url 'accounts:signin' %}">Sign
+                        In</a>
+                    <button class="btn btn-pill-primary py-1 px-3 text-label-sm" type="button"
+                        style="font-family: inherit;">Start Free Trial</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Collapsible Mobile Search -->
+        <div class="collapse bg-surface-container-low border-bottom border-outline-variant px-margin-mobile py-2"
+            id="mobileSearchCollapse">
+            <div
+                class="d-flex align-items-center bg-surface px-3 py-2 rounded-pill border border-outline-variant js-search-wrapper">
+                <i class="bi bi-search text-outline me-2"></i>
+                <input class="form-control form-control-sm border-0 bg-transparent shadow-none js-search-input"
+                    type="text" placeholder="Search exams...">
+            </div>
+        </div>
+        {% endif %}
+    </header>
+
+    <!-- Bottom Navigation Bar for Mobile -->
+    <div class="mobile-bottom-nav d-flex d-md-none justify-content-around align-items-center fixed-bottom bg-surface border-top border-outline-variant py-2 shadow-lg"
+        style="z-index: 1030;">
+        <a href="{% url 'core:home' %}"
+            class="d-flex flex-column align-items-center text-decoration-none text-on-surface-variant">
+            <i class="bi bi-house-door fs-5"></i>
+            <span class="text-label-sm mt-1" style="font-family: inherit; font-size: 10px;">Home</span>
+        </a>
+        <a href="{% url 'products:shop' %}"
+            class="d-flex flex-column align-items-center text-decoration-none text-on-surface-variant">
+            <i class="bi bi-journal-text fs-5"></i>
+            <span class="text-label-sm mt-1" style="font-family: inherit; font-size: 10px;">Exams</span>
+        </a>
+        <a href="{% url 'products:books' %}"
+            class="d-flex flex-column align-items-center text-decoration-none text-on-surface-variant active-bottom-nav">
+            <i class="bi bi-book fs-5"></i>
+            <span class="text-label-sm mt-1" style="font-family: inherit; font-size: 10px;">Books</span>
+        </a>
+        <a href="#" class="d-flex flex-column align-items-center text-decoration-none text-on-surface-variant">
+            <i class="bi bi-newspaper fs-5"></i>
+            <span class="text-label-sm mt-1" style="font-family: inherit; font-size: 10px;">Blogs</span>
+        </a>
+    </div>
+
+    <div class="overlay" id="overlay"></div>
+
+    <div class="app">
+
+        <!-- LEFT SIDEBAR MENU -->
+        <aside class="sidebar-left" id="sidebarLeft">
+            <button class="sidebar-toggle-arrow" id="sidebarArrowBtn" title="Toggle Sidebar">
+                <i class="bi bi-chevron-left" id="sidebarArrowIcon"></i>
+            </button>
+
+            <div class="sidebar-header">
+                <h2>🐍 Django Course</h2>
+                <span class="badge">4 Weeks</span>
+            </div>
+
+            <div class="sidebar-scroll" id="menuScroll">
+
+                <!-- Overview -->
+                <div class="module-group">
+                    <a href="{% url 'products:django-book' %}" class="lesson-item {% if active_lesson == 'overview' %}active{% endif %}" style="padding-left: 12px; margin-bottom: 6px;">
+                        <span class="num">🗺️</span>
+                        <span>Django Roadmap Overview</span>
+                    </a>
+                </div>
+
+                <!-- Week 1 -->
+                <div class="module-group">
+                    <button class="module-toggle" data-target="w1">
+                        <span>💻 Week 1 — Django Fundamentals</span>
+                        <span class="arrow {% if active_week == 'w1' %}open{% endif %}">▶</span>
+                    </button>
+                    <div class="module-lessons {% if active_week == 'w1' %}open{% endif %}" id="w1">
+                        <a href="{% url 'products:django-week1-l1' %}" class="lesson-item {% if active_lesson == 'w1l1' %}active{% endif %}">
+                            <span class="num">1</span>Virtual env + Django installation
+                        </a>
+                        <a href="{% url 'products:django-week1-l2' %}" class="lesson-item {% if active_lesson == 'w1l2' %}active{% endif %}">
+                            <span class="num">2</span>Project vs App structure
+                        </a>
+                        <a href="{% url 'products:django-week1-l3' %}" class="lesson-item {% if active_lesson == 'w1l3' %}active{% endif %}">
+                            <span class="num">3</span>URLs, Views &amp; Templates
+                        </a>
+                        <a href="{% url 'products:django-week1-l4' %}" class="lesson-item {% if active_lesson == 'w1l4' %}active{% endif %}">
+                            <span class="num">4</span>Django ka MVT pattern
+                        </a>
+                        <a href="{% url 'products:django-week1-l5' %}" class="lesson-item {% if active_lesson == 'w1l5' %}active{% endif %}">
+                            <span class="num">5</span>Django Templates
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Week 2 -->
+                <div class="module-group">
+                    <button class="module-toggle" data-target="w2">
+                        <span>🗄️ Week 2 — Models &amp; Database</span>
+                        <span class="arrow {% if active_week == 'w2' %}open{% endif %}">▶</span>
+                    </button>
+                    <div class="module-lessons {% if active_week == 'w2' %}open{% endif %}" id="w2">
+                        <a href="{% url 'products:django-week2-l1' %}" class="lesson-item {% if active_lesson == 'w2l1' %}active{% endif %}">
+                            <span class="num">1</span>Models banana, migrations
+                        </a>
+                        <a href="{% url 'products:django-week2-l2' %}" class="lesson-item {% if active_lesson == 'w2l2' %}active{% endif %}">
+                            <span class="num">2</span>Django ORM (queries likhna)
+                        </a>
+                        <a href="{% url 'products:django-week2-l3' %}" class="lesson-item {% if active_lesson == 'w2l3' %}active{% endif %}">
+                            <span class="num">3</span>Django Admin panel customize
+                        </a>
+                        <a href="{% url 'products:django-week2-l4' %}" class="lesson-item {% if active_lesson == 'w2l4' %}active{% endif %}">
+                            <span class="num">4</span>Relationships: FK, ManyToMany
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Week 3 -->
+                <div class="module-group">
+                    <button class="module-toggle" data-target="w3">
+                        <span>📝 Week 3 — Full CRUD + Forms</span>
+                        <span class="arrow {% if active_week == 'w3' %}open{% endif %}">▶</span>
+                    </button>
+                    <div class="module-lessons {% if active_week == 'w3' %}open{% endif %}" id="w3">
+                        <a href="{% url 'products:django-week3-l1' %}" class="lesson-item {% if active_lesson == 'w3l1' %}active{% endif %}">
+                            <span class="num">1</span>CRUD — Real App Project
+                        </a>
+                        <a href="{% url 'products:django-week3-l2' %}" class="lesson-item {% if active_lesson == 'w3l2' %}active{% endif %}">
+                            <span class="num">2</span>Django Forms &amp; ModelForms
+                        </a>
+                        <a href="{% url 'products:django-week3-l3' %}" class="lesson-item {% if active_lesson == 'w3l3' %}active{% endif %}">
+                            <span class="num">3</span>Class-Based Views (CBVs)
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Week 4 -->
+                <div class="module-group">
+                    <button class="module-toggle" data-target="w4">
+                        <span>🚀 Week 4 — Polish + Job-Ready</span>
+                        <span class="arrow {% if active_week == 'w4' %}open{% endif %}">▶</span>
+                    </button>
+                    <div class="module-lessons {% if active_week == 'w4' %}open{% endif %}" id="w4">
+                        <a href="{% url 'products:django-week4-l1' %}" class="lesson-item {% if active_lesson == 'w4l1' %}active{% endif %}">
+                            <span class="num">1</span>User Auth (login/signup)
+                        </a>
+                        <a href="{% url 'products:django-week4-l2' %}" class="lesson-item {% if active_lesson == 'w4l2' %}active{% endif %}">
+                            <span class="num">2</span>Static/media files, styling
+                        </a>
+                        <a href="{% url 'products:django-week4-l3' %}" class="lesson-item {% if active_lesson == 'w4l3' %}active{% endif %}">
+                            <span class="num">3</span>Project deployment
+                        </a>
+                        <a href="{% url 'products:django-week4-l4' %}" class="lesson-item {% if active_lesson == 'w4l4' %}active{% endif %}">
+                            <span class="num">4</span>GitHub + README
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT AREA -->
+        <main class="main-content" id="mainContent">
+            <div class="content-container">
+                {% block content %}
+                <div class="lesson-header">
+                    <span class="tag">🚀 Django Web Development</span>
+                    <h1>4-Week Complete Roadmap</h1>
+                    <div class="sub">From zero to job-ready Django developer</div>
+                </div>
+
+                <!-- Roadmap Weeks -->
+                <div class="weeks-list">
+
+                    <!-- Week 1 Card -->
+                    <div class="week-card open">
+                        <div class="week-header" onclick="toggleWeekCard(this)">
+                            <div class="week-title-area">
+                                <span class="week-num-badge">Week 1</span>
+                                <h3 class="week-title">💻 Django Fundamentals</h3>
+                            </div>
+                            <span class="week-arrow">▼</span>
+                        </div>
+                        <div class="week-lessons-list">
+                            <div class="roadmap-lesson-row">
+                                <div class="roadmap-lesson-left">
+                                    <span class="badge bg-success text-white">L1</span>
+                                    <div class="roadmap-lesson-title">Virtual environment + Django installation</div>
+                                </div>
+                                <a href="{% url 'products:django-week1-l1' %}" class="btn-roadmap-read">Read Lesson</a>
+                            </div>
+
+                            <div class="roadmap-lesson-row">
+                                <div class="roadmap-lesson-left">
+                                    <span class="badge bg-success text-white">L2</span>
+                                    <div class="roadmap-lesson-title">Project vs App structure samajhna</div>
+                                </div>
+                                <a href="{% url 'products:django-week1-l2' %}" class="btn-roadmap-read">Read Lesson</a>
+                            </div>
+
+                            <div class="roadmap-lesson-row">
+                                <div class="roadmap-lesson-left">
+                                    <span class="badge bg-success text-white">L3</span>
+                                    <div class="roadmap-lesson-title">URLs, Views (function-based), Templates</div>
+                                </div>
+                                <a href="{% url 'products:django-week1-l3' %}" class="btn-roadmap-read">Read Lesson</a>
+                            </div>
+
+                            <div class="roadmap-lesson-row">
+                                <div class="roadmap-lesson-left">
+                                    <span class="badge bg-success text-white">L4</span>
+                                    <div class="roadmap-lesson-title">Django ka MVT pattern (MVC ka Django version)</div>
+                                </div>
+                                <a href="{% url 'products:django-week1-l4' %}" class="btn-roadmap-read">Read Lesson</a>
+                            </div>
+
+                            <div class="roadmap-lesson-row">
+                                <div class="roadmap-lesson-left">
+                                    <span class="badge bg-success text-white">L5</span>
+                                    <div class="roadmap-lesson-title">Django Templates (Rendering HTML)</div>
+                                </div>
+                                <a href="{% url 'products:django-week1-l5' %}" class="btn-roadmap-read">Read Lesson</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Week 2 Card -->
+                    <div class="week-card open">
+                        <div class="week-header" onclick="toggleWeekCard(this)">
+                            <div class="week-title-area">
+                                <span class="week-num-badge">Week 2</span>
+                                <h3 class="week-title">🗄️ Models &amp; Database (Django ka dil)</h3>
+                            </div>
+                            <span class="week-arrow">▼</span>
+                        </div>
+                        <div class="week-lessons-list">
+                            <div class="roadmap-lesson-row">
+                                <div class="roadmap-lesson-left">
+                                    <span class="badge bg-success text-white">L1</span>
+                                    <div class="roadmap-lesson-title">Models banana, migrations</div>
+                                </div>
+                                <a href="{% url 'products:django-week2-l1' %}" class="btn-roadmap-read">Read Lesson</a>
+                            </div>
+
+                            <div class="roadmap-lesson-row">
+                                <div class="roadmap-lesson-left">
+                                    <span class="badge bg-success text-white">L2</span>
+                                    <div class="roadmap-lesson-title">Django ORM (queries likhna)</div>
+                                </div>
+                                <a href="{% url 'products:django-week2-l2' %}" class="btn-roadmap-read">Read Lesson</a>
+                            </div>
+
+                            <div class="roadmap-lesson-row">
+                                <div class="roadmap-lesson-left">
+                                    <span class="badge bg-success text-white">L3</span>
+                                    <div class="roadmap-lesson-title">Django Admin panel customize karna</div>
+                                </div>
+                                <a href="{% url 'products:django-week2-l3' %}" class="btn-roadmap-read">Read Lesson</a>
+                            </div>
+
+                            <div class="roadmap-lesson-row">
+                                <div class="roadmap-lesson-left">
+                                    <span class="badge bg-success text-white">L4</span>
+                                    <div class="roadmap-lesson-title">Relationships: ForeignKey, ManyToMany</div>
+                                </div>
+                                <a href="{% url 'products:django-week2-l4' %}" class="btn-roadmap-read">Read Lesson</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Week 3 Card -->
+                    <div class="week-card open">
+                        <div class="week-header" onclick="toggleWeekCard(this)">
+                            <div class="week-title-area">
+                                <span class="week-num-badge">Week 3</span>
+                                <h3 class="week-title">📝 Full CRUD + Forms</h3>
+                            </div>
+                            <span class="week-arrow">▼</span>
+                        </div>
+                        <div class="week-lessons-list">
+                            <div class="roadmap-lesson-row">
+                                <div class="roadmap-lesson-left">
+                                    <span class="badge bg-success text-white">L1</span>
+                                    <div class="roadmap-lesson-title">Create, Read, Update, Delete — real app pe</div>
+                                </div>
+                                <a href="{% url 'products:django-week3-l1' %}" class="btn-roadmap-read">Read Lesson</a>
+                            </div>
+
+                            <div class="roadmap-lesson-row">
+                                <div class="roadmap-lesson-left">
+                                    <span class="badge bg-success text-white">L2</span>
+                                    <div class="roadmap-lesson-title">Django Forms aur ModelForms</div>
+                                </div>
+                                <a href="{% url 'products:django-week3-l2' %}" class="btn-roadmap-read">Read Lesson</a>
+                            </div>
+
+                            <div class="roadmap-lesson-row">
+                                <div class="roadmap-lesson-left">
+                                    <span class="badge bg-success text-white">L3</span>
+                                    <div class="roadmap-lesson-title">Class-Based Views (CBVs)</div>
+                                </div>
+                                <a href="{% url 'products:django-week3-l3' %}" class="btn-roadmap-read">Read Lesson</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Week 4 Card -->
+                    <div class="week-card open">
+                        <div class="week-header" onclick="toggleWeekCard(this)">
+                            <div class="week-title-area">
+                                <span class="week-num-badge">Week 4</span>
+                                <h3 class="week-title">🚀 Polish + Job-Ready</h3>
+                            </div>
+                            <span class="week-arrow">▼</span>
+                        </div>
+                        <div class="week-lessons-list">
+                            <div class="roadmap-lesson-row">
+                                <div class="roadmap-lesson-left">
+                                    <span class="badge bg-success text-white">L1</span>
+                                    <div class="roadmap-lesson-title">User authentication (login/signup)</div>
+                                </div>
+                                <a href="{% url 'products:django-week4-l1' %}" class="btn-roadmap-read">Read Lesson</a>
+                            </div>
+
+                            <div class="roadmap-lesson-row">
+                                <div class="roadmap-lesson-left">
+                                    <span class="badge bg-success text-white">L2</span>
+                                    <div class="roadmap-lesson-title">Static/media files, basic styling</div>
+                                </div>
+                                <a href="{% url 'products:django-week4-l2' %}" class="btn-roadmap-read">Read Lesson</a>
+                            </div>
+
+                            <div class="roadmap-lesson-row">
+                                <div class="roadmap-lesson-left">
+                                    <span class="badge bg-success text-white">L3</span>
+                                    <div class="roadmap-lesson-title">Ek complete project deploy karna</div>
+                                </div>
+                                <a href="{% url 'products:django-week4-l3' %}" class="btn-roadmap-read">Read Lesson</a>
+                            </div>
+
+                            <div class="roadmap-lesson-row">
+                                <div class="roadmap-lesson-left">
+                                    <span class="badge bg-success text-white">L4</span>
+                                    <div class="roadmap-lesson-title">GitHub pe upload + README likhna</div>
+                                </div>
+                                <a href="{% url 'products:django-week4-l4' %}" class="btn-roadmap-read">Read Lesson</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Navigation Footer -->
+                <div class="lesson-nav-bar">
+                    <div class="d-flex align-items-center justify-content-between gap-3">
+                        <a href="{% url 'products:books' %}" class="btn-lesson-nav btn-lesson-prev">
+                            <i class="bi bi-arrow-left me-2"></i>
+                            <span>Back to Books</span>
+                        </a>
+
+                        <div class="d-none d-sm-block text-center">
+                            <span class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill font-monospace" style="font-size: 0.8rem; font-weight:500;">
+                                ⏱️ 4 Weeks Curriculum
+                            </span>
+                        </div>
+
+                        <a href="{% url 'products:django-week1-l1' %}" class="btn-lesson-nav btn-lesson-next">
+                            <span>Start Week 1</span>
+                            <i class="bi bi-arrow-right ms-2"></i>
+                        </a>
+                    </div>
+                </div>
+                {% endblock %}
+            </div>
+        </main>
+
+        <!-- RIGHT SIDEBAR -->
+        <aside class="sidebar-right">
+            {% block right_sidebar %}
+            <div class="right-section">
+                <h4>📊 Your Progress</h4>
+                <div class="progress-ring">
+                    <div class="circle"><span>25%</span></div>
+                    <div class="info">
+                        <strong>1/4</strong> Weeks completed<br />
+                        <span style="font-size:12px; color:#777587;">Django Track</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="right-section">
+                <h4>⚡ Quick Actions</h4>
+                <div class="quick-actions">
+                    <button class="quick-btn"><span class="icon">⭐</span> Bookmark Roadmap</button>
+                    <button class="quick-btn"><span class="icon">📝</span> Add Note</button>
+                    <button class="quick-btn"><span class="icon">📤</span> Share Course</button>
+                </div>
+            </div>
+
+            <div class="right-section" style="flex:1;">
+                <h4>📝 Your Notes</h4>
+                <textarea class="notes-area" id="djangoNotes" placeholder="Write your notes here..."></textarea>
+            </div>
+            {% endblock %}
+        </aside>
+
+    </div>
+
+    <!-- Prism JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
+
+    <script>
+        // Sidebar toggle
+        document.querySelectorAll('.module-toggle').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const target = document.getElementById(this.dataset.target);
+                const arrow = this.querySelector('.arrow');
+                if (target) {
+                    target.classList.toggle('open');
+                    if (arrow) arrow.classList.toggle('open');
+                }
+            });
+        });
+
+        function toggleWeekCard(header) {
+            const card = header.closest('.week-card');
+            card.classList.toggle('open');
+        }
+
+        const sidebar = document.getElementById('sidebarLeft');
+        const sidebarArrowBtn = document.getElementById('sidebarArrowBtn');
+        const sidebarArrowIcon = document.getElementById('sidebarArrowIcon');
+
+        if (sidebarArrowBtn && sidebar) {
+            sidebarArrowBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                sidebar.classList.toggle('collapsed');
+                if (sidebar.classList.contains('collapsed')) {
+                    sidebarArrowIcon.className = 'bi bi-chevron-right';
+                } else {
+                    sidebarArrowIcon.className = 'bi bi-chevron-left';
+                }
+            });
+        }
+
+        // Copy code button
+        function copyCode(btn) {
+            const codeBlock = btn.closest('.code-block');
+            const code = codeBlock.querySelector('code');
+            const text = code.textContent;
+
+            navigator.clipboard.writeText(text).then(() => {
+                btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.innerHTML = '<i class="fas fa-copy"></i> Copy';
+                    btn.classList.remove('copied');
+                }, 2000);
+            }).catch(() => {
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                setTimeout(() => {
+                    btn.innerHTML = '<i class="fas fa-copy"></i> Copy';
+                }, 2000);
+            });
+        }
+
+        function copyHtmlCode(btn) {
+            const code = btn.closest('.html-snippet').querySelector('code');
+            navigator.clipboard.writeText(code.textContent.trim()).then(() => {
+                btn.innerHTML = '<i class="fas fa-check"></i> Copied!'; btn.classList.add('copied');
+                setTimeout(() => { btn.innerHTML = '<i class="fas fa-copy"></i> Copy'; btn.classList.remove('copied'); }, 2000);
+            }).catch(() => {
+                const ta = document.createElement('textarea'); ta.value = code.textContent.trim();
+                document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+                btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                setTimeout(() => { btn.innerHTML = '<i class="fas fa-copy"></i> Copy'; }, 2000);
+            });
+        }
+
+        // Persistent notes
+        const notesArea = document.getElementById('djangoNotes');
+        const notesKey = '{{ notes_key|default:"django_notes" }}';
+        if (notesArea) {
+            notesArea.value = localStorage.getItem(notesKey) || '';
+            notesArea.addEventListener('input', function() {
+                localStorage.setItem(notesKey, this.value);
+            });
+        }
+    </script>
+
+    {% block extra_js %}{% endblock %}
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

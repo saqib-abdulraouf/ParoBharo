@@ -1,0 +1,789 @@
+{% extends "Books/Djnago/django-read/index.html" %}
+{% load static %}
+
+{% block title %}Week 03 — Full CRUD: Update &amp; Delete{% endblock %}
+
+{% block content %}
+<!-- ===== BREADCRUMB ===== -->
+<div class="breadcrumb">
+    <a href="{% url 'products:django-book' %}">Django Course</a>
+    <span class="sep">›</span>
+    <span>Week 3</span>
+    <span class="sep">›</span>
+    <span>Lesson 2</span>
+</div>
+
+<!-- ===== LESSON HEADER ===== -->
+<div class="lesson-header">
+    <span class="tag">📖 Week 3 · Lesson 2</span>
+    <h1>Full CRUD — Update &amp; Delete</h1>
+    <div class="sub">
+        <i class="fas fa-pen-to-square" style="color:#0c4b33;margin-right:4px;"></i>
+        Function-Based Views: Task Update and Task Delete
+    </div>
+</div>
+
+<div class="reading-content">
+{% verbatim %}
+
+    <!-- ===== INTRODUCTION ===== -->
+    <div class="info-box success-box">
+        <i class="bi bi-rocket me-2 text-success"></i>
+        <strong>Bohat khoob!</strong> Ab <strong>Update</strong> aur <strong>Delete</strong> — dono ek sath karte hain
+        kyunke pattern <strong>Create</strong> jaisa hi hai.
+    </div>
+
+    <!-- ============================================================
+                    PART 1: UPDATE
+                    ============================================================ -->
+    <h2><span class="step-number">1</span> Update — Existing Task Edit Karna</h2>
+
+    <h3>Step 1: View Banayein</h3>
+
+    <p>
+        <code>tasks/views.py</code> mein add karein:
+    </p>
+
+    <div class="code-block">
+        <div class="code-label">
+            <i class="fab fa-python"></i> tasks/views.py
+        </div>
+        <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i> Copy</button>
+        <pre><code class="language-python">def task_update(request, pk):
+    task = get_object_or_404(Task, pk=pk)
+    if request.method == 'POST':
+        form = TaskForm(request.POST, instance=task)
+        if form.is_valid():
+            form.save()
+            return redirect('task_list')
+    else:
+        form = TaskForm(instance=task)
+    return render(request, 'tasks/task_form.html', {'form': form})</code></pre>
+    </div>
+
+    <!-- ===== FIELD EXPLANATION ===== -->
+    <h3>Samjhein:</h3>
+
+    <div class="field-explanation">
+        <div class="field-item">
+            <span class="field-name">pk</span>
+            <span class="field-desc"><strong>"Primary Key"</strong> — yani task ki ID jo URL se aayegi</span>
+        </div>
+        <div class="field-item">
+            <span class="field-name">get_object_or_404(Task, pk=pk)</span>
+            <span class="field-desc">us ID ka task dhundo, agar na mile to <strong>404 error page</strong> dikhao (crash
+                nahi hoga)</span>
+        </div>
+        <div class="field-item">
+            <span class="field-name">instance=task</span>
+            <span class="field-desc"><strong>👈 Sabse important hai!</strong> Ye Django ko batata hai <strong>"naya task
+                    nahi banana, isi purane task ko update karna hai"</strong>. Bina is ke Django naya record bana
+                dega.</span>
+        </div>
+        <div class="field-item">
+            <span class="field-name">task_form.html</span>
+            <span class="field-desc">Wahi template use kiya — kyunke form <strong>same</strong> hai, sirf data pehle se
+                <strong>filled</strong> hoga</span>
+        </div>
+    </div>
+
+    <div class="info-box teal-box">
+        <i class="bi bi-lightbulb me-2 text-success"></i>
+        <strong>Pro Tip:</strong> <code>instance=task</code> ke baghair Django <strong>naya record</strong> create
+        karega — ye ek common mistake hai!
+    </div>
+
+    <!-- ============================================================
+                    PART 2: DELETE
+                    ============================================================ -->
+    <h2><span class="step-number">2</span> Delete — Task Hataana</h2>
+
+    <h3>Step 1: Delete View</h3>
+
+    <div class="code-block">
+        <div class="code-label">
+            <i class="fab fa-python"></i> tasks/views.py
+        </div>
+        <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i> Copy</button>
+        <pre><code class="language-python">def task_delete(request, pk):
+    task = get_object_or_404(Task, pk=pk)
+    if request.method == 'POST':
+        task.delete()
+        return redirect('task_list')
+    return render(request, 'tasks/task_confirm_delete.html', {'task': task})</code></pre>
+    </div>
+
+    <div class="field-explanation">
+        <div class="field-item">
+            <span class="field-name">if request.method == 'POST'</span>
+            <span class="field-desc">Sirf <strong>POST</strong> request pe actual delete ho ga</span>
+        </div>
+        <div class="field-item">
+            <span class="field-name">task.delete()</span>
+            <span class="field-desc">Database se task <strong>delete</strong> kar do</span>
+        </div>
+        <div class="field-item">
+            <span class="field-name">task_confirm_delete.html</span>
+            <span class="field-desc">Pehle <strong>confirmation page</strong> dikhate hain (accidental delete se bachne
+                ke liye)</span>
+        </div>
+    </div>
+
+    <div class="info-box">
+        <i class="bi bi-shield-check me-2 text-warning"></i>
+        <strong>Security:</strong> Delete <strong>direct</strong> nahi kar dete — pehle confirmation page dikhate hain.
+        Sirf <strong>POST request</strong> pe hi actual delete hota hai (GET request pe nahi!).
+    </div>
+
+    <h3>Step 2: Delete Confirmation Template</h3>
+
+    <p>
+        <code>tasks/templates/tasks/task_confirm_delete.html</code>:
+    </p>
+
+    <div class="code-block">
+        <div class="code-label">
+            <i class="fab fa-html5"></i> tasks/templates/tasks/task_confirm_delete.html
+        </div>
+        <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i> Copy</button>
+        <pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Delete Task&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Delete "{{ task.title }}"?&lt;/h1&gt;
+    &lt;p&gt;Kya aap sure hain? Ye action wapas nahi ho sakta.&lt;/p&gt;
+
+    &lt;form method="POST"&gt;
+        {% csrf_token %}
+        &lt;button type="submit"&gt;Haan, Delete Karein&lt;/button&gt;
+    &lt;/form&gt;
+
+    &lt;a href="{% url 'task_list' %}"&gt;Cancel&lt;/a&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+    </div>
+
+    <!-- ============================================================
+                    PART 3: URLS
+                    ============================================================ -->
+    <h2><span class="step-number">3</span> URLs Add Karein</h2>
+
+    <p>
+        <code>tasks/urls.py</code>:
+    </p>
+
+    <div class="code-block">
+        <div class="code-label">
+            <i class="fas fa-link"></i> tasks/urls.py
+        </div>
+        <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i> Copy</button>
+        <pre><code class="language-python">from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.task_list, name='task_list'),
+    path('create/', views.task_create, name='task_create'),
+    path('&lt;int:pk&gt;/update/', views.task_update, name='task_update'),
+    path('&lt;int:pk&gt;/delete/', views.task_delete, name='task_delete'),
+]</code></pre>
+    </div>
+
+    <div class="field-explanation">
+        <div class="field-item">
+            <span class="field-name">&lt;int:pk&gt;</span>
+            <span class="field-desc">URL se ek <strong>integer</strong> capture karega aur view ko <code>pk</code> naam
+                se bhejega (jaise <code>/1/update/</code> → <code>pk=1</code>)</span>
+        </div>
+    </div>
+
+    <!-- ============================================================
+                    PART 4: LIST PAGE LINKS
+                    ============================================================ -->
+    <h2><span class="step-number">4</span> List Page Mein Edit/Delete Links Add Karein</h2>
+
+    <p>
+        <code>task_list.html</code> ko update karein:
+    </p>
+
+    <div class="code-block">
+        <div class="code-label">
+            <i class="fab fa-html5"></i> tasks/templates/tasks/task_list.html
+        </div>
+        <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i> Copy</button>
+        <pre><code class="language-html">&lt;ul&gt;
+    {% for task in tasks %}
+        &lt;li&gt;
+            {{ task.title }} 
+            {% if task.completed %}✅{% else %}⏳{% endif %}
+            — &lt;a href="{% url 'task_update' task.pk %}"&gt;Edit&lt;/a&gt;
+            — &lt;a href="{% url 'task_delete' task.pk %}"&gt;Delete&lt;/a&gt;
+        &lt;/li&gt;
+    {% empty %}
+        &lt;li&gt;Koi task nahi hai.&lt;/li&gt;
+    {% endfor %}
+&lt;/ul&gt;</code></pre>
+    </div>
+
+    <!-- ============================================================
+                    COMPLETE VIEWS.PY
+                    ============================================================ -->
+    <h2><span class="step-number" style="background:var(--success);color:#fff;">5</span> Complete <code>views.py</code>
+    </h2>
+
+    <p>
+        Yeh raha <strong>complete</strong> <code>tasks/views.py</code> — CRUD ke saare functions ek jagah:
+    </p>
+
+    <div class="code-block">
+        <div class="code-label">
+            <i class="fab fa-python"></i> tasks/views.py (Complete)
+        </div>
+        <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i> Copy</button>
+        <pre><code class="language-python">from django.shortcuts import render, redirect, get_object_or_404
+from .models import Task
+from .forms import TaskForm
+
+# READ — All Tasks
+def task_list(request):
+    tasks = Task.objects.all()
+    return render(request, 'tasks/task_list.html', {'tasks': tasks})
+
+# CREATE — New Task
+def task_create(request):
+    if request.method == 'POST':
+        form = TaskForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('task_list')
+    else:
+        form = TaskForm()
+    return render(request, 'tasks/task_form.html', {'form': form})
+
+# UPDATE — Edit Existing Task
+def task_update(request, pk):
+    task = get_object_or_404(Task, pk=pk)
+    if request.method == 'POST':
+        form = TaskForm(request.POST, instance=task)
+        if form.is_valid():
+            form.save()
+            return redirect('task_list')
+    else:
+        form = TaskForm(instance=task)
+    return render(request, 'tasks/task_form.html', {'form': form})
+
+# DELETE — Remove Task
+def task_delete(request, pk):
+    task = get_object_or_404(Task, pk=pk)
+    if request.method == 'POST':
+        task.delete()
+        return redirect('task_list')
+    return render(request, 'tasks/task_confirm_delete.html', {'task': task})</code></pre>
+    </div>
+
+    <!-- ============================================================
+                    CHECKLIST
+                    ============================================================ -->
+    <div class="checklist-box">
+        <div class="checklist-header">
+            <i class="bi bi-clipboard-check"></i> Practice Checklist
+        </div>
+        <ul class="checklist-items">
+            <li>
+                <span class="check-icon"><i class="bi bi-circle"></i></span>
+                <code>task_update</code> view banaya (with <code>instance=task</code>)
+            </li>
+            <li>
+                <span class="check-icon"><i class="bi bi-circle"></i></span>
+                <code>task_delete</code> view banaya
+            </li>
+            <li>
+                <span class="check-icon"><i class="bi bi-circle"></i></span>
+                <code>task_confirm_delete.html</code> template banaya
+            </li>
+            <li>
+                <span class="check-icon"><i class="bi bi-circle"></i></span>
+                <code>update/</code> aur <code>delete/</code> URLs add kiye
+            </li>
+            <li>
+                <span class="check-icon"><i class="bi bi-circle"></i></span>
+                List page mein <strong>Edit</strong> aur <strong>Delete</strong> links add kiye
+            </li>
+        </ul>
+    </div>
+
+    <!-- ============================================================
+                    FINAL TEST
+                    ============================================================ -->
+    <div class="week-complete-box" style="border-color:var(--success);">
+        <div class="week-complete-icon">🎉</div>
+        <div class="week-complete-text">
+            <h3 style="color:var(--success);">Full CRUD Complete!</h3>
+            <p>
+                <strong>Ab poora CRUD test karein:</strong>
+            </p>
+            <ul>
+                <li>✅ List page pe jayein</li>
+                <li>✅ Kisi task ko <strong>"Edit"</strong> karein — change save ho raha hai?</li>
+                <li>✅ Kisi task ko <strong>"Delete"</strong> karein — confirmation page aa raha hai, aur delete ho raha
+                    hai?</li>
+            </ul>
+            <p style="margin-top:0.5rem; font-size:1.1rem; color:var(--primary);">
+                🏆 <strong>Congratulations!</strong> Aap ne apna pehla <strong>full CRUD app</strong> bana liya hai! 🎉
+                <br />
+                <span style="font-size:0.9rem; color:var(--text-muted);">
+                    Ye exact wo skill hai jo har <strong>Django job listing</strong> mein maangi jaati hai.
+                </span>
+            </p>
+        </div>
+    </div>
+
+    {% endverbatim %}
+</div>
+
+<!-- ===== NAVIGATION FOOTER ===== -->
+<div class="lesson-nav-bar">
+    <div class="d-flex align-items-center justify-content-between gap-3">
+        <a href="{% url 'products:django-week3-l1' %}" class="btn-lesson-nav btn-lesson-prev">
+            <i class="bi bi-arrow-left me-2"></i>
+            <span>Previous (L1)</span>
+        </a>
+
+        <div class="d-none d-sm-block text-center">
+            <span class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill font-monospace"
+                style="font-size: 0.8rem; font-weight:500;">
+                Week 3 • Lesson 2 of 4
+            </span>
+        </div>
+
+        <a href="{% url 'products:django-week3-l3' %}" class="btn-lesson-nav btn-lesson-next">
+            <span>Next (L3)</span>
+            <i class="bi bi-arrow-right ms-2"></i>
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block right_sidebar %}
+<!-- ===== PROGRESS ===== -->
+<div class="right-section">
+    <h4>📊 Your Progress</h4>
+    <div class="progress-ring">
+        <div class="circle"><span>50%</span></div>
+        <div class="info">
+            <strong>2/4</strong> Week 3 done
+        </div>
+    </div>
+</div>
+
+<!-- ===== QUICK ACTIONS ===== -->
+<div class="right-section">
+    <h4>⚡ Quick Actions</h4>
+    <div class="quick-actions">
+        <button class="quick-btn"><span class="icon">⭐</span> Bookmark</button>
+        <button class="quick-btn"><span class="icon">📝</span> Add Note</button>
+    </div>
+</div>
+
+<!-- ===== NOTES ===== -->
+<div class="right-section" style="flex:1;">
+    <h4>📝 Your Notes</h4>
+    <textarea class="notes-area" id="djangoNotes" placeholder="Write your notes here..."></textarea>
+</div>
+{% endblock %}
+
+<!-- ================================================================
+    CSS — Inline Styles for the Lesson Page
+    ================================================================ -->
+{% block extra_css %}
+<style>
+    /* ===== BREADCRUMB ===== */
+    .breadcrumb {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        margin-bottom: 1.5rem;
+        flex-wrap: wrap;
+    }
+
+    .breadcrumb a {
+        color: var(--primary);
+        text-decoration: none;
+        transition: color 0.2s;
+    }
+
+    .breadcrumb a:hover {
+        color: var(--primary-dark);
+        text-decoration: underline;
+    }
+
+    .breadcrumb .sep {
+        color: var(--text-muted);
+        opacity: 0.5;
+    }
+
+    /* ===== LESSON HEADER ===== */
+    .lesson-header {
+        margin-bottom: 2rem;
+    }
+
+    .lesson-header .tag {
+        display: inline-block;
+        background: var(--primary);
+        color: #fff;
+        padding: 0.2rem 1rem;
+        border-radius: 9999px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .lesson-header h1 {
+        font-size: 2.25rem;
+        font-weight: 700;
+        color: var(--text-dark);
+        letter-spacing: -0.02em;
+        margin-bottom: 0.25rem;
+    }
+
+    .lesson-header .sub {
+        font-size: 1.05rem;
+        color: var(--text-muted);
+    }
+
+    /* ===== INFO BOXES ===== */
+    .info-box {
+        background: var(--bg-light);
+        border-left: 4px solid var(--primary);
+        padding: 1rem 1.25rem;
+        border-radius: 0.5rem;
+        margin: 1rem 0;
+    }
+
+    .info-box.success-box {
+        border-left-color: var(--success);
+        background: rgba(16, 185, 129, 0.06);
+    }
+
+    .info-box.teal-box {
+        border-left-color: var(--success);
+        background: rgba(16, 185, 129, 0.06);
+    }
+
+    .info-box code {
+        background: var(--bg-light);
+        padding: 0.1rem 0.4rem;
+        border-radius: 0.25rem;
+        font-size: 0.85rem;
+        font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* ===== CODE BLOCKS ===== */
+    .code-block {
+        background: #0d1117;
+        border-radius: 0.75rem;
+        padding: 1.25rem 1.5rem;
+        margin: 1rem 0 1.5rem 0;
+        overflow-x: auto;
+        position: relative;
+    }
+
+    .code-block .code-label {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.7rem;
+        font-weight: 500;
+        color: #8b949e;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .code-block .code-label i {
+        color: var(--success);
+    }
+
+    .code-block code {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.85rem;
+        line-height: 1.7;
+        color: #e6edf3;
+    }
+
+    .code-block .copy-btn {
+        position: absolute;
+        top: 0.75rem;
+        right: 0.75rem;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        color: #8b949e;
+        padding: 0.3rem 0.8rem;
+        border-radius: 0.375rem;
+        font-family: 'Inter', sans-serif;
+        font-size: 0.75rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .code-block .copy-btn:hover {
+        background: rgba(255, 255, 255, 0.12);
+        color: #e6edf3;
+    }
+
+    .code-block .copy-btn.copied {
+        background: var(--success);
+        color: #fff;
+        border-color: var(--success);
+    }
+
+    /* ===== FIELD EXPLANATION ===== */
+    .field-explanation {
+        background: var(--bg-light);
+        border-radius: 0.75rem;
+        padding: 1.25rem 1.5rem;
+        margin: 1rem 0 1.5rem 0;
+    }
+
+    .field-explanation .field-item {
+        display: flex;
+        gap: 1rem;
+        padding: 0.6rem 0;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .field-explanation .field-item:last-child {
+        border-bottom: none;
+    }
+
+    .field-explanation .field-name {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--primary);
+        min-width: 180px;
+        flex-shrink: 0;
+    }
+
+    .field-explanation .field-desc {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        line-height: 1.5rem;
+    }
+
+    .field-explanation .field-desc code {
+        background: var(--bg-light);
+        padding: 0.1rem 0.4rem;
+        border-radius: 0.25rem;
+        font-size: 0.8rem;
+        font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* ===== STEP NUMBER ===== */
+    .step-number {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--primary);
+        color: #fff;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.8rem;
+        font-weight: 600;
+        margin-right: 0.5rem;
+        flex-shrink: 0;
+    }
+
+    h2 {
+        display: flex;
+        align-items: center;
+        font-size: 1.35rem;
+        font-weight: 600;
+        color: var(--text-dark);
+        margin-top: 2rem;
+        margin-bottom: 0.75rem;
+    }
+
+    h3 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--text-dark);
+        margin-top: 1.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    /* ===== CHECKLIST ===== */
+    .checklist-box {
+        background: var(--bg-light);
+        border-radius: 0.75rem;
+        padding: 1.25rem 1.5rem;
+        margin: 1.5rem 0;
+        border-left: 4px solid var(--primary);
+    }
+
+    .checklist-box .checklist-header {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--text-dark);
+        margin-bottom: 0.5rem;
+    }
+
+    .checklist-box .checklist-header i {
+        color: var(--primary);
+        margin-right: 0.5rem;
+    }
+
+    .checklist-box .checklist-items {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 0.5rem 0;
+    }
+
+    .checklist-box .checklist-items li {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.3rem 0;
+        font-size: 0.9rem;
+        color: var(--text-muted);
+    }
+
+    .checklist-box .checklist-items li .check-icon {
+        color: var(--text-muted);
+        font-size: 0.8rem;
+        width: 20px;
+        text-align: center;
+    }
+
+    .checklist-box .checklist-items li code {
+        background: var(--bg-light);
+        padding: 0.1rem 0.4rem;
+        border-radius: 0.25rem;
+        font-size: 0.8rem;
+        font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* ===== WEEK COMPLETE BOX ===== */
+    .week-complete-box {
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.06), rgba(79, 70, 229, 0.06));
+        border: 2px solid var(--success);
+        border-radius: 1rem;
+        padding: 1.5rem 2rem;
+        margin: 2rem 0 0.5rem 0;
+        display: flex;
+        align-items: flex-start;
+        gap: 1.5rem;
+    }
+
+    .week-complete-box .week-complete-icon {
+        font-size: 3rem;
+        flex-shrink: 0;
+    }
+
+    .week-complete-box .week-complete-text h3 {
+        color: var(--success);
+        margin-top: 0;
+        margin-bottom: 0.25rem;
+    }
+
+    .week-complete-box .week-complete-text p {
+        color: var(--text-muted);
+        margin-bottom: 0.25rem;
+    }
+
+    .week-complete-box .week-complete-text ul {
+        margin: 0.25rem 0 0.25rem 1.5rem;
+        color: var(--text-muted);
+        line-height: 1.8;
+    }
+
+    .week-complete-box .week-complete-text ul li {
+        list-style-type: disc;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+        .lesson-header h1 {
+            font-size: 1.6rem;
+        }
+
+        .field-explanation .field-item {
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .field-explanation .field-name {
+            min-width: auto;
+        }
+
+        .lesson-nav-bar .d-flex {
+            flex-wrap: wrap;
+            justify-content: center !important;
+        }
+
+        .code-block {
+            padding: 1rem;
+        }
+
+        .code-block code {
+            font-size: 0.75rem;
+        }
+
+        .week-complete-box {
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 1.25rem;
+        }
+
+        .week-complete-box .week-complete-text ul {
+            text-align: left;
+        }
+    }
+</style>
+{% endblock %}
+
+<!-- ================================================================
+    JAVASCRIPT — Copy Button Functionality
+    ================================================================ -->
+{% block extra_js %}
+<script>
+    // ===== COPY CODE BUTTON =====
+    document.querySelectorAll('.copy-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            const codeBlock = this.closest('.code-block');
+            const code = codeBlock.querySelector('code');
+            const text = code.textContent;
+
+            navigator.clipboard.writeText(text).then(function () {
+                btn.innerHTML = '<i class="bi bi-check"></i> Copied!';
+                btn.classList.add('copied');
+                setTimeout(function () {
+                    btn.innerHTML = '<i class="bi bi-clipboard"></i> Copy';
+                    btn.classList.remove('copied');
+                }, 2000);
+            }).catch(function () {
+                // Fallback
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                btn.innerHTML = '<i class="bi bi-check"></i> Copied!';
+                setTimeout(function () {
+                    btn.innerHTML = '<i class="bi bi-clipboard"></i> Copy';
+                }, 2000);
+            });
+        });
+    });
+</script>
+{% endblock %}

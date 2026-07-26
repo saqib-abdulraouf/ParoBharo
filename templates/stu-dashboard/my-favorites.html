@@ -1,0 +1,504 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Favorites | ExamPrep</title>
+    <meta name="description"
+        content="View and manage your favorite exams, mock tests, study notes and practice sets on ExamPrep Student Portal.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+    <link rel="stylesheet" href="{% static 'css/stu-dashboard/my-favorites.css' %}">
+</head>
+
+<body>
+
+    <a class="visually-hidden-focusable skip-link" href="#main-content">Skip to main content</a>
+
+    <div class="app-shell">
+
+        <!-- =========================================================
+         SIDEBAR (Desktop)
+         ========================================================= -->
+        <aside class="app-sidebar" aria-label="Primary navigation">
+            <div class="sidebar-brand-header">
+                <a href="{% url 'dashboard:index' %}" class="sidebar-brand text-decoration-none" style="color: inherit;">
+                    <div class="sidebar-brand-mark" aria-hidden="true">
+                        <i class="bi bi-mortarboard-fill"></i>
+                    </div>
+                    <div class="sidebar-brand-text">
+                        <h1 class="sidebar-brand-title">ExamPrep</h1>
+                        <p class="sidebar-brand-subtitle">Student Portal</p>
+                    </div>
+                </a>
+                <div role="button" class="ds-button ds-button--iconLabelTertiary ds-button--icon ds-button--capsule ds-button--m ds-button--icon-relative-m ds-button--sizing-content _7d1f5e2" tabindex="0" style="--dsl-button-height: 34px;" id="desktopSidebarToggle" aria-label="Toggle sidebar">
+                    <div class="ds-button__background"></div>
+                    <div class="ds-button__icon ds-button__icon--last-child">
+                        <div class="ds-icon" style="font-size: inherit;">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M9.67272 0.522841C10.8339 0.522841 11.76 0.522714 12.4963 0.602493C13.2453 0.683657 13.8789 0.854248 14.4264 1.25197C14.7504 1.48739 15.0355 1.77247 15.2709 2.0965C15.6686 2.64394 15.8392 3.27758 15.9204 4.02655C16.0002 4.7629 16 5.68895 16 6.85014V9.14986C16 10.3111 16.0002 11.2371 15.9204 11.9735C15.8392 12.7224 15.6686 13.3561 15.2709 13.9035C15.0355 14.2275 14.7504 14.5126 14.4264 14.748C13.8789 15.1458 13.2453 15.3163 12.4963 15.3975C11.76 15.4773 10.8339 15.4772 9.67272 15.4772H6.3273C5.16611 15.4772 4.24006 15.4773 3.50371 15.3975C2.75474 15.3163 2.1211 15.1458 1.57366 14.748C1.24963 14.5126 0.964549 14.2275 0.729131 13.9035C0.331407 13.3561 0.160817 12.7224 0.0796529 11.9735C-0.000126137 11.2371 1.25338e-09 10.3111 1.25338e-09 9.14986V6.85014C1.25329e-09 5.68895 -0.000126137 4.7629 0.0796529 4.02655C0.160817 3.27758 0.331407 2.64394 0.729131 2.0965C0.964549 1.77247 1.24963 1.48739 1.57366 1.25197C2.1211 0.854248 2.75474 0.683657 3.50371 0.602493C4.24006 0.522714 5.16611 0.522841 6.3273 0.522841H9.67272ZM5.54303 1.88715V14.1118C5.78636 14.1128 6.04709 14.1169 6.3273 14.1169H9.67272C10.8639 14.1169 11.7032 14.1164 12.3493 14.0465C12.9824 13.9779 13.3497 13.8494 13.6268 13.6482C13.8354 13.4966 14.0195 13.3125 14.1711 13.1039C14.3723 12.8268 14.5007 12.4595 14.5693 11.8264C14.6393 11.1803 14.6398 10.341 14.6398 9.14986V6.85014C14.6398 5.65896 14.6393 4.81967 14.5693 4.1736C14.5007 3.54048 14.3723 3.17318 14.1711 2.89609C14.0195 2.68747 13.8354 2.50337 13.6268 2.35179C13.3497 2.1506 12.9824 2.02212 12.3493 1.95353C11.7032 1.88358 10.8639 1.88307 9.67272 1.88307H6.3273C6.04709 1.88307 5.78636 1.8862 5.54303 1.88715ZM4.1828 1.91166C3.99125 1.9216 3.8148 1.93577 3.65076 1.95353C3.01764 2.02212 2.65034 2.1506 2.37325 2.35179C2.16463 2.50337 1.98052 2.68747 1.82895 2.89609C1.62776 3.17318 1.49928 3.54048 1.43069 4.1736C1.36074 4.81967 1.36023 5.65896 1.36023 6.85014V9.14986C1.36023 10.341 1.36074 11.1803 1.43069 11.8264C1.49928 12.4595 1.62776 12.8268 1.82895 13.1039C1.98052 13.3125 2.16463 13.4966 2.37325 13.6482C2.65034 13.8494 3.01764 13.9779 3.65076 14.0465C3.81478 14.0642 3.99127 14.0774 4.1828 14.0873V1.91166Z" fill="currentColor"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav" aria-label="Dashboard sections">
+                <a class="sidebar-nav-link" href="{% url 'dashboard:index' %}" tabindex="0">
+                    <i class="bi bi-grid-1x2-fill" aria-hidden="true"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a class="sidebar-nav-link" href="{% url 'dashboard:my_exams' %}" tabindex="0">
+                    <i class="bi bi-journal-bookmark-fill" aria-hidden="true"></i>
+                    <span>My Exams</span>
+                </a>
+                <a class="sidebar-nav-link active" href="{% url 'dashboard:my_favorites' %}" tabindex="0">
+                    <i class="bi bi-heart" aria-hidden="true"></i>
+                    <span>My Favorites</span>
+                </a>
+                <a class="sidebar-nav-link" href="{% url 'dashboard:results' %}" tabindex="0">
+                    <i class="bi bi-check2-square" aria-hidden="true"></i>
+                    <span>Results</span>
+                </a>
+                <a class="sidebar-nav-link" href="#" tabindex="0">
+                    <i class="bi bi-graph-up-arrow" aria-hidden="true"></i>
+                    <span>Analytics</span>
+                </a>
+                <a class="sidebar-nav-link" href="#" tabindex="0">
+                    <i class="bi bi-gear-fill" aria-hidden="true"></i>
+                    <span>Settings</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-upgrade">
+                <div class="sidebar-upgrade-card">
+                    <h4>Upgrade to Pro</h4>
+                    <p>Get unlimited practice tests and expert insights.</p>
+                    <button type="button" class="btn-upgrade">Upgrade Now</button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- =========================================================
+         SIDEBAR (Mobile Offcanvas Slide Drawer)
+         ========================================================= -->
+        <div class="offcanvas offcanvas-start app-sidebar-mobile" tabindex="-1" id="mobileSidebar"
+            aria-labelledby="mobileSidebarLabel">
+            <div class="offcanvas-header sidebar-brand">
+                <a href="{% url 'dashboard:index' %}" class="d-flex text-decoration-none flex-grow-1 align-items-center" style="color: inherit; gap: 12px;">
+                    <div class="sidebar-brand-mark" aria-hidden="true" style="margin-right: 0;"><i class="bi bi-mortarboard-fill"></i></div>
+                    <div>
+                        <h2 class="sidebar-brand-title" id="mobileSidebarLabel">ExamPrep</h2>
+                        <p class="sidebar-brand-subtitle">Student Portal</p>
+                    </div>
+                </a>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close menu"></button>
+            </div>
+            <div class="offcanvas-body d-flex flex-column">
+                <nav class="sidebar-nav" aria-label="Dashboard sections (mobile)">
+                    <a class="sidebar-nav-link" href="{% url 'dashboard:index' %}"><i class="bi bi-grid-1x2-fill"
+                            aria-hidden="true"></i><span>Dashboard</span></a>
+                    <a class="sidebar-nav-link" href="{% url 'dashboard:my_exams' %}"><i class="bi bi-journal-bookmark-fill"
+                            aria-hidden="true"></i><span>My Exams</span></a>
+                    <a class="sidebar-nav-link active" href="{% url 'dashboard:my_favorites' %}"><i class="bi bi-heart"
+                            aria-hidden="true"></i><span>My Favorites</span></a>
+                    <a class="sidebar-nav-link" href="{% url 'dashboard:results' %}"><i class="bi bi-check2-square"
+                            aria-hidden="true"></i><span>Results</span></a>
+                    <a class="sidebar-nav-link" href="#"><i class="bi bi-graph-up-arrow"
+                            aria-hidden="true"></i><span>Analytics</span></a>
+                    <a class="sidebar-nav-link" href="#"><i class="bi bi-gear-fill"
+                            aria-hidden="true"></i><span>Settings</span></a>
+                </nav>
+                <div class="sidebar-upgrade mt-auto px-0">
+                    <div class="sidebar-upgrade-card">
+                        <h4>Upgrade to Pro</h4>
+                        <p>Get unlimited practice tests and expert insights.</p>
+                        <button type="button" class="btn-upgrade">Upgrade Now</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== MAIN ========== -->
+        <div class="main-content">
+
+        <!-- HEADER -->
+        <header class="app-header" id="appHeader">
+            <div class="app-header-inner">
+                <div class="d-flex align-items-center gap-2 flex-grow-1">
+                    <button class="sidebar-toggle-btn d-md-none" type="button" data-bs-toggle="offcanvas"
+                        data-bs-target="#mobileSidebar" aria-controls="mobileSidebar"
+                        aria-label="Open navigation menu">
+                        <svg width="20" height="20" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M9.67272 0.522841C10.8339 0.522841 11.76 0.522714 12.4963 0.602493C13.2453 0.683657 13.8789 0.854248 14.4264 1.25197C14.7504 1.48739 15.0355 1.77247 15.2709 2.0965C15.6686 2.64394 15.8392 3.27758 15.9204 4.02655C16.0002 4.7629 16 5.68895 16 6.85014V9.14986C16 10.3111 16.0002 11.2371 15.9204 11.9735C15.8392 12.7224 15.6686 13.3561 15.2709 13.9035C15.0355 14.2275 14.7504 14.5126 14.4264 14.748C13.8789 15.1458 13.2453 15.3163 12.4963 15.3975C11.76 15.4773 10.8339 15.4772 9.67272 15.4772H6.3273C5.16611 15.4772 4.24006 15.4773 3.50371 15.3975C2.75474 15.3163 2.1211 15.1458 1.57366 14.748C1.24963 14.5126 0.964549 14.2275 0.729131 13.9035C0.331407 13.3561 0.160817 12.7224 0.0796529 11.9735C-0.000126137 11.2371 0 10.3111 0 9.14986V6.85014C0 5.68895 -0.000126137 4.7629 0.0796529 4.02655C0.160817 3.27758 0.331407 2.64394 0.729131 2.0965C0.964549 1.77247 1.24963 1.48739 1.57366 1.25197C2.1211 0.854248 2.75474 0.683657 3.50371 0.602493C4.24006 0.522714 5.16611 0.522841 6.3273 0.522841H9.67272ZM5.54303 1.88715V14.1118C5.78636 14.1128 6.04709 14.1169 6.3273 14.1169H9.67272C10.8639 14.1169 11.7032 14.1164 12.3493 14.0465C12.9824 13.9779 13.3497 13.8494 13.6268 13.6482C13.8354 13.4966 14.0195 13.3125 14.1711 13.1039C14.3723 12.8268 14.5007 12.4595 14.5693 11.8264C14.6393 11.1803 14.6398 10.341 14.6398 9.14986V6.85014C14.6398 5.65896 14.6393 4.81967 14.5693 4.1736C14.5007 3.54048 14.3723 3.17318 14.1711 2.89609C14.0195 2.68747 13.8354 2.50337 13.6268 2.35179C13.3497 2.1506 12.9824 2.02212 12.3493 1.95353C11.7032 1.88358 10.8639 1.88307 9.67272 1.88307H6.3273C6.04709 1.88307 5.78636 1.8862 5.54303 1.88715ZM4.1828 1.91166C3.99125 1.9216 3.8148 1.93577 3.65076 1.95353C3.01764 2.02212 2.65034 2.1506 2.37325 2.35179C2.16463 2.50337 1.98052 2.68747 1.82895 2.89609C1.62776 3.17318 1.49928 3.54048 1.43069 4.1736C1.36074 4.81967 1.36023 5.65896 1.36023 6.85014V9.14986C1.36023 10.341 1.36074 11.1803 1.43069 11.8264C1.49928 12.4595 1.62776 12.8268 1.82895 13.1039C1.98052 13.3125 2.16463 13.4966 2.37325 13.6482C2.65034 13.8494 3.01764 13.9779 3.65076 14.0465C3.81478 14.0642 3.99127 14.0774 4.1828 14.0873V1.91166Z" fill="currentColor"></path></svg>
+                    </button>
+
+                    <form class="header-search d-none d-md-block" role="search">
+                        <label for="globalSearch" class="visually-hidden">Search exams and lessons</label>
+                        <i class="bi bi-search" aria-hidden="true"></i>
+                        <input type="search" id="globalSearch" placeholder="Search exams, lessons..." />
+                    </form>
+                </div>
+
+                <div class="header-actions">
+                    <!-- Dark mode toggle -->
+                    <button class="icon-btn" type="button" id="darkModeToggle" aria-pressed="false"
+                        aria-label="Toggle dark mode">
+                        <i class="bi bi-moon-stars" aria-hidden="true"></i>
+                    </button>
+
+                    <!-- Notification dropdown -->
+                    <div class="dropdown">
+                        <button class="icon-btn" type="button" id="notifDropdownBtn" data-bs-toggle="dropdown"
+                            aria-expanded="false" aria-label="View notifications">
+                            <i class="bi bi-bell" aria-hidden="true"></i>
+                            <span class="notif-dot" aria-hidden="true"></span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-custom"
+                            aria-labelledby="notifDropdownBtn">
+                            <li class="dropdown-header-custom">Notifications</li>
+                            <li>
+                                <a class="dropdown-item-custom" href="#">
+                                    <i class="bi bi-check-circle-fill" aria-hidden="true"></i>
+                                    <div>
+                                        <p class="item-title">Mathematics Advanced graded</p>
+                                        <p class="item-desc">You scored 48/50 — 2 minutes ago</p>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item-custom" href="#">
+                                    <i class="bi bi-trophy-fill" aria-hidden="true"></i>
+                                    <div>
+                                        <p class="item-title">New leaderboard rank</p>
+                                        <p class="item-desc">You moved up to #124 globally</p>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item-custom" href="#">
+                                    <i class="bi bi-calendar-event-fill" aria-hidden="true"></i>
+                                    <div>
+                                        <p class="item-title">Today's Mock Test is live</p>
+                                        <p class="item-desc">Starts in 45 minutes</p>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <button class="icon-btn" type="button" aria-label="Help and support">
+                        <i class="bi bi-question-circle" aria-hidden="true"></i>
+                    </button>
+
+                    <div class="header-divider" aria-hidden="true"></div>
+
+                    <!-- User profile dropdown -->
+                    <div class="dropdown">
+                        <button class="user-menu-btn dropdown-toggle" type="button" id="userDropdownBtn"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <span class="d-none d-sm-block text-end">
+                                <p class="user-menu-name">Alex Johnson</p>
+                                <p class="user-menu-plan">Standard Plan</p>
+                            </span>
+                            <img class="user-avatar" src="https://i.pravatar.cc/150?img=47"
+                                alt="Alex Johnson's profile photo" width="40" height="40" />
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-custom"
+                            aria-labelledby="userDropdownBtn">
+                            <li>
+                                <a class="dropdown-item-custom" href="#">
+                                    <i class="bi bi-person-circle" aria-hidden="true"></i>
+                                    <div>
+                                        <p class="item-title">My Profile</p>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item-custom" href="#">
+                                    <i class="bi bi-credit-card" aria-hidden="true"></i>
+                                    <div>
+                                        <p class="item-title">Billing &amp; Plan</p>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item-custom" href="#">
+                                    <i class="bi bi-gear" aria-hidden="true"></i>
+                                    <div>
+                                        <p class="item-title">Account Settings</p>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider my-1" />
+                            </li>
+                            <li>
+                                <a class="dropdown-item-custom" href="{% url 'accounts:signin' %}">
+                                    <i class="bi bi-box-arrow-right" aria-hidden="true"></i>
+                                    <div>
+                                        <p class="item-title">Sign Out</p>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main id="main-content" class="app-content">
+
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'dashboard:index' %}">Dashboard</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Favorites</li>
+                </ol>
+            </nav>
+
+            <section class="page-heading" aria-labelledby="pageTitle">
+                <div class="page-heading-left">
+                    <h2 id="pageTitle">My Favorites <span class="badge badge-count">12 Items</span></h2>
+                </div>
+                <div class="page-heading-right">
+                    <label for="filterFavorites" class="visually-hidden">Filter favorites</label>
+                    <div class="filter-search">
+                        <i class="bi bi-search"></i>
+                        <input type="search" id="filterFavorites" class="form-control"
+                            placeholder="Filter favorites...">
+                    </div>
+                    <div class="dropdown">
+                        <button class="btn btn-outline-neutral dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            Recently Added
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#">Recently Added</a></li>
+                            <li><a class="dropdown-item" href="#">Highest Rated</a></li>
+                            <li><a class="dropdown-item" href="#">Progress: High to Low</a></li>
+                            <li><a class="dropdown-item" href="#">Progress: Low to High</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CATEGORY TABS -->
+            <div class="favorites-tabs" role="tablist" aria-label="Favorite categories">
+                <button type="button" class="tab-btn active" role="tab" aria-selected="true"
+                    data-category="all">All</button>
+                <button type="button" class="tab-btn" role="tab" aria-selected="false"
+                    data-category="exams">Exams</button>
+                <button type="button" class="tab-btn" role="tab" aria-selected="false" data-category="mock-tests">Mock
+                    Tests</button>
+                <button type="button" class="tab-btn" role="tab" aria-selected="false" data-category="study-notes">Study
+                    Notes</button>
+                <button type="button" class="tab-btn" role="tab" aria-selected="false"
+                    data-category="practice-sets">Practice Sets</button>
+            </div>
+
+            <!-- FAVORITES GRID -->
+            <div class="row g-4 favorites-grid" id="favoritesGrid">
+
+                <!-- Card 1 -->
+                <div class="col-12 col-md-6 col-xl-4">
+                    <article class="exam-card">
+                        <div class="exam-card-media">
+                            <img src="https://images.unsplash.com/photo-1584982751601-97dcc096659c?q=80&w=800&auto=format&fit=crop"
+                                alt="Tablet displaying a cardiovascular anatomy diagram beside a stethoscope"
+                                loading="lazy">
+                            <span class="media-badge">Medical</span>
+                            <button type="button" class="favorite-toggle is-active" aria-pressed="true"
+                                title="Remove from Favorites"
+                                aria-label="Remove Advanced Cardiovascular Pathology from favorites">
+                                <i class="bi bi-heart-fill"></i>
+                            </button>
+                        </div>
+                        <div class="exam-card-body">
+                            <div class="exam-card-top">
+                                <h3>Advanced Cardiovascular Pathology</h3>
+                                <span class="rating"><i class="bi bi-star-fill"></i>4.9</span>
+                            </div>
+                            <div class="exam-card-meta">
+                                <span><i class="bi bi-bar-chart-fill"></i>Advanced</span>
+                                <span class="dot" aria-hidden="true">&bull;</span>
+                                <span>Saved on Oct 12, 2023</span>
+                            </div>
+                            <div class="progress-block">
+                                <div class="progress-label">
+                                    <span>Mastery Progress</span>
+                                    <span class="progress-value">75%</span>
+                                </div>
+                                <div class="progress" role="progressbar" aria-label="Mastery progress 75%"
+                                    aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
+                                    <div class="progress-bar" style="width:75%"></div>
+                                </div>
+                            </div>
+                            <div class="exam-card-actions">
+                                <button type="button" class="btn btn-primary flex-fill">Continue Learning</button>
+                                <button type="button" class="btn btn-outline-neutral">Start Test</button>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="col-12 col-md-6 col-xl-4">
+                    <article class="exam-card">
+                        <div class="exam-card-media">
+                            <img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?q=80&w=800&auto=format&fit=crop"
+                                alt="Sunlit colonnade hallway of a courthouse-style government building" loading="lazy">
+                            <span class="media-badge badge-law">CSS / Law</span>
+                            <button type="button" class="favorite-toggle is-active" aria-pressed="true"
+                                title="Remove from Favorites"
+                                aria-label="Remove Constitutional Law and Governance from favorites">
+                                <i class="bi bi-heart-fill"></i>
+                            </button>
+                        </div>
+                        <div class="exam-card-body">
+                            <div class="exam-card-top">
+                                <h3>Constitutional Law &amp; Governance</h3>
+                                <span class="rating"><i class="bi bi-star-fill"></i>4.7</span>
+                            </div>
+                            <div class="exam-card-meta">
+                                <span><i class="bi bi-bar-chart-fill"></i>Intermediate</span>
+                                <span class="dot" aria-hidden="true">&bull;</span>
+                                <span>Saved on Nov 05, 2023</span>
+                            </div>
+                            <div class="progress-block">
+                                <div class="progress-label">
+                                    <span>Mastery Progress</span>
+                                    <span class="progress-value">32%</span>
+                                </div>
+                                <div class="progress" role="progressbar" aria-label="Mastery progress 32%"
+                                    aria-valuenow="32" aria-valuemin="0" aria-valuemax="100">
+                                    <div class="progress-bar" style="width:32%"></div>
+                                </div>
+                            </div>
+                            <div class="exam-card-actions">
+                                <button type="button" class="btn btn-primary flex-fill">Continue Learning</button>
+                                <button type="button" class="btn btn-outline-neutral">Start Test</button>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="col-12 col-md-6 col-xl-4">
+                    <article class="exam-card">
+                        <div class="exam-card-media">
+                            <img src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?q=80&w=800&auto=format&fit=crop"
+                                alt="Open textbook and laptop on a desk in a soft-focus library" loading="lazy">
+                            <span class="media-badge badge-econ">FPSC / Economics</span>
+                            <button type="button" class="favorite-toggle is-active" aria-pressed="true"
+                                title="Remove from Favorites"
+                                aria-label="Remove Advanced Macroeconomic Policy from favorites">
+                                <i class="bi bi-heart-fill"></i>
+                            </button>
+                        </div>
+                        <div class="exam-card-body">
+                            <div class="exam-card-top">
+                                <h3>Advanced Macroeconomic Policy</h3>
+                                <span class="rating"><i class="bi bi-star-half"></i>4.5</span>
+                            </div>
+                            <div class="exam-card-meta">
+                                <span><i class="bi bi-bar-chart-fill"></i>Beginner</span>
+                                <span class="dot" aria-hidden="true">&bull;</span>
+                                <span>Saved on Nov 18, 2023</span>
+                            </div>
+                            <div class="progress-block">
+                                <div class="progress-label">
+                                    <span>Mastery Progress</span>
+                                    <span class="progress-value">10%</span>
+                                </div>
+                                <div class="progress" role="progressbar" aria-label="Mastery progress 10%"
+                                    aria-valuenow="10" aria-valuemin="0" aria-valuemax="100">
+                                    <div class="progress-bar" style="width:10%"></div>
+                                </div>
+                            </div>
+                            <div class="exam-card-actions">
+                                <button type="button" class="btn btn-primary flex-fill">Continue Learning</button>
+                                <button type="button" class="btn btn-outline-neutral">Start Test</button>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+
+            </div>
+
+            <!-- LOADING SKELETONS (hidden by default, shown via JS while "loading") -->
+            <div class="row g-4 favorites-grid d-none" id="favoritesSkeleton" aria-hidden="true">
+                <div class="col-12 col-md-6 col-xl-4">
+                    <div class="exam-card skeleton-card">
+                        <div class="skeleton skeleton-media"></div>
+                        <div class="exam-card-body">
+                            <div class="skeleton skeleton-line w-75"></div>
+                            <div class="skeleton skeleton-line w-50"></div>
+                            <div class="skeleton skeleton-line w-100 mt-3"></div>
+                            <div class="skeleton skeleton-line w-100" style="height:38px;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-xl-4">
+                    <div class="exam-card skeleton-card">
+                        <div class="skeleton skeleton-media"></div>
+                        <div class="exam-card-body">
+                            <div class="skeleton skeleton-line w-75"></div>
+                            <div class="skeleton skeleton-line w-50"></div>
+                            <div class="skeleton skeleton-line w-100 mt-3"></div>
+                            <div class="skeleton skeleton-line w-100" style="height:38px;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-xl-4">
+                    <div class="exam-card skeleton-card">
+                        <div class="skeleton skeleton-media"></div>
+                        <div class="exam-card-body">
+                            <div class="skeleton skeleton-line w-75"></div>
+                            <div class="skeleton skeleton-line w-50"></div>
+                            <div class="skeleton skeleton-line w-100 mt-3"></div>
+                            <div class="skeleton skeleton-line w-100" style="height:38px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EMPTY STATE -->
+            <div class="empty-state d-none" id="emptyState">
+                <div class="empty-state-icon">
+                    <i class="bi bi-heart"></i>
+                    <i class="bi bi-search empty-state-icon-badge"></i>
+                </div>
+                <h3>No favorites found.</h3>
+                <p>Items you mark as favorites will appear here. Start exploring our vast library of exams and study
+                    materials.</p>
+                <button type="button" class="btn btn-primary btn-lg">Browse Exams</button>
+            </div>
+
+        </main>
+
+        <!-- FOOTER -->
+        <footer class="app-footer">
+            <div class="app-footer-inner">
+                <p class="mb-0">&copy; 2024 ExamPrep Educational Platforms Inc.</p>
+                <nav class="footer-links" aria-label="Footer">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Contact Support</a>
+                </nav>
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'js/stu-dashboard/my-favorites.js' %}"></script>
+</body>
+
+</html>

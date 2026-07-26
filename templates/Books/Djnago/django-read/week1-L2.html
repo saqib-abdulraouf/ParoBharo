@@ -1,0 +1,166 @@
+{% extends "Books/Djnago/django-read/index.html" %}
+{% load static %}
+
+{% block title %}Week 01 — Lesson 2: Django Project + Server Run{% endblock %}
+
+{% block content %}
+                <div class="breadcrumb">
+                    <a href="{% url 'products:django-book' %}">Django Course</a>
+                    <span class="sep">›</span><span>Week 1</span>
+                    <span class="sep">›</span><span>Lesson 2</span>
+                </div>
+
+                <div class="lesson-header">
+                    <span class="tag">📖 Week 1 · Lesson 2</span>
+                    <h1>Django Project + Server Run</h1>
+                    <div class="sub"><i class="fas fa-rocket" style="color:#0c4b33;margin-right:4px;"></i> Create your first Django project and run the development server</div>
+                </div>
+
+                <div class="reading-content">
+
+                    <!-- STEP 3 -->
+                    <h2>
+                        <span class="step-number">3</span> Django Project Banana
+                    </h2>
+
+                    <p>
+                        Terminal mein <strong>(venv activate hona chahiye, <code style="background:rgba(0,0,0,0.06);padding:2px 6px;border-radius:4px;font-size:13px;">(practice)</code> dikhna chahiye)</strong>, 
+                        ye command chalayein:
+                    </p>
+
+                    <div class="code-block">
+                        <div class="code-label"><i class="fas fa-terminal"></i> Terminal / Command Prompt</div>
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                        <pre><code class="language-bash">django-admin startproject config .</code></pre>
+                    </div>
+
+                    <div class="info-box">
+                        <i class="fas fa-exclamation-circle" style="color:#0c4b33;margin-right:8px;"></i>
+                        <strong>Important:</strong> Aakhir mein wo <code>.</code> (dot) 
+                        <strong>zaroor lagayein</strong> — is se project files seedha current folder mein banengi, 
+                        ek extra nested folder nahi banega.
+                        <br /><br />
+                        <code>config</code> project ka naam hai (aap chahen to koi aur naam bhi de sakte hain, lekin abhi ke liye isi ko follow karte hain).
+                    </div>
+
+                    <p>Is command ke baad aapke folder mein ye structure banega:</p>
+
+                    <!-- FOLDER STRUCTURE -->
+                    <div class="folder-structure">
+                        <div>
+                            <span class="tree-icon"><i class="fas fa-folder-open"></i></span>
+                            <span class="folder">django_practice/</span>
+                        </div>
+                        <div class="indent-1">
+                            <span class="tree-icon"><i class="fas fa-folder"></i></span>
+                            <span class="folder">practice/</span>
+                            <span class="comment">  (venv folder)</span>
+                        </div>
+                        <div class="indent-1">
+                            <span class="tree-icon"><i class="fas fa-folder-open"></i></span>
+                            <span class="folder">config/</span>
+                        </div>
+                        <div class="indent-2">
+                            <span class="tree-icon"><i class="fas fa-file"></i></span>
+                            <span class="file">__init__.py</span>
+                        </div>
+                        <div class="indent-2">
+                            <span class="tree-icon"><i class="fas fa-file"></i></span>
+                            <span class="file">settings.py</span>
+                        </div>
+                        <div class="indent-2">
+                            <span class="tree-icon"><i class="fas fa-file"></i></span>
+                            <span class="file">urls.py</span>
+                        </div>
+                        <div class="indent-2">
+                            <span class="tree-icon"><i class="fas fa-file"></i></span>
+                            <span class="file">asgi.py</span>
+                        </div>
+                        <div class="indent-2">
+                            <span class="tree-icon"><i class="fas fa-file"></i></span>
+                            <span class="file">wsgi.py</span>
+                        </div>
+                        <div class="indent-1">
+                            <span class="tree-icon"><i class="fas fa-file"></i></span>
+                            <span class="highlight-file">manage.py</span>
+                            <span class="comment">  ← Django's command-line utility</span>
+                        </div>
+                    </div>
+
+                    <!-- STEP 4 -->
+                    <h2>
+                        <span class="step-number">4</span> Server Run Karke Check Karein
+                    </h2>
+
+                    <div class="code-block">
+                        <div class="code-label"><i class="fas fa-terminal"></i> Terminal / Command Prompt</div>
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                        <pre><code class="language-bash">python manage.py runserver</code></pre>
+                    </div>
+
+                    <p>Agar sab sahi hua to terminal mein kuch aisa dikhega:</p>
+
+                    <div class="terminal-command" style="flex-wrap:wrap;">
+                        <span class="prompt">$</span>
+                        <span class="command" style="color:#10b981;">Starting development server at http://127.0.0.1:8000/</span>
+                    </div>
+
+                    <!-- SUCCESS -->
+                    <div class="success-box">
+                        <div class="success-title">
+                            <i class="fas fa-check-circle"></i> ✅ Success!
+                        </div>
+                        <p>
+                            Browser mein <code style="background:rgba(0,0,0,0.06);padding:2px 6px;border-radius:4px;">http://127.0.0.1:8000/</code> open karein — 
+                            <strong>Django ka welcome page (rocket wala)</strong> dikhna chahiye! 🚀
+                        </p>
+                    </div>
+
+                    <div class="info-box" style="border-left-color:#10b981;background:rgba(16,185,129,0.06);">
+                        <i class="fas fa-lightbulb" style="color:#10b981;margin-right:8px;"></i>
+                        <strong>Pro Tip:</strong> 
+                        Server chalte rahega jab tak aap <kbd style="background:rgba(0,0,0,0.06);padding:2px 8px;border-radius:4px;font-size:13px;border:1px solid #c7c4d8;">Ctrl + C</kbd> 
+                        nahi dabaate. Har change ke baad server automatically reload hota hai (auto-reload) — 
+                        isliye aap code edit karte rahein aur browser refresh karke dekh sakte hain!
+                    </div>
+
+                    <!-- Navigation Footer -->
+                    <div class="lesson-nav-bar">
+                        <div class="d-flex align-items-center justify-content-between gap-3">
+                            <a href="{% url 'products:django-week1-l1' %}" class="btn-lesson-nav btn-lesson-prev">
+                                <i class="bi bi-arrow-left me-2"></i><span>Previous (L1)</span>
+                            </a>
+                            <div class="d-none d-sm-block text-center">
+                                <span class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill font-monospace" style="font-size: 0.8rem; font-weight:500;">
+                                    Week 1 • Lesson 2 of 4
+                                </span>
+                            </div>
+                            <a href="{% url 'products:django-week1-l3' %}" class="btn-lesson-nav btn-lesson-next">
+                                <span>Next Lesson (L3)</span><i class="bi bi-arrow-right ms-2"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+{% endblock %}
+
+{% block right_sidebar %}
+            <div class="right-section">
+                <h4>📊 Your Progress</h4>
+                <div class="progress-ring">
+                    <div class="circle"><span>50%</span></div>
+                    <div class="info"><strong>2/4</strong> Week 1 done</div>
+                </div>
+            </div>
+            <div class="right-section">
+                <h4>⚡ Quick Actions</h4>
+                <div class="quick-actions">
+                    <button class="quick-btn"><span class="icon">⭐</span> Bookmark</button>
+                    <button class="quick-btn"><span class="icon">📝</span> Add Note</button>
+                </div>
+            </div>
+            <div class="right-section" style="flex:1;">
+                <h4>📝 Your Notes</h4>
+                <textarea class="notes-area" id="djangoNotes" placeholder="Write your notes here..."></textarea>
+            </div>
+{% endblock %}

@@ -1,0 +1,211 @@
+{% extends "Books/Djnago/django-read/index.html" %}
+{% load static %}
+
+{% block title %}Week 01 — Lesson 5: Django Templates{% endblock %}
+
+{% block content %}
+                <div class="breadcrumb">
+                    <a href="{% url 'products:django-book' %}">Django Course</a>
+                    <span class="sep">›</span><span>Week 1</span>
+                    <span class="sep">›</span><span>Lesson 5</span>
+                </div>
+
+                <div class="lesson-header">
+                    <span class="tag">📖 Week 1 · Lesson 5</span>
+                    <h1>Django Templates</h1>
+                    <div class="sub"><i class="fas fa-file-code" style="color:#0c4b33;margin-right:4px;"></i> Learn how to render HTML pages instead of plain text</div>
+                </div>
+
+                <div class="reading-content">
+
+                    <p>
+                        Ab hum agla important concept seekhte hain — <strong>Templates</strong>. Abhi tak hum plain text bhej rahe the 
+                        (<code>HttpResponse</code>), lekin real websites HTML dikhati hain. Django mein HTML files ko 
+                        <strong>"templates"</strong> kehte hain.
+                    </p>
+
+                    <!-- STEP 11 -->
+                    <h2>
+                        <span class="step-number">11</span> Templates Folder Setup Karein
+                    </h2>
+
+                    <p>
+                        <code>tasks</code> app ke andar ye folder structure banayein:
+                    </p>
+
+                    <!-- FOLDER STRUCTURE -->
+                    <div class="folder-structure">
+                        <div>
+                            <span class="tree-icon"><i class="fas fa-folder-open"></i></span>
+                            <span class="folder">tasks/</span>
+                        </div>
+                        <div class="indent-1">
+                            <span class="tree-icon"><i class="fas fa-folder"></i></span>
+                            <span class="folder">templates/</span>
+                        </div>
+                        <div class="indent-2">
+                            <span class="tree-icon"><i class="fas fa-folder"></i></span>
+                            <span class="folder">tasks/</span>
+                        </div>
+                        <div class="indent-2" style="padding-left:4.5rem;">
+                            <span class="tree-icon"><i class="fas fa-file-code"></i></span>
+                            <span class="highlight-file">home.html</span>
+                            <span class="comment">  ← Template file</span>
+                        </div>
+                    </div>
+
+                    <div class="terminal-command" style="flex-wrap:wrap;">
+                        <span class="prompt">$</span>
+                        <span class="command">mkdir tasks\templates\tasks</span>
+                        <span class="comment" style="color:#8b949e;font-style:italic;">  (Windows)</span>
+                    </div>
+
+                    <div class="info-box">
+                        <i class="fas fa-info-circle" style="color:#0c4b33;margin-right:8px;"></i>
+                        <strong>Note:</strong> <code>tasks</code> folder ke andar dobara <code>tasks</code> folder banane ka reason hai — 
+                        Django templates ko app ke naam se <strong>namespace</strong> karta hai, taake do alag apps mein same naam ki file ho to conflict na ho.
+                    </div>
+
+                    <!-- STEP 12 -->
+                    <h2>
+                        <span class="step-number">12</span> HTML Likhein
+                    </h2>
+
+                    <p>
+                        <code style="background:rgba(0,0,0,0.06);padding:2px 6px;border-radius:4px;">tasks/templates/tasks/home.html</code> mein:
+                    </p>
+
+                    <div class="html-snippet">
+                        <div class="code-label"><i class="fab fa-html5"></i> tasks/templates/tasks/home.html</div>
+                        <button class="copy-btn" onclick="copyHtmlCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                        <pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Task Manager&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Welcome to Task Manager&lt;/h1&gt;
+    &lt;p&gt;Django templates working!&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+                    </div>
+
+                    <!-- STEP 13 -->
+                    <h2>
+                        <span class="step-number">13</span> View ko Update Karein (Template Render Karne Ke Liye)
+                    </h2>
+
+                    <p>
+                        <code style="background:rgba(0,0,0,0.06);padding:2px 6px;border-radius:4px;">tasks/views.py</code> mein <code>HttpResponse</code> ki jagah <code>render</code> use karenge:
+                    </p>
+
+                    <div class="code-block">
+                        <div class="code-label"><i class="fab fa-python"></i> tasks/views.py</div>
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                        <pre><code class="language-python">from django.shortcuts import render
+
+def home(request):
+    return render(request, 'tasks/home.html')</code></pre>
+                    </div>
+
+                    <div class="info-box" style="border-left-color:#10b981;background:rgba(16,185,129,0.06);">
+                        <i class="fas fa-lightbulb" style="color:#10b981;margin-right:8px;"></i>
+                        <strong>Samjhein:</strong> 
+                        <code>render()</code> function <strong>template</strong> ko load karta hai, usme context (data) pass karta hai, 
+                        aur <strong>HTML response</strong> wapas bhejta hai.
+                        <br /><br />
+                        <code>render(request, 'tasks/home.html')</code> — pehla parameter <code>request</code>, 
+                        doosra <strong>template path</strong>.
+                    </div>
+
+                    <!-- STEP 14 -->
+                    <h2>
+                        <span class="step-number">14</span> Server Dobara Check Karein
+                    </h2>
+
+                    <div class="terminal-command">
+                        <span class="prompt">$</span>
+                        <span class="command">python manage.py runserver</span>
+                    </div>
+
+                    <p>
+                        Browser refresh karein — ab <strong>proper HTML page</strong> dikhna chahiye 
+                        ("Welcome to Task Manager" heading ke sath).
+                    </p>
+
+                    <!-- Screenshot Placeholder -->
+                    <div class="screenshot-placeholder">
+                        <i class="fas fa-file-code" style="font-size:48px;color:#0c4b33;"></i>
+                        <p>
+                            <strong style="color:#111c2d;">Your First HTML Page!</strong>
+                            <br />
+                            <span style="font-size:14px;color:#464555;">Browser mein ye dikhna chahiye:</span>
+                        </p>
+                        <div class="output-box">
+                            <h1>Welcome to Task Manager</h1>
+                            <p>Django templates working!</p>
+                        </div>
+                        <div class="url">
+                            <i class="fas fa-globe" style="font-size:12px;"></i>
+                            http://127.0.0.1:8000/
+                        </div>
+                    </div>
+
+                    <!-- RECAP -->
+                    <div class="success-box">
+                        <div class="success-title">
+                            <i class="fas fa-check-circle"></i> ✅ Summary — What We Learned
+                        </div>
+                        <p>
+                            <strong>1.</strong> Templates folder structure — <code>tasks/templates/tasks/</code>
+                            <br />
+                            <strong>2.</strong> HTML file banayi — <code>home.html</code>
+                            <br />
+                            <strong>3.</strong> View ko <code>render()</code> se update kiya
+                            <br />
+                            <strong>4.</strong> Server run karke HTML page dekha
+                            <br /><br />
+                            <strong style="color:#0c4b33;">🎉 Week 01 Complete!</strong>
+                        </p>
+                    </div>
+
+                    <!-- Navigation Footer -->
+                    <div class="lesson-nav-bar">
+                        <div class="d-flex align-items-center justify-content-between gap-3">
+                            <a href="{% url 'products:django-week1-l4' %}" class="btn-lesson-nav btn-lesson-prev">
+                                <i class="bi bi-arrow-left me-2"></i><span>Previous (L4)</span>
+                            </a>
+                            <div class="d-none d-sm-block text-center">
+                                <span class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill font-monospace" style="font-size: 0.8rem; font-weight:500;">
+                                    Week 1 • Lesson 5 of 5
+                                </span>
+                            </div>
+                            <a href="{% url 'products:django-week2-l1' %}" class="btn-lesson-nav btn-lesson-next">
+                                <span>Week 2 Lesson 1</span><i class="bi bi-arrow-right ms-2"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+{% endblock %}
+
+{% block right_sidebar %}
+            <div class="right-section">
+                <h4>📊 Your Progress</h4>
+                <div class="progress-ring">
+                    <div class="circle"><span>100%</span></div>
+                    <div class="info"><strong>5/5</strong> Week 1 done</div>
+                </div>
+            </div>
+            <div class="right-section">
+                <h4>⚡ Quick Actions</h4>
+                <div class="quick-actions">
+                    <button class="quick-btn"><span class="icon">⭐</span> Bookmark</button>
+                    <button class="quick-btn"><span class="icon">📝</span> Add Note</button>
+                </div>
+            </div>
+            <div class="right-section" style="flex:1;">
+                <h4>📝 Your Notes</h4>
+                <textarea class="notes-area" id="djangoNotes" placeholder="Write your notes here..."></textarea>
+            </div>
+{% endblock %}

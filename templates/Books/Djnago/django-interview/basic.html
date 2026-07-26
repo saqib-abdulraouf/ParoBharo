@@ -1,0 +1,125 @@
+<!-- SECTION 1: BASIC CONCEPTS -->
+<section class="section">
+    <div class="section-header">
+        <h2>Basic Concepts &amp; Architecture</h2>
+    </div>
+
+    <div class="question-grid">
+
+        <!-- Q1 -->
+        <div class="question-card">
+            <div class="q-header">
+                <span class="q-num-badge">Q01</span>
+                <div class="q-title-group">
+                    <div class="q-title">Django kya hai aur ye kis liye use hota hai?</div>
+                    <span class="q-tag">Framework</span>
+                </div>
+            </div>
+            <div class="q-actions">
+                <button type="button" class="btn-q-action btn-view-ans" onclick="toggleAns(this)">
+                    <i class="bi bi-eye"></i> View Answer
+                </button>
+                <button type="button" class="btn-q-action btn-view-example" onclick="toggleExample(this)">
+                    <i class="bi bi-code-square"></i> Practical Example
+                </button>
+            </div>
+            <div class="ans-box d-none">
+                <p>
+                    <strong>Django</strong> ek high-level Python web framework hai jo rapid development aur clean, pragmatic design follow karta hai. Isko <strong>"Batteries-included"</strong> bola jata hai kyunke isme Authentication, Admin Panel, ORM, aur Security utilities built-in milti hain.
+                </p>
+            </div>
+            <div class="example-box d-none">
+                <strong>📌 Real Project Application:</strong> In our Task Manager application, Django allowed us to utilize built-in authentication, ORM for database tables, and the admin interface without writing custom boilerplate.
+            </div>
+        </div>
+
+        <!-- Q2 -->
+        <div class="question-card">
+            <div class="q-header">
+                <span class="q-num-badge">Q02</span>
+                <div class="q-title-group">
+                    <div class="q-title">MVT pattern kya hai? MVC se kaise different hai?</div>
+                    <span class="q-tag">Architecture</span>
+                </div>
+            </div>
+            <div class="q-actions">
+                <button type="button" class="btn-q-action btn-view-ans" onclick="toggleAns(this)">
+                    <i class="bi bi-eye"></i> View Answer
+                </button>
+                <button type="button" class="btn-q-action btn-view-example" onclick="toggleExample(this)">
+                    <i class="bi bi-code-square"></i> Practical Example
+                </button>
+            </div>
+            <div class="ans-box d-none">
+                <p>
+                    Django <strong>MVT (Model-View-Template)</strong> architecture pattern use karta hai:
+                    <br /><br />
+                    • <strong>Model:</strong> Database layer (tables &amp; schemas)<br />
+                    • <strong>View:</strong> Business logic layer (MVC ke Controller jaisa)<br />
+                    • <strong>Template:</strong> Presentation layer (HTML files)
+                    <br /><br />
+                    MVC ke Controller ka kaam Django mein framework khud URL routing engine ke zariye handle karta hai.
+                </p>
+            </div>
+            <div class="example-box d-none">
+                <strong>📌 Real Project Application:</strong> In Task Manager, database schemas reside in <code class="code-inline">models.py</code>, application logic in <code class="code-inline">views.py</code>, and UI render logic in <code class="code-inline">templates/</code>.
+            </div>
+        </div>
+
+        <!-- Q3 -->
+        <div class="question-card">
+            <div class="q-header">
+                <span class="q-num-badge">Q03</span>
+                <div class="q-title-group">
+                    <div class="q-title"><code class="code-inline">makemigrations</code> aur <code class="code-inline">migrate</code> mein kya farq hai?</div>
+                    <span class="q-tag">Database</span>
+                </div>
+            </div>
+            <div class="q-actions">
+                <button type="button" class="btn-q-action btn-view-ans" onclick="toggleAns(this)">
+                    <i class="bi bi-eye"></i> View Answer
+                </button>
+                <button type="button" class="btn-q-action btn-view-example" onclick="toggleExample(this)">
+                    <i class="bi bi-code-square"></i> Practical Example
+                </button>
+            </div>
+            <div class="ans-box d-none">
+                <p>
+                    • <code class="code-inline">makemigrations</code>: Models mein hone wali updates ka Python blueprint (migration file) generate karta hai.<br />
+                    • <code class="code-inline">migrate</code>: Un migration blueprints ko execute karke actual database (e.g. SQLite / PostgreSQL) pe schema changes apply karta hai.
+                </p>
+            </div>
+            <div class="example-box d-none">
+                <strong>📌 Real Project Application:</strong> When adding a new field to the Task model, running <code class="code-inline">makemigrations</code> generated the migration file, and <code class="code-inline">migrate</code> created the database column.
+            </div>
+        </div>
+
+        <!-- Q4 -->
+        <div class="question-card">
+            <div class="q-header">
+                <span class="q-num-badge">Q04</span>
+                <div class="q-title-group">
+                    <div class="q-title">Django ORM kya hai aur iska kya fayda hai?</div>
+                    <span class="q-tag">ORM</span>
+                </div>
+            </div>
+            <div class="q-actions">
+                <button type="button" class="btn-q-action btn-view-ans" onclick="toggleAns(this)">
+                    <i class="bi bi-eye"></i> View Answer
+                </button>
+                <button type="button" class="btn-q-action btn-view-example" onclick="toggleExample(this)">
+                    <i class="bi bi-code-square"></i> Practical Example
+                </button>
+            </div>
+            <div class="ans-box d-none">
+                <p>
+                    <strong>ORM (Object-Relational Mapping)</strong> ek abstraction layer hai jo Python objects ko database tables ke sath communicate karne ki permission deti hai. Iska faida ye hai ke developers ko raw SQL queries nahi likhni parhti.
+                </p>
+            </div>
+            <div class="example-box d-none">
+                <strong>📌 Real Project Application:</strong> Fetching all user tasks via <code class="code-inline">Task.objects.filter(user=request.user)</code> instead of writing custom SQL <code class="code-inline">SELECT * FROM task WHERE user_id = ...</code> queries.
+            </div>
+        </div>
+
+    </div>
+</section>

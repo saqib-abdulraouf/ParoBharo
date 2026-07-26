@@ -1,0 +1,843 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find Your Exam | ExamPrep</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap"
+        rel="stylesheet">
+
+    <!-- Bootstrap 5.3 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Custom design system CSS -->
+    <link href="{% static 'css/all-exam/exam.css' %}" rel="stylesheet">
+</head>
+
+<body class="d-flex flex-column min-vh-100 has-bottom-nav">
+
+    <!-- ==================== Top Navigation Bar (Desktop) ==================== -->
+    <header class="sticky-top bg-surface shadow-sm d-none d-md-block">
+        <nav class="navbar navbar-expand-md">
+            <div class="container-fluid max-w-container px-margin-mobile" style="margin-left:auto; margin-right:auto;">
+                <div class="d-flex align-items-center gap-4 w-100">
+
+                    <a class="navbar-brand d-flex align-items-center gap-2 mb-0" href="{% url 'core:home' %}">
+                        <img src="{% static 'images/logos/ParoBharo-name.png' %}" alt="ParoBharo"
+                            style="height: 60px; width: auto;">
+                    </a>
+
+                    <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false"
+                        aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="mainNavbar">
+                        <div class="d-md-flex gap-4 align-items-md-center ms-md-4 mb-3 mb-md-0">
+                            <a class="d-block d-md-inline-block nav-link-custom mb-2 mb-md-0"
+                                href="{% url 'core:home' %}">Home</a>
+                            <a class="d-block d-md-inline-block nav-link-active mb-2 mb-md-0"
+                                href="{% url 'products:shop' %}">Exams</a>
+                            <a class="d-block d-md-inline-block nav-link-custom mb-2 mb-md-0"
+                                href="{% url 'products:books' %}">Books</a>
+                            <a class="d-block d-md-inline-block nav-link-custom mb-2 mb-md-0"
+                                href="{% url 'core:home' %}#pricing-section">Pricing</a>
+                            <a class="d-block d-md-inline-block nav-link-custom" href="#">Blog</a>
+                        </div>
+
+                        <div class="d-flex flex-column flex-md-row align-items-md-center gap-3 ms-md-auto mt-3 mt-md-0">
+                            <div
+                                class="d-none d-lg-flex align-items-center bg-surface-container-low px-3 py-2 rounded-pill border border-outline-variant js-search-wrapper">
+                                <i class="bi bi-search text-outline me-2"></i>
+                                <input
+                                    class="form-control form-control-sm border-0 bg-transparent shadow-none js-search-input"
+                                    style="width: 12rem;" type="text" placeholder="Search exams...">
+                            </div>
+                            <a href="{% url 'cart:cart_detail' %}"
+                                class="text-decoration-none text-on-surface-variant p-2 rounded-circle hover-bg-light"
+                                title="Shopping Cart">
+                                <i class="bi bi-cart3 fs-5"></i>
+                            </a>
+                            {% if user.is_authenticated %}
+                            <div class="d-flex gap-3 align-items-center">
+                                <i class="bi bi-bell text-on-surface-variant fs-5" role="button"
+                                    aria-label="Notifications"></i>
+                                <a href="{% url 'dashboard:index' %}"
+                                    class="text-decoration-none text-on-surface-variant fs-4" aria-label="Account">
+                                    <i class="bi bi-person-circle" role="button"></i>
+                                </a>
+                            </div>
+                            {% else %}
+                            <a class="btn d-none d-md-inline-block fw-medium text-primary p-0 text-start text-decoration-none"
+                                href="{% url 'accounts:signin' %}">Sign In</a>
+
+                            <a href="{% url 'accounts:signin' %}"><button class="btn btn-pill-primary"
+                                    type="button">Start Free Trial</button></a>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ==================== Top Navigation Bar (Mobile) ==================== -->
+    <header class="sticky-top bg-surface shadow-sm d-block d-md-none mobile-nav-header">
+        {% if user.is_authenticated %}
+        <!-- Logged In Mobile Header -->
+        <div class="container-fluid py-2 px-margin-mobile">
+            <div class="d-flex align-items-center justify-content-between" style="min-height: 40px;">
+                <!-- Left side: Website Name -->
+                <a class="navbar-brand d-flex align-items-center gap-2 mb-0" href="{% url 'core:home' %}">
+                    <img src="{% static 'images/logos/ParoBharo-logo.png' %}" alt="ParoBharo Logo"
+                        style="height: 40px; width: auto;">
+                    <img src="{% static 'images/logos/ParoBharo-name.png' %}" alt="ParoBharo"
+                        style="height: 30px; width: auto;">
+                </a>
+
+                <!-- Right side: Search, Cart & Wishlist icons -->
+                <div class="d-flex align-items-center gap-3 text-on-surface-variant">
+                    <button class="btn p-0 border-0 text-on-surface-variant" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#mobileSearchCollapse" aria-expanded="false"
+                        aria-controls="mobileSearchCollapse">
+                        <i class="bi bi-search fs-5"></i>
+                    </button>
+                    <a href="{% url 'cart:cart_detail' %}" class="text-decoration-none text-on-surface-variant">
+                        <i class="bi bi-cart3 fs-5"></i>
+                    </a>
+                    <a href="#" class="text-decoration-none text-on-surface-variant">
+                        <i class="bi bi-heart fs-5"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Collapsible Mobile Search -->
+        <div class="collapse bg-surface-container-low border-bottom border-outline-variant px-margin-mobile py-2"
+            id="mobileSearchCollapse">
+            <div
+                class="d-flex align-items-center bg-surface px-3 py-2 rounded-pill border border-outline-variant js-search-wrapper">
+                <i class="bi bi-search text-outline me-2"></i>
+                <input class="form-control form-control-sm border-0 bg-transparent shadow-none js-search-input"
+                    type="text" placeholder="Search exams...">
+            </div>
+        </div>
+        {% else %}
+        <!-- Logged Out Mobile Header -->
+        <div class="container-fluid py-2 px-margin-mobile">
+            <div class="d-flex align-items-center justify-content-between" style="min-height: 40px;">
+                <!-- Left side: Website Name -->
+                <a class="navbar-brand d-flex align-items-center gap-2 mb-0" href="{% url 'core:home' %}">
+                    <img src="{% static 'images/logos/ParoBharo-logo.png' %}" alt="ParoBharo Logo"
+                        style="height: 32px; width: auto;">
+                    <img src="{% static 'images/logos/ParoBharo-name.png' %}" alt="ParoBharo"
+                        style="height: 22px; width: auto;">
+                </a>
+
+                <!-- Right side: Search, Cart & Auth -->
+                <div class="d-flex align-items-center gap-3">
+                    <button class="btn p-0 border-0 text-on-surface-variant" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#mobileSearchCollapse" aria-expanded="false"
+                        aria-controls="mobileSearchCollapse">
+                        <i class="bi bi-search fs-5"></i>
+                    </button>
+                    <a href="{% url 'cart:cart_detail' %}" class="text-decoration-none text-on-surface-variant">
+                        <i class="bi bi-cart3 fs-5"></i>
+                    </a>
+                    <a class="fw-medium text-primary text-decoration-none" href="{% url 'accounts:signin' %}">Sign
+                        In</a>
+                    <button class="btn btn-pill-primary py-1 px-3 text-label-sm" type="button"
+                        style="font-family: inherit;">Start Free Trial</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Collapsible Mobile Search -->
+        <div class="collapse bg-surface-container-low border-bottom border-outline-variant px-margin-mobile py-2"
+            id="mobileSearchCollapse">
+            <div
+                class="d-flex align-items-center bg-surface px-3 py-2 rounded-pill border border-outline-variant js-search-wrapper">
+                <i class="bi bi-search text-outline me-2"></i>
+                <input class="form-control form-control-sm border-0 bg-transparent shadow-none js-search-input"
+                    type="text" placeholder="Search exams...">
+            </div>
+        </div>
+        {% endif %}
+    </header>
+
+    <!-- Bottom Navigation Bar for Mobile -->
+    <div class="mobile-bottom-nav d-flex d-md-none justify-content-around align-items-center fixed-bottom bg-surface border-top border-outline-variant py-2 shadow-lg"
+        style="z-index: 1030;">
+        <a href="{% url 'core:home' %}"
+            class="d-flex flex-column align-items-center text-decoration-none text-on-surface-variant">
+            <i class="bi bi-house-door fs-5"></i>
+            <span class="text-label-sm mt-1" style="font-family: inherit; font-size: 10px;">Home</span>
+        </a>
+        <a href="{% url 'products:shop' %}"
+            class="d-flex flex-column align-items-center text-decoration-none text-on-surface-variant active-bottom-nav">
+            <i class="bi bi-journal-text fs-5"></i>
+            <span class="text-label-sm mt-1" style="font-family: inherit; font-size: 10px;">Exams</span>
+        </a>
+        <a href="{% url 'products:books' %}"
+            class="d-flex flex-column align-items-center text-decoration-none text-on-surface-variant">
+            <i class="bi bi-book fs-5"></i>
+            <span class="text-label-sm mt-1" style="font-family: inherit; font-size: 10px;">Books</span>
+        </a>
+        <a href="#" class="d-flex flex-column align-items-center text-decoration-none text-on-surface-variant">
+            <i class="bi bi-newspaper fs-5"></i>
+            <span class="text-label-sm mt-1" style="font-family: inherit; font-size: 10px;">Blogs</span>
+        </a>
+    </div>
+
+    <!-- ==================== Main Content ==================== -->
+    <main class="flex-grow-1 w-100 max-w-container mx-auto px-margin-mobile py-stack-lg"
+        style="margin-left:auto; margin-right:auto;">
+
+        <!-- Hero Search Section -->
+        <section class="exam-hero mb-5">
+            <div class="position-relative" style="max-width: 42rem; z-index: 1;">
+                <h1 class="text-display-lg text-on-primary mb-3">Find Your Exam</h1>
+                <p class="text-body-lg mb-4" style="color: rgba(255,255,255,0.8);">Your gateway to prestigious
+                    government and professional careers. Expert-curated curriculum for Pakistan's top recruitment tests.
+                </p>
+                <div class="d-flex flex-column flex-sm-row gap-2">
+                    <div class="exam-search-bar flex-grow-1 d-flex align-items-center js-search-wrapper">
+                        <i class="bi bi-search text-outline me-2"></i>
+                        <input class="form-control border-0 shadow-none js-search-input" type="text"
+                            placeholder="Search for FPSC, PPSC, CSS...">
+                    </div>
+                    <button
+                        class="btn fw-bold px-4 py-3 rounded-3 d-flex align-items-center justify-content-center gap-2"
+                        style="background-color: var(--color-secondary); color: var(--color-on-secondary);"
+                        type="button">
+                        Browse All
+                        <i class="bi bi-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Category Quick Filters -->
+        <div class="category-quick-filters mb-5">
+            <button class="filter-pill active" type="button">All Exams</button>
+            <button class="filter-pill" type="button">Government</button>
+            <button class="filter-pill" type="button">Military</button>
+            <button class="filter-pill" type="button">Police</button>
+            <button class="filter-pill" type="button">Teaching</button>
+            <button class="filter-pill" type="button">Banking</button>
+        </div>
+
+        <div class="row g-4">
+
+            <!-- Sidebar Filters -->
+            <aside class="col-12 col-lg-3">
+                <div class="filters-sidebar">
+
+                    <div>
+                        <h3 class="text-headline-md text-on-surface mb-3">Filters</h3>
+                        <div class="d-flex flex-column gap-2">
+                            <label class="d-flex align-items-center gap-3" style="cursor: pointer;">
+                                <input class="filter-checkbox" type="checkbox">
+                                <span class="text-body-md text-on-surface-variant">FPSC (Federal)</span>
+                            </label>
+                            <label class="d-flex align-items-center gap-3" style="cursor: pointer;">
+                                <input class="filter-checkbox" type="checkbox">
+                                <span class="text-body-md text-on-surface-variant">PPSC (Punjab)</span>
+                            </label>
+                            <label class="d-flex align-items-center gap-3" style="cursor: pointer;">
+                                <input class="filter-checkbox" type="checkbox">
+                                <span class="text-body-md text-on-surface-variant">NTS (Private)</span>
+                            </label>
+                            <label class="d-flex align-items-center gap-3" style="cursor: pointer;">
+                                <input class="filter-checkbox" type="checkbox">
+                                <span class="text-body-md text-on-surface-variant">ISSB (Military)</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <hr class="border-outline-variant-soft my-0">
+
+                    <div>
+                        <h4 class="fw-bold text-on-surface mb-3 d-flex align-items-center gap-2">
+                            <i class="bi bi-graph-up text-primary"></i>
+                            Popularity
+                        </h4>
+                        <div class="d-flex flex-column gap-1">
+                            <button class="filter-sort-link" type="button">Most Enrolled</button>
+                            <button class="filter-sort-link" type="button">Recently Updated</button>
+                            <button class="filter-sort-link" type="button">Upcoming Exams</button>
+                        </div>
+                    </div>
+
+                    <div class="update-callout">
+                        <h4 class="fw-bold text-primary text-label-sm text-uppercase mb-2"
+                            style="letter-spacing: 0.05em;">Latest Update</h4>
+                        <p class="text-label-sm text-on-surface-variant mb-3">PPSC CSS Exam 2024 dates announced.
+                            Registrations open until Nov 15th.</p>
+                        <a class="text-primary fw-bold text-label-sm text-decoration-none d-flex align-items-center gap-1"
+                            href="#">
+                            Read More <i class="bi bi-box-arrow-up-right"></i>
+                        </a>
+                    </div>
+
+                </div>
+            </aside>
+
+            <!-- Exam Grid -->
+            <div class="col-12 col-lg-9">
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <p class="text-on-surface-variant mb-0">Showing <strong>24</strong> matching exams</p>
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="text-label-sm text-outline">SORT BY</span>
+                        <select
+                            class="form-select form-select-sm border-0 bg-transparent fw-bold text-on-surface shadow-none w-auto">
+                            <option>Exam Date</option>
+                            <option>Relevance</option>
+                            <option>Popularity</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row g-4">
+
+                    <!-- Exam Card 1 -->
+                    <div class="col-12 col-md-6 col-xl-4" data-page="1">
+                        <div class="exam-list-card">
+                            <div class="card-top-bar bg-primary"></div>
+                            <div class="p-4">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <span class="exam-category-chip">FPSC</span>
+                                    <i class="bi bi-heart exam-fav-icon"></i>
+                                </div>
+                                <h3 class="text-headline-md text-on-surface mb-2">Civil Services Exam</h3>
+                                <p class="text-on-surface-variant mb-4">Competitive examination for recruitment to
+                                    various government positions in BPS-17.</p>
+                                <div class="d-flex flex-column gap-2 mb-4">
+                                    <div class="exam-meta-row"><i class="bi bi-calendar3"></i><span>Exam Date:
+                                            <strong>Jan 15, 2025</strong></span></div>
+                                    <div class="exam-meta-row"><i class="bi bi-clipboard-check"></i><span>Tests:
+                                            <strong>12 Modules</strong></span></div>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between gap-3">
+                                    <div class="d-flex">
+                                        <span class="avatar-mini"><img
+                                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUj_5H9jPIPQEOVrg2SUKWZ1x4ddg3S-mh0U3VZoSLoJ_hxoiF6dNkKyc6ieG9yLe9RhhKaNf_9N6Q54KN4eIDUf2RqwGMc6SmttLd67vDjzbqTDjp2NhKSAf4wMFPkKjEhqHe9WXPpqNsxwvKYWTgh17bExHwvovA6ajic2MsULVbGwbvCaImf1tsdBfxx6WmzZTgChfJ5AQknspUk-eNPGgbGEnY_gXtpXpgA31ytfPt0aThkRrgzBdSySfr3z9cuGR-yyQ2ZRo"
+                                                alt="Mentor portrait"></span>
+                                        <span class="avatar-count-badge">+8k</span>
+                                    </div>
+                                    <button class="btn btn-sm btn-primary-custom py-2 px-3" type="button"
+                                        style="box-shadow:none;">Enroll Now</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Exam Card 2 -->
+                    <div class="col-12 col-md-6 col-xl-4" data-page="1">
+                        <div class="exam-list-card">
+                            <div class="card-top-bar bg-secondary"></div>
+                            <div class="p-4">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <span class="exam-category-chip">ISSB</span>
+                                    <i class="bi bi-heart exam-fav-icon"></i>
+                                </div>
+                                <h3 class="text-headline-md text-on-surface mb-2">Military Officers Test</h3>
+                                <p class="text-on-surface-variant mb-4">Initial selection tests for candidates seeking
+                                    commission in the Armed Forces.</p>
+                                <div class="d-flex flex-column gap-2 mb-4">
+                                    <div class="exam-meta-row"><i class="bi bi-calendar3"></i><span>Exam Date:
+                                            <strong>Rolling</strong></span></div>
+                                    <div class="exam-meta-row"><i class="bi bi-clipboard-check"></i><span>Tests:
+                                            <strong>8 Modules</strong></span></div>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between gap-3">
+                                    <div class="d-flex">
+                                        <span class="avatar-mini"><img
+                                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAIKMINmHdBWzX8w3JyB166p-rl9TW1y2XyCNBorWvGQjvwtTGXzCtk2voHDEv1UsiQO8Qs0igdzqP1wamHfL4koziloSK8sgpZXi_AiADMh21lTMOX2Yca2PqrKCSz1bXCntMKh9dLv3oh3CJVJGDXLGvK5k5Hmv85VbcQk5yVP8aEYEZAVo3v8uJoAB1N_KN7470jl4jbmoBF65aa0t9vOMqCX1pB3FI744Ed3by7hdT7ouP0skeDokmcQingGr5U5wAeZj0Vpqc"
+                                                alt="Student portrait"></span>
+                                        <span class="avatar-count-badge">+4k</span>
+                                    </div>
+                                    <button class="btn btn-sm btn-primary-custom py-2 px-3" type="button"
+                                        style="box-shadow:none;">Enroll Now</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Exam Card 3 -->
+                    <div class="col-12 col-md-6 col-xl-4" data-page="1">
+                        <div class="exam-list-card">
+                            <div class="card-top-bar bg-tertiary"></div>
+                            <div class="p-4">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <span class="exam-category-chip">PPSC</span>
+                                    <i class="bi bi-heart exam-fav-icon"></i>
+                                </div>
+                                <h3 class="text-headline-md text-on-surface mb-2">Lecturers Recruitment</h3>
+                                <p class="text-on-surface-variant mb-4">Competitive exam for permanent teaching
+                                    positions in provincial colleges.</p>
+                                <div class="d-flex flex-column gap-2 mb-4">
+                                    <div class="exam-meta-row"><i class="bi bi-calendar3"></i><span>Exam Date:
+                                            <strong>Dec 05, 2024</strong></span></div>
+                                    <div class="exam-meta-row"><i class="bi bi-clipboard-check"></i><span>Tests:
+                                            <strong>5 Modules</strong></span></div>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between gap-3">
+                                    <div class="d-flex">
+                                        <span class="avatar-mini"><img
+                                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3ONDFAkHDQOQ_pTxkNm2sulRGG71CgNXBuB3vOz0FYM-jE_6a2WjgXw5qwz3hxY0zrIUkLw3KZPVHfS76rDKuJNdI0C5JoM0X1bX4FToDjMUl-UEiWDSwasc5yAwB-8twCihzzjYhQRf3K0-P46gJszDLiAh9r6-jQPn_KbwUR-b9AoouaN4Cyb2cY9qR3emy6f_C7Z9rVtpA--btD9OamSGmuSiyZHigImGCLsV2v2m4JjM22sr4xpvGz5Npt3IXOi8a73KOz8c"
+                                                alt="Students collaborating"></span>
+                                        <span class="avatar-count-badge">+12k</span>
+                                    </div>
+                                    <button class="btn btn-sm btn-primary-custom py-2 px-3" type="button"
+                                        style="box-shadow:none;">Enroll Now</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Exam Card 4 -->
+                    <div class="col-12 col-md-6 col-xl-4" data-page="1">
+                        <div class="exam-list-card">
+                            <div class="card-top-bar bg-primary-container"></div>
+                            <div class="p-4">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <span class="exam-category-chip">NTS</span>
+                                    <i class="bi bi-heart exam-fav-icon"></i>
+                                </div>
+                                <h3 class="text-headline-md text-on-surface mb-2">NAT-1 General Test</h3>
+                                <p class="text-on-surface-variant mb-4">Standardized aptitude test required for
+                                    admissions in top private sector universities.</p>
+                                <div class="d-flex flex-column gap-2 mb-4">
+                                    <div class="exam-meta-row"><i class="bi bi-calendar3"></i><span>Exam Date:
+                                            <strong>Monthly</strong></span></div>
+                                    <div class="exam-meta-row"><i class="bi bi-clipboard-check"></i><span>Tests:
+                                            <strong>1 Comprehensive</strong></span></div>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between gap-3">
+                                    <div class="d-flex">
+                                        <span class="avatar-mini"><img
+                                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCLdkd37g1q7tSsHd22q-3e7ac6MwbN5S87oLpXvPYbeEoqSY1wADBsMcUYVwgQW3wZ1-YTfH07UlQikTKe4KtpM7cKC6dAetA7h_Jzid1eVo08jxNiguyWVC1wXuWp1zKpWGyT2b5YI1DmdwkahOV-8aMfF1Ff2FzsInz20wb_vy7et1fA8XoY_ha7nlN0UCF9TVfFWP33eOFylcoFTcxHIAVpRzHCWANvsTwxp1ze7Z88JBQHcSxaegSCoB-rVO28BAhV_UORie8"
+                                                alt="Workspace"></span>
+                                        <span class="avatar-count-badge">+2k</span>
+                                    </div>
+                                    <button class="btn btn-sm btn-primary-custom py-2 px-3" type="button"
+                                        style="box-shadow:none;">Enroll Now</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Exam Card 5 -->
+                    <div class="col-12 col-md-6 col-xl-4" data-page="1">
+                        <div class="exam-list-card">
+                            <div class="card-top-bar bg-secondary-fixed-dim"></div>
+                            <div class="p-4">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <span class="exam-category-chip">Police</span>
+                                    <i class="bi bi-heart exam-fav-icon"></i>
+                                </div>
+                                <h3 class="text-headline-md text-on-surface mb-2">Sub-Inspector Prep</h3>
+                                <p class="text-on-surface-variant mb-4">Physical and written test preparation for Punjab
+                                    and Federal Police recruitment.</p>
+                                <div class="d-flex flex-column gap-2 mb-4">
+                                    <div class="exam-meta-row"><i class="bi bi-calendar3"></i><span>Exam Date:
+                                            <strong>Feb 2025</strong></span></div>
+                                    <div class="exam-meta-row"><i class="bi bi-clipboard-check"></i><span>Tests:
+                                            <strong>6 Modules</strong></span></div>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between gap-3">
+                                    <div class="d-flex">
+                                        <span class="avatar-mini"><img
+                                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAjHRLlQXBrQUlwz8VMnnv1AKXqrLy3T6oH8d8FDvCjVFzV5U-Mim6bshEwWZBqLBCZ4IyFiC2juxiB7F0G0nh_eGRLli8QxPcuwnFmOGaSt3_gG7W_u5aNjgRvkmp5tO1nhV5-hzYYFGXn2XW7jU1ViCu7Ty-M1JXauD_8oEyPPgpEp4msi2Dd4xJgifOnpaG6W6EVfZ7WyVU8zRpNA5mLtz3j1aqjEqUDcqQxE3DnoHyuh33pkHMYR2sJ_knySDPscxuHLlPxeMU"
+                                                alt="Auditorium"></span>
+                                        <span class="avatar-count-badge">+5k</span>
+                                    </div>
+                                    <button class="btn btn-sm btn-primary-custom py-2 px-3" type="button"
+                                        style="box-shadow:none;">Enroll Now</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Exam Card 5 -->
+                    <div class="col-12 col-md-6 col-xl-4" data-page="1">
+                        <div class="exam-list-card">
+                            <div class="card-top-bar bg-secondary-fixed-dim"></div>
+                            <div class="p-4">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <span class="exam-category-chip">Police</span>
+                                    <i class="bi bi-heart exam-fav-icon"></i>
+                                </div>
+                                <h3 class="text-headline-md text-on-surface mb-2">Sub-Inspector Prep</h3>
+                                <p class="text-on-surface-variant mb-4">Physical and written test preparation for Punjab
+                                    and Federal Police recruitment.</p>
+                                <div class="d-flex flex-column gap-2 mb-4">
+                                    <div class="exam-meta-row"><i class="bi bi-calendar3"></i><span>Exam Date:
+                                            <strong>Feb 2025</strong></span></div>
+                                    <div class="exam-meta-row"><i class="bi bi-clipboard-check"></i><span>Tests:
+                                            <strong>6 Modules</strong></span></div>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between gap-3">
+                                    <div class="d-flex">
+                                        <span class="avatar-mini"><img
+                                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAjHRLlQXBrQUlwz8VMnnv1AKXqrLy3T6oH8d8FDvCjVFzV5U-Mim6bshEwWZBqLBCZ4IyFiC2juxiB7F0G0nh_eGRLli8QxPcuwnFmOGaSt3_gG7W_u5aNjgRvkmp5tO1nhV5-hzYYFGXn2XW7jU1ViCu7Ty-M1JXauD_8oEyPPgpEp4msi2Dd4xJgifOnpaG6W6EVfZ7WyVU8zRpNA5mLtz3j1aqjEqUDcqQxE3DnoHyuh33pkHMYR2sJ_knySDPscxuHLlPxeMU"
+                                                alt="Auditorium"></span>
+                                        <span class="avatar-count-badge">+5k</span>
+                                    </div>
+                                    <button class="btn btn-sm btn-primary-custom py-2 px-3" type="button"
+                                        style="box-shadow:none;">Enroll Now</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <!-- ================================= PAGE 2 CARDS ================================= -->
+
+                    <!-- Page 2 Card 1: FIA SI (Start Test) -->
+                    <div class="col-12 col-md-6 col-xl-4" data-page="2" style="display: none;">
+                        <div class="exam-list-card">
+                            <div class="card-top-bar bg-secondary-fixed-dim"></div>
+                            <div class="p-4">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <span class="exam-category-chip">FIA</span>
+                                    <i class="bi bi-heart exam-fav-icon"></i>
+                                </div>
+                                <h3 class="text-headline-md text-on-surface mb-2">FIA Sub-Inspector</h3>
+                                <p class="text-on-surface-variant mb-4">Physical and written test preparation for
+                                    Federal
+                                    Investigation Agency recruitment.</p>
+                                <div class="d-flex flex-column gap-2 mb-4">
+                                    <div class="exam-meta-row"><i class="bi bi-calendar3"></i><span>Exam Date:
+                                            <strong>Dec 2024</strong></span></div>
+                                    <div class="exam-meta-row"><i class="bi bi-clipboard-check"></i><span>Tests:
+                                            <strong>100 Questions</strong></span></div>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between gap-3">
+                                    <div class="d-flex">
+                                        <span class="avatar-mini"><img
+                                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAjHRLlQXBrQUlwz8VMnnv1AKXqrLy3T6oH8d8FDvCjVFzV5U-Mim6bshEwWZBqLBCZ4IyFiC2juxiB7F0G0nh_eGRLli8QxPcuwnFmOGaSt3_gG7W_u5aNjgRvkmp5tO1nhV5-hzYYFGXn2XW7jU1ViCu7Ty-M1JXauD_8oEyPPgpEp4msi2Dd4xJgifOnpaG6W6EVfZ7WyVU8zRpNA5mLtz3j1aqjEqUDcqQxE3DnoHyuh33pkHMYR2sJ_knySDPscxuHLlPxeMU"
+                                                alt="Auditorium"></span>
+                                        <span class="avatar-count-badge">+5k</span>
+                                    </div>
+                                    <a class="btn btn-sm btn-primary-custom py-2 px-3 text-decoration-none"
+                                        href="{% url 'products:fia-si' %}" style="box-shadow:none;">Start Test</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Page 2 Card 2: FIA AD -->
+                    <div class="col-12 col-md-6 col-xl-4" data-page="2" style="display: none;">
+                        <div class="exam-list-card">
+                            <div class="card-top-bar bg-tertiary"></div>
+                            <div class="p-4">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <span class="exam-category-chip">FIA</span>
+                                    <i class="bi bi-heart exam-fav-icon"></i>
+                                </div>
+                                <h3 class="text-headline-md text-on-surface mb-2">FIA Assistant Director</h3>
+                                <p class="text-on-surface-variant mb-4">Competitive mock exams for federal
+                                    administration
+                                    and investigative cadres.</p>
+                                <div class="d-flex flex-column gap-2 mb-4">
+                                    <div class="exam-meta-row"><i class="bi bi-calendar3"></i><span>Exam Date:
+                                            <strong>Dec 2024</strong></span></div>
+                                    <div class="exam-meta-row"><i class="bi bi-clipboard-check"></i><span>Tests:
+                                            <strong>5 Modules</strong></span></div>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between gap-3">
+                                    <div class="d-flex">
+                                        <span class="avatar-mini"><img
+                                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3ONDFAkHDQOQ_pTxkNm2sulRGG71CgNXBuB3vOz0FYM-jE_6a2WjgXw5qwz3hxY0zrIUkLw3KZPVHfS76rDKuJNdI0C5JoM0X1bX4FToDjMUl-UEiWDSwasc5yAwB-8twCihzzjYhQRf3K0-P46gJszDLiAh9r6-jQPn_KbwUR-b9AoouaN4Cyb2cY9qR3emy6f_C7Z9rVtpA--btD9OamSGmuSiyZHigImGCLsV2v2m4JjM22sr4xpvGz5Npt3IXOi8a73KOz8c"
+                                                alt="Students collaborating"></span>
+                                        <span class="avatar-count-badge">+2k</span>
+                                    </div>
+                                    <button class="btn btn-sm btn-primary-custom py-2 px-3" type="button"
+                                        style="box-shadow:none;">Enroll Now</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Page 2 Card 3: FIA UDC -->
+                    <div class="col-12 col-md-6 col-xl-4" data-page="2" style="display: none;">
+                        <div class="exam-list-card">
+                            <div class="card-top-bar bg-primary"></div>
+                            <div class="p-4">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <span class="exam-category-chip">FIA</span>
+                                    <i class="bi bi-heart exam-fav-icon"></i>
+                                </div>
+                                <h3 class="text-headline-md text-on-surface mb-2">FIA Upper Division Clerk</h3>
+                                <p class="text-on-surface-variant mb-4">Preparation coursework for Upper Division Clerk
+                                    (BPS-11) recruitment syllabus.</p>
+                                <div class="d-flex flex-column gap-2 mb-4">
+                                    <div class="exam-meta-row"><i class="bi bi-calendar3"></i><span>Exam Date:
+                                            <strong>Dec 2024</strong></span></div>
+                                    <div class="exam-meta-row"><i class="bi bi-clipboard-check"></i><span>Tests:
+                                            <strong>4 Modules</strong></span></div>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between gap-3">
+                                    <div class="d-flex">
+                                        <span class="avatar-mini"><img
+                                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAjHRLlQXBrQUlwz8VMnnv1AKXqrLy3T6oH8d8FDvCjVFzV5U-Mim6bshEwWZBqLBCZ4IyFiC2juxiB7F0G0nh_eGRLli8QxPcuwnFmOGaSt3_gG7W_u5aNjgRvkmp5tO1nhV5-hzYYFGXn2XW7jU1ViCu7Ty-M1JXauD_8oEyPPgpEp4msi2Dd4xJgifOnpaG6W6EVfZ7WyVU8zRpNA5mLtz3j1aqjEqUDcqQxE3DnoHyuh33pkHMYR2sJ_knySDPscxuHLlPxeMU"
+                                                alt="Auditorium"></span>
+                                        <span class="avatar-count-badge">+3k</span>
+                                    </div>
+                                    <a class="btn btn-sm btn-primary-custom py-2 px-3 text-decoration-none"
+                                        href="{% url 'products:fia-udc' %}" style="box-shadow:none;">Start Test</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Page 2 Card 4: Bano Qabil -->
+                    <div class="col-12 col-md-6 col-xl-4" data-page="2" style="display: none;">
+                        <div class="exam-list-card">
+                            <div class="card-top-bar bg-secondary"></div>
+                            <div class="p-4">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <span class="exam-category-chip">IT Program</span>
+                                    <i class="bi bi-heart exam-fav-icon"></i>
+                                </div>
+                                <h3 class="text-headline-md text-on-surface mb-2">Bano Qabil IT Aptitude</h3>
+                                <p class="text-on-surface-variant mb-4">Preparation modules for entrance aptitude tests
+                                    in web, mobile, and cloud programs.</p>
+                                <div class="d-flex flex-column gap-2 mb-4">
+                                    <div class="exam-meta-row"><i class="bi bi-calendar3"></i><span>Exam Date:
+                                            <strong>Rolling</strong></span></div>
+                                    <div class="exam-meta-row"><i class="bi bi-clipboard-check"></i><span>Tests:
+                                            <strong>3 Mocks</strong></span></div>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between gap-3">
+                                    <div class="d-flex">
+                                        <span class="avatar-mini"><img
+                                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAIKMINmHdBWzX8w3JyB166p-rl9TW1y2XyCNBorWvGQjvwtTGXzCtk2voHDEv1UsiQO8Qs0igdzqP1wamHfL4koziloSK8sgpZXi_AiADMh21lTMOX2Yca2PqrKCSz1bXCntMKh9dLv3oh3CJVJGDXLGvK5k5Hmv85VbcQk5yVP8aEYEZAVo3v8uJoAB1N_KN7470jl4jbmoBF65aa0t9vOMqCX1pB3FI744Ed3by7hdT7ouP0skeDokmcQingGr5U5wAeZj0Vpqc"
+                                                alt="Student"></span>
+                                        <span class="avatar-count-badge">+10k</span>
+                                    </div>
+                                    <a class="btn btn-sm btn-primary-custom py-2 px-3 text-decoration-none"
+                                        href="{% url 'products:bano-qabil' %}" style="box-shadow:none;">Start Test</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Page 2 Card 5: Honhaar Jawaan -->
+                    <div class="col-12 col-md-6 col-xl-4" data-page="2" style="display: none;">
+                        <div class="exam-list-card">
+                            <div class="card-top-bar bg-tertiary"></div>
+                            <div class="p-4">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <span class="exam-category-chip">Skills</span>
+                                    <i class="bi bi-heart exam-fav-icon"></i>
+                                </div>
+                                <h3 class="text-headline-md text-on-surface mb-2">Honhaar Jawaan Program</h3>
+                                <p class="text-on-surface-variant mb-4">Assessment tests for youth entrepreneurship and
+                                    digital skills scholarships.</p>
+                                <div class="d-flex flex-column gap-2 mb-4">
+                                    <div class="exam-meta-row"><i class="bi bi-calendar3"></i><span>Exam Date:
+                                            <strong>Jan 2025</strong></span></div>
+                                    <div class="exam-meta-row"><i class="bi bi-clipboard-check"></i><span>Tests:
+                                            <strong>2 Modules</strong></span></div>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between gap-3">
+                                    <div class="d-flex">
+                                        <span class="avatar-mini"><img
+                                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUj_5H9jPIPQEOVrg2SUKWZ1x4ddg3S-mh0U3VZoSLoJ_hxoiF6dNkKyc6ieG9yLe9RhhKaNf_9N6Q54KN4eIDUf2RqwGMc6SmttLd67vDjzbqTDjp2NhKSAf4wMFPkKjEhqHe9WXPpqNsxwvKYWTgh17bExHwvovA6ajic2MsULVbGwbvCaImf1tsdBfxx6WmzZTgChfJ5AQknspUk-eNPGgbGEnY_gXtpXpgA31ytfPt0aThkRrgzBdSySfr3z9cuGR-yyQ2ZRo"
+                                                alt="Mentor"></span>
+                                        <span class="avatar-count-badge">+6k</span>
+                                    </div>
+                                    <button class="btn btn-sm btn-primary-custom py-2 px-3" type="button"
+                                        style="box-shadow:none;">Enroll Now</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Page 2 Card 6: PIAIC -->
+                    <div class="col-12 col-md-6 col-xl-4" data-page="2" style="display: none;">
+                        <div class="exam-list-card">
+                            <div class="card-top-bar bg-primary-container"></div>
+                            <div class="p-4">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <span class="exam-category-chip">Emerging Tech</span>
+                                    <i class="bi bi-heart exam-fav-icon"></i>
+                                </div>
+                                <h3 class="text-headline-md text-on-surface mb-2">PIAIC Entrance Exam</h3>
+                                <p class="text-on-surface-variant mb-4">Aptitude test preparation for Artificial
+                                    Intelligence, Blockchain, and IoT certifications.</p>
+                                <div class="d-flex flex-column gap-2 mb-4">
+                                    <div class="exam-meta-row"><i class="bi bi-calendar3"></i><span>Exam Date:
+                                            <strong>Rolling</strong></span></div>
+                                    <div class="exam-meta-row"><i class="bi bi-clipboard-check"></i><span>Tests:
+                                            <strong>1 Comprehensive</strong></span></div>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between gap-3">
+                                    <div class="d-flex">
+                                        <span class="avatar-mini"><img
+                                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCLdkd37g1q7tSsHd22q-3e7ac6MwbN5S87oLpXvPYbeEoqSY1wADBsMcUYVwgQW3wZ1-YTfH07UlQikTKe4KtpM7cKC6dAetA7h_Jzid1eVo08jxNiguyWVC1wXuWp1zKpWGyT2b5YI1DmdwkahOV-8aMfF1Ff2FzsInz20wb_vy7et1fA8XoY_ha7nlN0UCF9TVfFWP33eOFylcoFTcxHIAVpRzHCWANvsTwxp1ze7Z88JBQHcSxaegSCoB-rVO28BAhV_UORie8"
+                                                alt="Tech"></span>
+                                        <span class="avatar-count-badge">+15k</span>
+                                    </div>
+                                    <button class="btn btn-sm btn-primary-custom py-2 px-3" type="button"
+                                        style="box-shadow:none;">Enroll Now</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Page 2 Placeholder -->
+                    <div class="col-12 col-md-6 col-xl-4" data-page="2" style="display: none;">
+                        <div class="exam-card-placeholder">
+                            <div class="rounded-circle bg-outline-variant-soft d-flex align-items-center justify-content-center mb-3"
+                                style="width:3rem; height:3rem;">
+                                <i class="bi bi-plus-circle text-outline fs-4"></i>
+                            </div>
+                            <h3 class="fw-bold text-on-surface mb-1">Coming Soon</h3>
+                            <p class="text-label-sm text-on-surface-variant mb-3">Request a Specific Exam Curriculum</p>
+                            <button class="btn text-primary fw-bold p-0" type="button">Contact Support</button>
+                        </div>
+                    </div>
+
+                    <!-- ================================= PAGE 3 CARDS ================================= -->
+
+                    <div class="col-12 col-md-6 col-xl-4" data-page="3" style="display: none;">
+                        <div class="exam-card-placeholder">
+                            <div class="rounded-circle bg-outline-variant-soft d-flex align-items-center justify-content-center mb-3"
+                                style="width:3rem; height:3rem;">
+                                <i class="bi bi-plus-circle text-outline fs-4"></i>
+                            </div>
+                            <h3 class="fw-bold text-on-surface mb-1">Coming Soon</h3>
+                            <p class="text-label-sm text-on-surface-variant mb-3">Request a Specific Exam Curriculum</p>
+                            <button class="btn text-primary fw-bold p-0" type="button">Contact Support</button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Pagination -->
+                <nav class="exam-pagination mt-5 d-flex justify-content-center align-items-center gap-2"
+                    aria-label="Exam results pagination">
+                    <button class="page-btn" type="button" aria-label="Previous page">
+                        <i class="bi bi-chevron-left"></i>
+                    </button>
+                    <button class="page-btn active" type="button" data-page="1">1</button>
+                    <button class="page-btn" type="button" data-page="2">2</button>
+                    <button class="page-btn" type="button" data-page="3">3</button>
+                    <span class="mx-2 text-outline">...</span>
+                    <button class="page-btn" type="button" data-page="8">8</button>
+                    <button class="page-btn" type="button" aria-label="Next page">
+                        <i class="bi bi-chevron-right"></i>
+                    </button>
+                </nav>
+
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- ==================== Footer ==================== -->
+    <footer class="w-100 py-stack-lg px-margin-desktop bg-surface-container-highest border-top border-outline-variant">
+        <div class="max-w-container mx-auto row g-4" style="margin-left:auto; margin-right:auto;">
+
+            <div class="col-12 col-md-3">
+                <span class="text-headline-md fw-bold text-primary d-block mb-3">ExamPrep</span>
+                <p class="text-body-md text-on-surface-variant mb-3">Master your academic journey with the industry's
+                    most sophisticated preparation tools.</p>
+                <div class="d-flex gap-3">
+                    <i class="bi bi-facebook text-primary fs-5" role="button" aria-label="Facebook"></i>
+                    <i class="bi bi-twitter-x text-primary fs-5" role="button" aria-label="Twitter"></i>
+                    <i class="bi bi-linkedin text-primary fs-5" role="button" aria-label="LinkedIn"></i>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-3">
+                <h4 class="fw-bold text-on-surface mb-3">Company</h4>
+                <ul class="list-unstyled d-flex flex-column gap-2">
+                    <li><a class="text-decoration-none text-on-surface-variant text-label-sm" href="#">About Us</a></li>
+                    <li><a class="text-decoration-none text-on-surface-variant text-label-sm" href="#">Careers</a></li>
+                    <li><a class="text-decoration-none text-on-surface-variant text-label-sm" href="#">Contact</a></li>
+                    <li><a class="text-decoration-none text-on-surface-variant text-label-sm" href="#">Media Kit</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="col-12 col-md-3">
+                <h4 class="fw-bold text-on-surface mb-3">Resources</h4>
+                <ul class="list-unstyled d-flex flex-column gap-2">
+                    <li><a class="text-decoration-none text-on-surface-variant text-label-sm" href="#">Study
+                            Material</a></li>
+                    <li><a class="text-decoration-none text-on-surface-variant text-label-sm" href="#">Success
+                            Stories</a></li>
+                    <li><a class="text-decoration-none text-on-surface-variant text-label-sm" href="#">Help Center</a>
+                    </li>
+                    <li><a class="text-decoration-none text-on-surface-variant text-label-sm" href="#">Newsletter</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="col-12 col-md-3">
+                <h4 class="fw-bold text-on-surface mb-3">Legal</h4>
+                <ul class="list-unstyled d-flex flex-column gap-2">
+                    <li><a class="text-decoration-none text-on-surface-variant text-label-sm" href="#">Privacy
+                            Policy</a></li>
+                    <li><a class="text-decoration-none text-on-surface-variant text-label-sm" href="#">Terms of
+                            Service</a></li>
+                    <li><a class="text-decoration-none text-on-surface-variant text-label-sm" href="#">Cookie Policy</a>
+                    </li>
+                </ul>
+                <p class="mt-4 text-label-sm text-on-surface-variant" style="opacity:0.6;">© 2024 ExamPrep. Premium
+                    Academic Excellence.</p>
+            </div>
+
+        </div>
+    </footer>
+
+    {% if user.is_authenticated %}
+    <!-- Bottom Navigation Bar for Mobile -->
+    <div class="mobile-bottom-nav d-flex d-md-none justify-content-around align-items-center fixed-bottom bg-surface border-top border-outline-variant py-2 shadow-lg"
+        style="z-index: 1030;">
+        <a href="{% url 'core:home' %}"
+            class="d-flex flex-column align-items-center text-decoration-none text-on-surface-variant">
+            <i class="bi bi-house-door fs-5"></i>
+            <span class="text-label-sm mt-1" style="font-family: inherit; font-size: 10px;">Home</span>
+        </a>
+        <a href="{% url 'products:shop' %}"
+            class="d-flex flex-column align-items-center text-decoration-none text-on-surface-variant active-bottom-nav">
+            <i class="bi bi-journal-text fs-5"></i>
+            <span class="text-label-sm mt-1" style="font-family: inherit; font-size: 10px;">Exams</span>
+        </a>
+        <a href="#" class="d-flex flex-column align-items-center text-decoration-none text-on-surface-variant">
+            <i class="bi bi-newspaper fs-5"></i>
+            <span class="text-label-sm mt-1" style="font-family: inherit; font-size: 10px;">Blogs</span>
+        </a>
+        <a href="{% url 'dashboard:index' %}"
+            class="d-flex flex-column align-items-center text-decoration-none text-on-surface-variant">
+            <i class="bi bi-person fs-5"></i>
+            <span class="text-label-sm mt-1" style="font-family: inherit; font-size: 10px;">Profile</span>
+        </a>
+    </div>
+    {% endif %}
+
+    <!-- Bootstrap 5.3 JS bundle (for navbar collapse) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="{% static 'js/all-exam/exam.js' %}"></script>
+</body>
+
+</html>

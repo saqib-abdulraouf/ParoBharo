@@ -1,0 +1,223 @@
+{% extends "Books/Djnago/django-read/index.html" %}
+{% load static %}
+
+{% block title %}Week 02 — Lesson 2: Django ORM (queries likhna){% endblock %}
+
+{% block content %}
+                <div class="breadcrumb">
+                    <a href="{% url 'products:django-book' %}">Django Course</a>
+                    <span class="sep">›</span>
+                    <span>Week 2</span>
+                    <span class="sep">›</span>
+                    <span>Lesson 2</span>
+                </div>
+
+                <div class="lesson-header">
+                    <span class="tag">📖 Week 2 · Lesson 2</span>
+                    <h1>Django ORM (queries likhna)</h1>
+                    <div class="sub"><i class="fas fa-code" style="color:#0c4b33;margin-right:4px;"></i> Learn to query your database using Python code — no SQL needed!</div>
+                </div>
+
+                <div class="reading-content">
+
+                    <p>
+                        Django ORM ki practice karte hain (database ko Python code se query karna) — 
+                        ye samajhna <strong>zaroori</strong> hai kyunke aage CRUD views mein yehi use hoga. 
+                        Phir seedha <strong>CRUD Views</strong> pe chalenge, jo aapka asli goal hai.
+                    </p>
+
+                    <!-- STEP 21 -->
+                    <h2>
+                        <span class="step-number">21</span> Django Shell Mein ORM Try Karein
+                    </h2>
+
+                    <p>
+                        Terminal mein <strong>(venv active hona chahiye)</strong>:
+                    </p>
+
+                    <div class="terminal-command">
+                        <span class="prompt">$</span>
+                        <span class="command">python manage.py shell</span>
+                    </div>
+
+                    <div class="info-box">
+                        <i class="fas fa-terminal" style="color:#0c4b33;margin-right:8px;"></i>
+                        <strong>Samjhein:</strong> Ye ek <strong>interactive Python shell</strong> khol dega jahan aap 
+                        directly database se baat kar sakte hain.
+                    </div>
+
+                    <p>
+                        Ye commands <strong>ek-ek karke</strong> try karein:
+                    </p>
+
+                    <!-- SHELL COMMANDS -->
+                    <div class="code-block">
+                        <div class="code-label"><i class="fas fa-terminal"></i> Django Shell (Python)</div>
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy All</button>
+                        <pre><code class="language-python">from tasks.models import Task
+
+# Naya task banana
+Task.objects.create(title="Learn Django", description="Complete CRUD project")
+
+# Sab tasks dekhna
+Task.objects.all()
+
+# Ek specific task dhundna
+Task.objects.get(id=1)
+
+# Task update karna
+task = Task.objects.get(id=1)
+task.completed = True
+task.save()
+
+# Task delete karna
+task.delete()
+
+# Shell se bahar aane ke liye:
+exit()</code></pre>
+                    </div>
+
+                    <!-- SHELL OUTPUT EXAMPLE -->
+                    <div class="shell-output">
+                        <div class="input-line"><span style="color:#10b981;">>>> </span>from tasks.models import Task</div>
+                        <div class="input-line"><span style="color:#10b981;">>>> </span>Task.objects.create(title="Learn Django", description="Complete CRUD project")</div>
+                        <div class="output-line">&lt;Task: Learn Django&gt;</div>
+                        <br />
+                        <div class="input-line"><span style="color:#10b981;">>>> </span>Task.objects.all()</div>
+                        <div class="output-line">&lt;QuerySet [&lt;Task: Learn Django&gt;]&gt;</div>
+                        <br />
+                        <div class="input-line"><span style="color:#10b981;">>>> </span>Task.objects.get(id=1)</div>
+                        <div class="output-line">&lt;Task: Learn Django&gt;</div>
+                        <br />
+                        <div class="input-line"><span style="color:#10b981;">>>> </span>task = Task.objects.get(id=1)</div>
+                        <div class="input-line"><span style="color:#10b981;">>>> </span>task.completed = True</div>
+                        <div class="input-line"><span style="color:#10b981;">>>> </span>task.save()</div>
+                        <div class="output-line"><span class="highlight-output">✅ Task updated successfully!</span></div>
+                        <br />
+                        <div class="input-line"><span style="color:#10b981;">>>> </span>task.delete()</div>
+                        <div class="output-line"><span class="highlight-output">✅ Task deleted successfully!</span></div>
+                    </div>
+
+                    <!-- ORM METHODS TABLE -->
+                    <h2>
+                        <span class="step-number" style="background:#4b4dd8;"><i class="fas fa-list" style="font-size:14px;"></i></span> ORM Methods — Summary
+                    </h2>
+
+                    <div class="orm-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Method</th>
+                                    <th>Purpose</th>
+                                    <th>Example</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code class="method">.create()</code></td>
+                                    <td>Naya record create karna</td>
+                                    <td><code>Task.objects.create(title="...")</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code class="method">.all()</code></td>
+                                    <td>Sab records fetch karna</td>
+                                    <td><code>Task.objects.all()</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code class="method">.get()</code></td>
+                                    <td>Ek specific record dhundna (ID ke through)</td>
+                                    <td><code>Task.objects.get(id=1)</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code class="method">.save()</code></td>
+                                    <td>Record update karna</td>
+                                    <td><code>task.completed = True; task.save()</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code class="method">.delete()</code></td>
+                                    <td>Record delete karna</td>
+                                    <td><code>task.delete()</code></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="info-box" style="border-left-color:#10b981;background:rgba(16,185,129,0.06);">
+                        <i class="fas fa-lightbulb" style="color:#10b981;margin-right:8px;"></i>
+                        <strong>Key Takeaway:</strong> 
+                        <code>objects.create()</code>, <code>.all()</code>, <code>.get()</code>, <code>.save()</code>, <code>.delete()</code> 
+                        — ye sab <strong>ORM methods</strong> hain. 
+                        <br /><br />
+                        <strong>Bilkul yehi methods</strong> hum apni <strong>CRUD views</strong> mein use karenge, bas web browser se.
+                    </div>
+
+                    <!-- SUMMARY -->
+                    <div class="success-box">
+                        <div class="success-title">
+                            <i class="fas fa-check-circle"></i> ✅ Summary — What We Learned
+                        </div>
+                        <p>
+                            <strong>1.</strong> Django Shell kaise open karein — <code>python manage.py shell</code>
+                            <br />
+                            <strong>2.</strong> Model import karna — <code>from tasks.models import Task</code>
+                            <br />
+                            <strong>3.</strong> CREATE — <code>Task.objects.create()</code>
+                            <br />
+                            <strong>4.</strong> READ — <code>Task.objects.all()</code> and <code>Task.objects.get()</code>
+                            <br />
+                            <strong>5.</strong> UPDATE — <code>task.save()</code>
+                            <br />
+                            <strong>6.</strong> DELETE — <code>task.delete()</code>
+                            <br /><br />
+                            <strong style="color:#0c4b33;">🎯 Next Step:</strong> Admin Panel setup &amp; CRUD Views banayenge! 🚀
+                        </p>
+                    </div>
+
+                </div>
+
+                <!-- Navigation Footer -->
+                <div class="lesson-nav-bar">
+                    <div class="d-flex align-items-center justify-content-between gap-3">
+                        <a href="{% url 'products:django-week2-l1' %}" class="btn-lesson-nav btn-lesson-prev">
+                            <i class="bi bi-arrow-left me-2"></i>
+                            <span>Previous (L1)</span>
+                        </a>
+
+                        <div class="d-none d-sm-block text-center">
+                            <span class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill font-monospace" style="font-size: 0.8rem; font-weight:500;">
+                                Week 2 • Lesson 2 of 4
+                            </span>
+                        </div>
+
+                        <a href="{% url 'products:django-week2-l3' %}" class="btn-lesson-nav btn-lesson-next">
+                            <span>Next Lesson (L3)</span>
+                            <i class="bi bi-arrow-right ms-2"></i>
+                        </a>
+                    </div>
+                </div>
+{% endblock %}
+
+{% block right_sidebar %}
+            <div class="right-section">
+                <h4>📊 Your Progress</h4>
+                <div class="progress-ring">
+                    <div class="circle"><span>50%</span></div>
+                    <div class="info">
+                        <strong>2/4</strong> Week 2 done
+                    </div>
+                </div>
+            </div>
+
+            <div class="right-section">
+                <h4>⚡ Quick Actions</h4>
+                <div class="quick-actions">
+                    <button class="quick-btn"><span class="icon">⭐</span> Bookmark</button>
+                    <button class="quick-btn"><span class="icon">📝</span> Add Note</button>
+                </div>
+            </div>
+
+            <div class="right-section" style="flex:1;">
+                <h4>📝 Your Notes</h4>
+                <textarea class="notes-area" id="djangoNotes" placeholder="Write your notes here..."></textarea>
+            </div>
+{% endblock %}

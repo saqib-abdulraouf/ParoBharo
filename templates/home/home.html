@@ -1,0 +1,665 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ExamPrep | Master Your Competitive Exams</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap"
+        rel="stylesheet">
+
+    <!-- Bootstrap 5.3 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Custom design system CSS -->
+    <link href="{% static 'css/home/home.css' %}" rel="stylesheet">
+</head>
+
+<body class="has-bottom-nav">
+
+    <!-- ==================== Top Navigation Bar (Desktop) ==================== -->
+    <header class="sticky-top bg-surface shadow-sm d-none d-md-block">
+        <nav class="navbar navbar-expand-md">
+            <div class="container-fluid max-w-container px-margin-mobile" style="margin-left:auto; margin-right:auto;">
+                <div class="d-flex align-items-center gap-4 w-100">
+
+                    <a class="navbar-brand d-flex align-items-center gap-2 mb-0" href="{% url 'core:home' %}">
+                        <img src="{% static 'images/logos/ParoBharo-name.png' %}" alt="ParoBharo"
+                            style="height: 75px; width: auto;">
+                    </a>
+
+                    <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false"
+                        aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="mainNavbar">
+                        <div class="d-md-flex gap-4 align-items-md-center ms-md-4 mb-3 mb-md-0">
+                            <a class="d-block d-md-inline-block nav-link-active mb-2 mb-md-0"
+                                href="{% url 'core:home' %}">Home</a>
+                            <a class="d-block d-md-inline-block nav-link-custom mb-2 mb-md-0"
+                                href="{% url 'products:shop' %}">Exams</a>
+                            <a class="d-block d-md-inline-block nav-link-custom mb-2 mb-md-0"
+                                href="{% url 'products:books' %}">Books</a>
+                            <a class="d-block d-md-inline-block nav-link-custom mb-2 mb-md-0"
+                                href="#pricing-section">Pricing</a>
+                            <a class="d-block d-md-inline-block nav-link-custom" href="#">Blog</a>
+                        </div>
+
+                        <div class="d-flex flex-column flex-md-row align-items-md-center gap-3 ms-md-auto mt-3 mt-md-0">
+                            <div
+                                class="d-none d-lg-flex align-items-center bg-surface-container-low px-3 py-2 rounded-pill border border-outline-variant js-search-wrapper">
+                                <i class="bi bi-search text-outline me-2"></i>
+                                <input
+                                    class="form-control form-control-sm border-0 bg-transparent shadow-none js-search-input"
+                                    style="width: 12rem;" type="text" placeholder="Search exams...">
+                            </div>
+                            <a href="{% url 'cart:cart_detail' %}"
+                                class="text-decoration-none text-on-surface-variant p-2 rounded-circle hover-bg-light"
+                                title="Shopping Cart">
+                                <i class="bi bi-cart3 fs-5"></i>
+                            </a>
+                            {% if user.is_authenticated %}
+                            <div class="d-flex gap-3 align-items-center">
+                                <i class="bi bi-bell text-on-surface-variant fs-5" role="button"
+                                    aria-label="Notifications"></i>
+                                <a href="{% url 'dashboard:index' %}"
+                                    class="text-decoration-none text-on-surface-variant fs-4" aria-label="Account">
+                                    <i class="bi bi-person-circle" role="button"></i>
+                                </a>
+                            </div>
+                            {% else %}
+                            <a class="btn d-none d-md-inline-block fw-medium text-primary p-0 text-start text-decoration-none"
+                                href="{% url 'accounts:signin' %}">Sign In</a>
+
+                            <a href="{% url 'accounts:signin' %}"><button class="btn btn-pill-primary"
+                                    type="button">Start Free Trial</button></a>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ==================== Top Navigation Bar (Mobile) ==================== -->
+    <header class="sticky-top bg-surface shadow-sm d-block d-md-none mobile-nav-header">
+        {% if user.is_authenticated %}
+        <!-- Logged In Mobile Header -->
+        <div class="container-fluid py-2 px-margin-mobile">
+            <div class="d-flex align-items-center justify-content-between" style="min-height: 48px;">
+                <!-- Left side: Website Name -->
+                <a class="navbar-brand d-flex align-items-center gap-2 mb-0" href="{% url 'core:home' %}">
+                    <img src="{% static 'images/logos/ParoBharo-name.png' %}" alt="ParoBharo"
+                        style="height: 48px; width: auto;">
+                </a>
+
+                <!-- Right side: Search, Cart & Wishlist icons -->
+                <div class="d-flex align-items-center gap-3 text-on-surface-variant">
+                    <button class="btn p-0 border-0 text-on-surface-variant" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#mobileSearchCollapse" aria-expanded="false"
+                        aria-controls="mobileSearchCollapse">
+                        <i class="bi bi-search fs-5"></i>
+                    </button>
+                    <a href="{% url 'cart:cart_detail' %}" class="text-decoration-none text-on-surface-variant">
+                        <i class="bi bi-cart3 fs-5"></i>
+                    </a>
+                    <a href="#" class="text-decoration-none text-on-surface-variant">
+                        <i class="bi bi-heart fs-5"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Collapsible Mobile Search -->
+        <div class="collapse bg-surface-container-low border-bottom border-outline-variant px-margin-mobile py-2"
+            id="mobileSearchCollapse">
+            <div
+                class="d-flex align-items-center bg-surface px-3 py-2 rounded-pill border border-outline-variant js-search-wrapper">
+                <i class="bi bi-search text-outline me-2"></i>
+                <input class="form-control form-control-sm border-0 bg-transparent shadow-none js-search-input"
+                    type="text" placeholder="Search exams...">
+            </div>
+        </div>
+        {% else %}
+        <!-- Logged Out Mobile Header -->
+        <div class="container-fluid py-2 px-margin-mobile">
+            <div class="d-flex align-items-center justify-content-between" style="min-height: 48px;">
+                <!-- Left side: Website Name -->
+                <a class="navbar-brand d-flex align-items-center gap-2 mb-0" href="{% url 'core:home' %}">
+                    <img src="{% static 'images/logos/ParoBharo-name.png' %}" alt="ParoBharo"
+                        style="height: 48px; width: auto;">
+                </a>
+
+                <!-- Right side: Search, Cart & Auth -->
+                <div class="d-flex align-items-center gap-3">
+                    <button class="btn p-0 border-0 text-on-surface-variant" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#mobileSearchCollapse" aria-expanded="false"
+                        aria-controls="mobileSearchCollapse">
+                        <i class="bi bi-search fs-5"></i>
+                    </button>
+                    <a href="{% url 'cart:cart_detail' %}" class="text-decoration-none text-on-surface-variant">
+                        <i class="bi bi-cart3 fs-5"></i>
+                    </a>
+                    <a class="fw-medium text-primary text-decoration-none" href="{% url 'accounts:signin' %}">Sign
+                        In</a>
+                    <button class="btn btn-pill-primary py-1 px-3 text-label-sm" type="button"
+                        style="font-family: inherit;">Start Free Trial</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Collapsible Mobile Search -->
+        <div class="collapse bg-surface-container-low border-bottom border-outline-variant px-margin-mobile py-2"
+            id="mobileSearchCollapse">
+            <div
+                class="d-flex align-items-center bg-surface px-3 py-2 rounded-pill border border-outline-variant js-search-wrapper">
+                <i class="bi bi-search text-outline me-2"></i>
+                <input class="form-control form-control-sm border-0 bg-transparent shadow-none js-search-input"
+                    type="text" placeholder="Search exams...">
+            </div>
+        </div>
+        {% endif %}
+    </header>
+
+    <!-- Bottom Navigation Bar for Mobile -->
+    <div class="mobile-bottom-nav d-flex d-md-none justify-content-around align-items-center fixed-bottom bg-surface border-top border-outline-variant py-2 shadow-lg"
+        style="z-index: 1030;">
+        <a href="{% url 'core:home' %}"
+            class="d-flex flex-column align-items-center text-decoration-none text-on-surface-variant active-bottom-nav">
+            <i class="bi bi-house-door fs-5"></i>
+            <span class="text-label-sm mt-1" style="font-family: inherit; font-size: 10px;">Home</span>
+        </a>
+        <a href="{% url 'products:shop' %}"
+            class="d-flex flex-column align-items-center text-decoration-none text-on-surface-variant">
+            <i class="bi bi-journal-text fs-5"></i>
+            <span class="text-label-sm mt-1" style="font-family: inherit; font-size: 10px;">Exams</span>
+        </a>
+        <a href="{% url 'products:books' %}"
+            class="d-flex flex-column align-items-center text-decoration-none text-on-surface-variant">
+            <i class="bi bi-book fs-5"></i>
+            <span class="text-label-sm mt-1" style="font-family: inherit; font-size: 10px;">Books</span>
+        </a>
+        <a href="#" class="d-flex flex-column align-items-center text-decoration-none text-on-surface-variant">
+            <i class="bi bi-newspaper fs-5"></i>
+            <span class="text-label-sm mt-1" style="font-family: inherit; font-size: 10px;">Blogs</span>
+        </a>
+    </div>
+
+    <!-- ==================== Hero Section ==================== -->
+    <header class="position-relative overflow-hidden pt-5 pb-5 px-margin-mobile">
+        <div class="max-w-container mx-auto" style="margin-left:auto; margin-right:auto;">
+            <div class="row align-items-center gy-5">
+
+                <div class="col-12 col-lg-6 d-flex flex-column gap-4">
+                    <span
+                        class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill bg-secondary-container text-on-secondary-container text-label-sm text-uppercase w-fit"
+                        style="width: fit-content; letter-spacing: 0.05em;">
+                        <i class="bi bi-patch-check-fill"></i>
+                        Trusted by 50,000+ Students
+                    </span>
+
+                    <h1 class="text-display-lg-mobile text-on-background lh-sm mb-0">
+                        Master Your Competitive <br class="d-none d-md-block"> <span
+                            class="text-primary fst-italic">Exams with Precision</span>
+                    </h1>
+
+                    <p class="text-body-lg text-on-surface-variant" style="max-width: 36rem;">
+                        High-stakes preparation requires specialized tools. Access elite mock tests, real-time
+                        analytics, and expert-curated curriculums for FIA, Punjab Police, and Armed Forces.
+                    </p>
+
+                    <div class="d-flex flex-wrap gap-3 pt-2">
+                        <button class="btn btn-primary-custom" type="button">Start Preparing Now</button>
+                        <button class="btn btn-outline-custom" type="button">View Exam Calendar</button>
+                    </div>
+
+                    <div class="d-flex align-items-center gap-4 pt-4">
+                        <div class="avatar-stack d-flex">
+                            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuAiffgqEK6I7y9yXvjSc4498xp-lTUmwaGlz-EI_L7FDuwjNbkbUNbPmxqTvbUCTqxqo6Mnra33mdeJ4jJA-4JMyPhXLy2EGsE5v4P-y6-g15xO80B7ijqYF_VR2OtzNUgdMWPJNV9oG7cSP3AiOFnfmF_Nl33ZQWFhST5naLubzHYX0QmGofbMJ3GYr1VbAnrw7P65OxdcHdLh37vFgGH16KDtIWJAY3hEkWsR8S_tAidHpMMum5AVTHJAJx2v9w9-EKtYv8_IxGU"
+                                alt="Female student portrait">
+                            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBuy2SELVaixfeRfJKbDgOi0NK2304Qdg5n8P5tmSbkSp1_GsWo7ANYu--0DxkXFZLFG8OILPmZDbmj6Qj6G3gw3xi6oaCo2z9MudiAexiQRMGbFUUkt3FUnMOsbNN2nOccWBqNmhBf28iLZhtPMNiBybMveme0Fyqvh6--vyyYHe9ncZrp_iY8UlPkxbzE92nt8TYdADMPdypd_UK-B-Bg9WSGNImTahNvCsn4NEd4GBOSBRfOiAMel6ort9x6iQftvGRH7ThXqCE"
+                                alt="Male student portrait">
+                            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCiUI2gdeWoulcor7BjG0a7RXo_inn4hgGeX1FxqYlrf09X8uk-A3-YBfOFqXm4AxbnS6ta8p8-aJ0Gu5406QOZ3gpNPiX2qM9Jl-4KOLBUdxYexAejTvynwmwn6s7Mkx8F3CbhHBTxGujf3WkLEdCw6nh0QYaUQXF392wj4-HmNZk52saU7PCEOxdMMylc_FjKRmzkPVPCXmrozICNZGl2K9BI0IIbRrd8WUBjqZ5I-G9MZ1mXFNoYjMD8sHT9KpKv4QrUNMb84b0"
+                                alt="Male student portrait">
+                        </div>
+                        <div class="text-on-surface-variant text-label-sm">
+                            <span class="text-primary fw-bold">4.9/5 Rating</span> based on 2k+ reviews
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-lg-6">
+                    <div class="hero-image-wrap">
+                        <div class="hero-image-glow"></div>
+                        <div class="hero-image-card">
+                            <img class="w-100 h-auto" style="aspect-ratio: 16/9; object-fit: cover;"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBcserSJ3YIMaNiZvbd0pGXtCtEO4mpI40OfhwfJrLkP6AXifed-QQjr2FG0zbA-7sJtZhj-_GNJkWVRNoP1Lm87XvQd_jLpGrNW8Jzi8fbVQTHIKX82JyuCQkKBUd95QWujZJAk7I8yvpSPJWBE33OBZD4q7feafjTg-jQFPpsxmT8k9B0RtK77TxKx8v3E5X1qy3fupXRa4zrHU6hWm-t9VkF9AtZx2Uec19XBeOFJmvG56oJlCCoBo1opxO6c20N-HgvRW6jrhA"
+                                alt="Product dashboard preview showing exam progress charts and mock test scores">
+                            <div class="glass-card position-absolute d-flex align-items-center justify-content-between p-4 rounded-4"
+                                style="bottom:24px; left:24px; right:24px;">
+                                <div>
+                                    <p class="text-label-sm text-primary text-uppercase mb-1">Recent Success</p>
+                                    <p class="text-headline-md text-on-surface mb-0">Alex Carter scored 98% in FIA</p>
+                                </div>
+                                <i class="bi bi-award-fill text-secondary fs-1"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </header>
+
+    <!-- ==================== Featured Exams Bento Grid ==================== -->
+    <section class="py-5 px-margin-mobile bg-surface-container-lowest">
+        <div class="max-w-container mx-auto" style="margin-left:auto; margin-right:auto;">
+
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-3 mb-5">
+                <div>
+                    <h2 class="text-headline-md text-on-background mb-2">Featured Exams</h2>
+                    <p class="text-on-surface-variant mb-0">Specialized preparation paths for top departments.</p>
+                </div>
+                <a href="../all-exam/exam.html"> <button
+                        class="btn text-primary fw-bold d-flex align-items-center gap-2 p-0" type="button">
+                        Browse All 50+ Exams
+                        <i class="bi bi-arrow-right"></i>
+                    </button></a>
+            </div>
+
+            <div class="bento-grid">
+
+                <!-- FIA Card -->
+                <div class="bento-item-large exam-card-image">
+                    <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBnTiO9dwXP9cpmDaRP2iIK3t50d0wrM-QgLje44y7uF2ztNeJiJ-lLN8MiD_j0DArRF7VCbg_AsRAuMqy4-A3OTBakzT8_re_l5CTf7qLLiv0FeK0kN2ipqi4BIn6lE1AQpPEXHtnukk3xknoOI8gwBElbKFr_jNMUFs37x5hZmmehqfv0H7-NN8Z7o0FRZKM1VmRCqZKXC5MzQMAL8VT5eZ4cD6GLLGGw8NpEkMA2463iTMzgiyhmCMyLXpd_46wkVZXQ1g5LOcE"
+                        alt="Government building representing FIA">
+                    <div class="exam-card-content">
+                        <span class="bg-secondary text-white px-3 py-1 rounded-pill text-label-sm mb-3"
+                            style="width: fit-content;">Federal Investigation</span>
+                        <h3 class="text-white fw-bold mb-2" style="font-size:2.25rem;">FIA Mock Series 2024</h3>
+                        <p class="text-white-50 mb-3" style="max-width: 28rem;">Master the Assistant Director and
+                            Inspector exams with past papers and simulated testing environments.</p>
+                        <button class="btn bg-white text-on-surface fw-bold rounded-3" type="button"
+                            style="width: fit-content;">Join Course</button>
+                    </div>
+                </div>
+
+                <!-- ASF Card -->
+                <div class="bento-item-small exam-card-simple d-flex flex-column">
+                    <div class="icon-tile bg-primary-fixed mb-4">
+                        <i class="bi bi-airplane text-primary fs-4"></i>
+                    </div>
+                    <h3 class="text-headline-md mb-2">ASF Security</h3>
+                    <p class="text-on-surface-variant flex-grow-1">Complete guide for Airport Security Force recruitment
+                        tests.</p>
+                    <div class="d-flex align-items-center justify-content-between text-primary fw-bold mt-4"
+                        role="button">
+                        <span>Explore Modules</span>
+                        <i class="bi bi-arrow-right"></i>
+                    </div>
+                </div>
+
+                <!-- Punjab Police -->
+                <div class="bento-item-small exam-card-highlight">
+                    <div class="d-flex justify-content-between align-items-start mb-4">
+                        <div class="icon-tile bg-white shadow-sm">
+                            <i class="bi bi-shield-fill text-on-surface fs-4"></i>
+                        </div>
+                        <span class="text-label-sm text-on-surface-variant">85% Success Rate</span>
+                    </div>
+                    <h3 class="text-headline-md mb-2">Punjab Police</h3>
+                    <p class="text-on-surface-variant mb-4">SI, ASI, and Constable specific training modules.</p>
+                    <div class="progress-bar-track mb-2">
+                        <div class="progress-bar-fill"></div>
+                    </div>
+                    <p class="text-uppercase text-on-surface-variant mb-0" style="font-size:12px;">Popularity Growth</p>
+                </div>
+
+                <!-- Armed Forces -->
+                <div class="bento-item-large exam-card-dark">
+                    <div class="row g-4 align-items-center h-100 p-4 p-md-5 m-0">
+                        <div class="col-12 col-md-6">
+                            <h3 class="fw-bold mb-3" style="font-size:2.25rem;">Armed Forces Prep</h3>
+                            <p class="text-on-surface-variant mb-4">Integrated preparation for Army, Navy, and Air Force
+                                ISSB and initial tests. Expert psychological assessments included.</p>
+                            <div class="d-flex flex-wrap gap-2">
+                                <span class="bg-white-soft px-3 py-2 rounded-3 text-label-sm">Army</span>
+                                <span class="bg-white-soft px-3 py-2 rounded-3 text-label-sm">Navy</span>
+                                <span class="bg-white-soft px-3 py-2 rounded-3 text-label-sm">PAF</span>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <img class="img-fluid rounded-4 shadow rotate-3"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCtuk5w8Sxn__J1361ZCbYmhJGKP3hKNDnC6BWS_YuBGMCtdSvggwXJmXeczhj2id9A3-kuqjpEegVTOkeBxc5EZ9EJ61NTdLkxRcYBy2_LtNqpXWwd3Y8DdKKXDBk5PWw-SaGqCXHSLgXA2HIIQJytpHoYapW9kaA3-kU6cQQGnB4XI6UmlEnPpRB49A-qyVio-PGLlpI6EOxX4PMUr1Zhj_GWsG85Z1LvLReA9_etIr9PtUmlylBYofk3WNVZH-EmqsRaVWApQp4"
+                                alt="Military cadet uniform detail">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== Features Section ==================== -->
+    <section class="py-5 px-margin-mobile bg-background">
+        <div class="max-w-container mx-auto" style="margin-left:auto; margin-right:auto;">
+
+            <div class="text-center mx-auto mb-5" style="max-width: 48rem;">
+                <h2 class="text-headline-md text-on-background mb-3">The Science of Selection</h2>
+                <p class="text-body-lg text-on-surface-variant mb-0">We don't just provide questions; we provide the
+                    analytics to master them.</p>
+            </div>
+
+            <div class="row g-4">
+
+                <!-- Mock Tests -->
+                <div class="col-12 col-md-6 col-lg-3">
+                    <div class="feature-card p-4 h-100">
+                        <div class="feature-icon-circle mb-4">
+                            <i class="bi bi-patch-question fs-3"></i>
+                        </div>
+                        <h4 class="text-headline-md mb-3">Mock Tests</h4>
+                        <p class="text-on-surface-variant mb-3">Simulate actual exam pressure with our timed mock test
+                            environment.</p>
+                        <ul class="list-unstyled text-on-surface small mb-0">
+                            <li class="d-flex align-items-center gap-2 mb-2"><i
+                                    class="bi bi-check-circle-fill text-secondary"></i> 10,000+ Questions</li>
+                            <li class="d-flex align-items-center gap-2"><i
+                                    class="bi bi-check-circle-fill text-secondary"></i> Real-time Timer</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Daily Quizzes -->
+                <div class="col-12 col-md-6 col-lg-3">
+                    <div class="feature-card p-4 h-100">
+                        <div class="feature-icon-circle mb-4">
+                            <i class="bi bi-calendar-event fs-3"></i>
+                        </div>
+                        <h4 class="text-headline-md mb-3">Daily Quizzes</h4>
+                        <p class="text-on-surface-variant mb-3">Keep your skills sharp with 10-minute daily practice
+                            sessions.</p>
+                        <ul class="list-unstyled text-on-surface small mb-0">
+                            <li class="d-flex align-items-center gap-2 mb-2"><i
+                                    class="bi bi-check-circle-fill text-secondary"></i> Current Affairs</li>
+                            <li class="d-flex align-items-center gap-2"><i
+                                    class="bi bi-check-circle-fill text-secondary"></i> Subject Drills</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Analytics -->
+                <div class="col-12 col-md-6 col-lg-3">
+                    <div class="feature-card p-4 h-100">
+                        <div class="feature-icon-circle mb-4">
+                            <i class="bi bi-graph-up-arrow fs-3"></i>
+                        </div>
+                        <h4 class="text-headline-md mb-3">Analytics</h4>
+                        <p class="text-on-surface-variant mb-3">Deep dive into your weak areas with AI-driven insights.
+                        </p>
+                        <ul class="list-unstyled text-on-surface small mb-0">
+                            <li class="d-flex align-items-center gap-2 mb-2"><i
+                                    class="bi bi-check-circle-fill text-secondary"></i> Topic Heatmaps</li>
+                            <li class="d-flex align-items-center gap-2"><i
+                                    class="bi bi-check-circle-fill text-secondary"></i> Speed Tracking</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Leaderboards -->
+                <div class="col-12 col-md-6 col-lg-3">
+                    <div class="feature-card p-4 h-100">
+                        <div class="feature-icon-circle mb-4">
+                            <i class="bi bi-bar-chart-steps fs-3"></i>
+                        </div>
+                        <h4 class="text-headline-md mb-3">Leaderboards</h4>
+                        <p class="text-on-surface-variant mb-3">Compete with top aspirants across the country in
+                            real-time.</p>
+                        <ul class="list-unstyled text-on-surface small mb-0">
+                            <li class="d-flex align-items-center gap-2 mb-2"><i
+                                    class="bi bi-check-circle-fill text-secondary"></i> Global Ranking</li>
+                            <li class="d-flex align-items-center gap-2"><i
+                                    class="bi bi-check-circle-fill text-secondary"></i> Group Challenges</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== Testimonials Section ==================== -->
+    <section class="py-5 px-margin-mobile bg-surface-container-low overflow-hidden">
+        <div class="max-w-container mx-auto position-relative" style="margin-left:auto; margin-right:auto;">
+
+            <div class="text-center mb-5">
+                <h2 class="text-headline-md text-on-background mb-0">Success Stories from Top Scorers</h2>
+            </div>
+
+            <div class="marquee-track" role="button" aria-label="Testimonials, hover to pause">
+
+                <!-- Testimonial 1 -->
+                <div class="testimonial-card">
+                    <div class="d-flex gap-1 text-secondary mb-4">
+                        <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                            class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                    </div>
+                    <p class="text-body-lg text-on-surface-variant fst-italic mb-4">"The performance analytics were a
+                        game-changer. I realized I was slow in General Knowledge and focused my last month there. Highly
+                        recommend for FIA aspirants!"</p>
+                    <div class="d-flex align-items-center gap-3">
+                        <img class="rounded-circle" style="width:3.5rem; height:3.5rem; object-fit:cover;"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZldF_M6ewm8xo1QboGotfOLVJbDdkAtdblIsK_nrxZZHyQ0nmXaOoTUVdCHb8cDIUJaIC_RRn5BIGR6nwV8NCem-AwLIIJu2utUuyfYVG0RdUdxWMEmw7lMWB02MTWZEFfmpW6LxLb_pA-tqhDaxaQGsyieIqtTo31x3PJQWpBzbDRfeBv3b8oQQfHbx_Sr7HWLCamUy635M2rsAJ5kAv3elcqL3EBuHd0AnU9i9HoTWmJCxGuwshtpAXVW1SiJuhCm0ki_bc0LY"
+                            alt="Haris Ahmed portrait">
+                        <div>
+                            <p class="fw-bold text-on-surface mb-0">Haris Ahmed</p>
+                            <p class="small text-on-surface-variant mb-0">Rank #4, FIA Inspector 2023</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 2 -->
+                <div class="testimonial-card">
+                    <div class="d-flex gap-1 text-secondary mb-4">
+                        <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                            class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                    </div>
+                    <p class="text-body-lg text-on-surface-variant fst-italic mb-4">"The Daily Quizzes kept me
+                        consistent. I could practice even during my commute. The ISSB modules for Armed Forces are
+                        exceptionally well-designed."</p>
+                    <div class="d-flex align-items-center gap-3">
+                        <img class="rounded-circle" style="width:3.5rem; height:3.5rem; object-fit:cover;"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDpHv4uljDfBBUt2_OaYUQPXUtcyDo8NryCEmZz_ffDk1dtsH6A3kRuylAnYbF6n_rBJrFkZ5RPQ5wPEHJGXm9aCUxNun4lnE0jvEwcwfI-oWtnFfT957J4M872WAa32o76f_uvEXb-lfosK9jlBjuxZybrc3QsXkxwKm-pTSCf3fA418jtZUbwg_rxYTATzTdZBIweiZDB8W_w3yVwAFjsXVD4WqPhK02nqqy38i_h5DAgux89hiUJLaKYXvt8QyC_clVTIxMhk_s"
+                            alt="Zainab Malik portrait">
+                        <div>
+                            <p class="fw-bold text-on-surface mb-0">Zainab Malik</p>
+                            <p class="small text-on-surface-variant mb-0">Selected, Navy Cadet 2024</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 3 -->
+                <div class="testimonial-card">
+                    <div class="d-flex gap-1 text-secondary mb-4">
+                        <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                            class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                    </div>
+                    <p class="text-body-lg text-on-surface-variant fst-italic mb-4">"Mock tests here are exactly like
+                        the real thing. It helped me overcome exam anxiety. Punjab Police prep here is second to none."
+                    </p>
+                    <div class="d-flex align-items-center gap-3">
+                        <img class="rounded-circle" style="width:3.5rem; height:3.5rem; object-fit:cover;"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBRVj-BvTXRxNleY3s5eO58eCC1PRb3nCoFa115ZjZKYELeyT59GRUyu5NxuLDqiLyL5agUtI8t6Popyu8bJ8h2g54AvuPxftFS_yEHfe2bayKmlinQHYNaXInJImP9yqhto6y1D18MTKKgosmtNoEnwP2u9KXhsv98FkmGm-k0yTvyhUMVRQ6RKvltHPsFoSEr7QCWsYD_SxtFAg0Mw_LXlWhqlZ3Ebl8PPdtJ-obCt8sG0o84cG3HZ8tc0z-GiyWPjSynV2E15ag"
+                            alt="Usman Tariq portrait">
+                        <div>
+                            <p class="fw-bold text-on-surface mb-0">Usman Tariq</p>
+                            <p class="small text-on-surface-variant mb-0">SI, Punjab Police</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== Pricing Section ==================== -->
+    <section class="py-5 px-margin-mobile bg-background" id="pricing-section">
+        <div class="max-w-container mx-auto" style="margin-left:auto; margin-right:auto;">
+
+            <div class="text-center mb-5">
+                <h2 class="text-headline-md text-on-background mb-4">Choose Your Path to Success</h2>
+                <div class="d-flex align-items-center justify-content-center gap-3">
+                    <span class="text-on-surface-variant fw-medium" id="label-monthly">Monthly</span>
+                    <button class="d-flex align-items-center" id="billing-toggle" type="button" role="switch"
+                        aria-checked="true" aria-label="Toggle annual billing">
+                        <div class="toggle-knob"></div>
+                    </button>
+                    <span class="text-on-surface fw-bold" id="label-annual">Annual <span
+                            class="text-secondary small ms-1">(Save
+                            25%)</span></span>
+                </div>
+            </div>
+
+            <div class="row g-4 justify-content-center mx-auto" style="max-width: 64rem;">
+
+                <!-- Basic Plan -->
+                <div class="col-12 col-md-6">
+                    <div class="pricing-card-basic h-100">
+                        <h3 class="fs-4 fw-bold mb-2">Standard Access</h3>
+                        <div class="d-flex align-items-baseline gap-1 mb-4">
+                            <span class="display-6 fw-bold" id="basic-price">$14</span>
+                            <span class="text-on-surface-variant">/month</span>
+                        </div>
+                        <p class="text-on-surface-variant mb-4">Perfect for focused preparation on a single exam type.
+                        </p>
+                        <ul class="list-unstyled mb-4">
+                            <li class="d-flex align-items-center gap-3 mb-3"><i
+                                    class="bi bi-check-lg text-secondary"></i> Access to 1 Exam Category</li>
+                            <li class="d-flex align-items-center gap-3 mb-3"><i
+                                    class="bi bi-check-lg text-secondary"></i> 5 Full Mock Tests</li>
+                            <li class="d-flex align-items-center gap-3 mb-3"><i
+                                    class="bi bi-check-lg text-secondary"></i> Daily Quizzes</li>
+                            <li class="d-flex align-items-center gap-3 text-outline"><i class="bi bi-x-lg"></i> AI
+                                Weakness Analysis</li>
+                        </ul>
+                        <button class="btn w-100 py-3 rounded-3 border border-primary text-primary fw-bold"
+                            type="button">Get Started</button>
+                    </div>
+                </div>
+
+                <!-- Pro Plan -->
+                <div class="col-12 col-md-6">
+                    <div class="pricing-card-pro h-100">
+                        <span class="pricing-badge">Most Popular</span>
+                        <h3 class="fs-4 fw-bold mb-2">Premium Unlimited</h3>
+                        <div class="d-flex align-items-baseline gap-1 mb-4">
+                            <span class="display-6 fw-bold" id="pro-price">$36</span>
+                            <span class="text-on-surface-variant">/month</span>
+                        </div>
+                        <p class="text-on-surface-variant mb-4">Unrestricted access for serious aspirants targeting
+                            multiple departments.</p>
+                        <ul class="list-unstyled mb-4">
+                            <li class="d-flex align-items-center gap-3 mb-3"><i
+                                    class="bi bi-check-lg text-secondary-fixed"></i> Access to ALL Exams</li>
+                            <li class="d-flex align-items-center gap-3 mb-3"><i
+                                    class="bi bi-check-lg text-secondary-fixed"></i> Unlimited Mock Tests</li>
+                            <li class="d-flex align-items-center gap-3 mb-3"><i
+                                    class="bi bi-check-lg text-secondary-fixed"></i> AI Performance Analytics</li>
+                            <li class="d-flex align-items-center gap-3"><i
+                                    class="bi bi-check-lg text-secondary-fixed"></i> PDF Study Material</li>
+                        </ul>
+                        <button class="btn btn-primary-custom w-100 py-3 rounded-3" type="button">Go Premium</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== Footer ==================== -->
+    <footer class="w-100 py-stack-lg px-margin-desktop bg-surface-container-highest border-top border-outline-variant">
+        <div class="max-w-container mx-auto" style="margin-left:auto; margin-right:auto;">
+
+            <div class="row g-4 mb-5">
+
+                <div class="col-12 col-md-3">
+                    <a href="{% url 'core:home' %}" class="d-flex align-items-center gap-2 mb-3 text-decoration-none">
+                        <img src="{% static 'images/logos/ParoBharo-name.png' %}" alt="ParoBharo"
+                            style="height: 36px; width: auto;">
+                    </a>
+                    <p class="text-body-md text-on-surface-variant">The definitive platform for academic and
+                        professional excellence in competitive examinations.</p>
+                    <div class="d-flex gap-3">
+                        <i class="bi bi-emoji-smile text-on-surface-variant fs-5" role="button"
+                            aria-label="Social link"></i>
+                        <i class="bi bi-globe text-on-surface-variant fs-5" role="button" aria-label="Website"></i>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-3">
+                    <h5 class="fw-bold text-on-surface mb-3">Company</h5>
+                    <ul class="list-unstyled text-on-surface-variant">
+                        <li class="mb-2"><a class="text-decoration-none text-on-surface-variant" href="#">About Us</a>
+                        </li>
+                        <li class="mb-2"><a class="text-decoration-none text-on-surface-variant" href="#">Careers</a>
+                        </li>
+                        <li class="mb-2"><a class="text-decoration-none text-on-surface-variant" href="#">Contact</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="col-12 col-md-3">
+                    <h5 class="fw-bold text-on-surface mb-3">Exams</h5>
+                    <ul class="list-unstyled text-on-surface-variant">
+                        <li class="mb-2"><a class="text-decoration-none text-on-surface-variant" href="#">FIA Series</a>
+                        </li>
+                        <li class="mb-2"><a class="text-decoration-none text-on-surface-variant" href="#">Armed Forces
+                                Initial</a></li>
+                        <li class="mb-2"><a class="text-decoration-none text-on-surface-variant" href="#">CSS
+                                Preparation</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-12 col-md-3">
+                    <h5 class="fw-bold text-on-surface mb-3">Newsletter</h5>
+                    <p class="text-body-md text-on-surface-variant mb-3">Get the latest exam updates directly.</p>
+                    <div class="input-group">
+                        <input type="email" class="form-control bg-surface-container-low border-outline-variant"
+                            placeholder="Your email" aria-label="Your email">
+                        <button class="btn btn-primary-custom rounded-0 rounded-end" type="button"
+                            style="padding: 0.5rem 1rem;">Join</button>
+                    </div>
+                </div>
+
+            </div>
+
+            <div
+                class="pt-4 border-top border-outline-variant d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
+                <p class="text-label-sm text-on-surface-variant mb-0">© 2024 ExamPrep. Premium Academic Excellence.</p>
+                <div class="d-flex gap-4 text-label-sm text-on-surface-variant">
+                    <a class="text-decoration-none text-on-surface-variant" href="#">Privacy</a>
+                    <a class="text-decoration-none text-on-surface-variant" href="#">Terms</a>
+                    <a class="text-decoration-none text-on-surface-variant" href="#">Resources</a>
+                </div>
+            </div>
+
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5.3 JS bundle (for navbar collapse) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="{% static 'js/home/home.js' %}"></script>
+</body>
+
+</html>

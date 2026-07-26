@@ -1,0 +1,202 @@
+{% extends "Books/Djnago/django-read/index.html" %}
+{% load static %}
+
+{% block title %}Week 01 — Lesson 3: Django App Creation + Registration{% endblock %}
+
+{% block content %}
+                <div class="breadcrumb">
+                    <a href="{% url 'products:django-book' %}">Django Course</a>
+                    <span class="sep">›</span><span>Week 1</span>
+                    <span class="sep">›</span><span>Lesson 3</span>
+                </div>
+
+                <div class="lesson-header">
+                    <span class="tag">📖 Week 1 · Lesson 3</span>
+                    <h1>Django App Creation + Registration</h1>
+                    <div class="sub"><i class="fas fa-puzzle-piece" style="color:#0c4b33;margin-right:4px;"></i> Learn the difference between Project &amp; App, create your first app</div>
+                </div>
+
+                <div class="reading-content">
+
+                    <!-- PROJECT vs APP -->
+                    <h2>
+                        <span class="step-number" style="background:#4b4dd8;"><i class="fas fa-code-branch" style="font-size:14px;"></i></span> Project vs App — Farq Samjhein
+                    </h2>
+
+                    <div class="comparison-table">
+                        <div class="col">
+                            <div class="title">
+                                <i class="fas fa-cubes icon-project"></i> Project <span style="font-size:14px;color:#464555;font-weight:400;">(config)</span>
+                            </div>
+                            <div class="desc">
+                                Poori website ka <strong>container</strong> — settings, URLs, aur overall configuration sambhalta hai.
+                            </div>
+                            <div class="example">
+                                <i class="fas fa-folder-open" style="font-size:10px;"></i> config/
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="title">
+                                <i class="fas fa-puzzle-piece icon-app"></i> App <span style="font-size:14px;color:#464555;font-weight:400;">(tasks)</span>
+                            </div>
+                            <div class="desc">
+                                Ek chhota <strong>module</strong> jo ek specific kaam karta hai (jaise "blog", "users", "tasks"). 
+                                Ek project mein <strong>multiple apps</strong> ho sakti hain.
+                            </div>
+                            <div class="example">
+                                <i class="fas fa-folder-open" style="font-size:10px;"></i> tasks/ &nbsp;|&nbsp; blog/ &nbsp;|&nbsp; users/
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="info-box">
+                        <i class="fas fa-lightbulb" style="color:#0c4b33;margin-right:8px;"></i>
+                        <strong>Key Concept:</strong> 
+                        Project = <strong>Website ka wrapper</strong> (settings, URLs, overall config)
+                        <br />
+                        App = <strong>Feature module</strong> (specific functionality like blog, tasks, users)
+                        <br /><br />
+                        <code>config</code> project ka naam hai, aur hum ab ek <code>tasks</code> app banayenge.
+                    </div>
+
+                    <!-- STEP 5 -->
+                    <h2>
+                        <span class="step-number">5</span> Pehli App Banayein
+                    </h2>
+
+                    <p>
+                        Hum ek simple <strong>"tasks"</strong> app banayenge jo aage chal ke hamara CRUD project banega (Task Manager). 
+                        Terminal mein:
+                    </p>
+
+                    <div class="code-block">
+                        <div class="code-label"><i class="fas fa-terminal"></i> Terminal / Command Prompt</div>
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                        <pre><code class="language-bash">python manage.py startapp tasks</code></pre>
+                    </div>
+
+                    <p>Ye ek naya folder banayega:</p>
+
+                    <!-- FOLDER STRUCTURE -->
+                    <div class="folder-structure">
+                        <div>
+                            <span class="tree-icon"><i class="fas fa-folder-open"></i></span>
+                            <span class="folder">tasks/</span>
+                            <span class="comment">  ← Naya app folder</span>
+                        </div>
+                        <div class="indent-1">
+                            <span class="tree-icon"><i class="fas fa-folder"></i></span>
+                            <span class="folder">migrations/</span>
+                            <span class="comment">  ← Database migrations</span>
+                        </div>
+                        <div class="indent-1">
+                            <span class="tree-icon"><i class="fas fa-file"></i></span>
+                            <span class="file">__init__.py</span>
+                        </div>
+                        <div class="indent-1">
+                            <span class="tree-icon"><i class="fas fa-file"></i></span>
+                            <span class="file">admin.py</span>
+                            <span class="comment">  ← Admin panel registration</span>
+                        </div>
+                        <div class="indent-1">
+                            <span class="tree-icon"><i class="fas fa-file"></i></span>
+                            <span class="file">apps.py</span>
+                            <span class="comment">  ← App configuration</span>
+                        </div>
+                        <div class="indent-1">
+                            <span class="tree-icon"><i class="fas fa-file"></i></span>
+                            <span class="highlight-file">models.py</span>
+                            <span class="comment">  ← Database tables yahan define hongi</span>
+                        </div>
+                        <div class="indent-1">
+                            <span class="tree-icon"><i class="fas fa-file"></i></span>
+                            <span class="file">tests.py</span>
+                            <span class="comment">  ← Unit tests</span>
+                        </div>
+                        <div class="indent-1">
+                            <span class="tree-icon"><i class="fas fa-file"></i></span>
+                            <span class="highlight-file">views.py</span>
+                            <span class="comment">  ← Logic yahan likhenge</span>
+                        </div>
+                    </div>
+
+                    <!-- STEP 6 -->
+                    <h2>
+                        <span class="step-number">6</span> App ko Register Karein
+                    </h2>
+
+                    <p>
+                        Django ko batana <strong>zaroori</strong> hai ke ye app use ho rahi hai. 
+                        <code style="background:rgba(0,0,0,0.06);padding:2px 6px;border-radius:4px;">config/settings.py</code> file kholein aur <code style="background:rgba(0,0,0,0.06);padding:2px 6px;border-radius:4px;">INSTALLED_APPS</code> list dhundein:
+                    </p>
+
+                    <div class="settings-snippet">
+                        <div class="code-label"><i class="fas fa-gear"></i> config/settings.py</div>
+                        <button class="copy-btn" onclick="copySettingsCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                        <pre><code class="language-python">INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    <span class="added-line">'tasks',   <span class="comment-add">← ye line add karein</span></span>
+]</code></pre>
+                    </div>
+
+                    <div class="info-box" style="border-left-color:#10b981;background:rgba(16,185,129,0.06);">
+                        <i class="fas fa-check-circle" style="color:#10b981;margin-right:8px;"></i>
+                        <strong>Important:</strong> App ka naam <code>'tasks'</code> <strong>string</strong> mein likhna hai, aur comma (,) lagana mat bhoolna!
+                    </div>
+
+                    <!-- SUCCESS -->
+                    <div class="success-box">
+                        <div class="success-title">
+                            <i class="fas fa-rocket"></i> What's Next?
+                        </div>
+                        <p>
+                            <strong>✅ Done!</strong> Ho jaye to batayein — phir hum apni <strong>pehli View aur URL</strong> banayenge 
+                            (yani browser mein kuch <strong>"dikhana"</strong> seekhenge). 🚀
+                        </p>
+                    </div>
+
+                    <!-- Navigation Footer -->
+                    <div class="lesson-nav-bar">
+                        <div class="d-flex align-items-center justify-content-between gap-3">
+                            <a href="{% url 'products:django-week1-l2' %}" class="btn-lesson-nav btn-lesson-prev">
+                                <i class="bi bi-arrow-left me-2"></i><span>Previous (L2)</span>
+                            </a>
+                            <div class="d-none d-sm-block text-center">
+                                <span class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill font-monospace" style="font-size: 0.8rem; font-weight:500;">
+                                    Week 1 • Lesson 3 of 4
+                                </span>
+                            </div>
+                            <a href="{% url 'products:django-week1-l4' %}" class="btn-lesson-nav btn-lesson-next">
+                                <span>Next Lesson (L4)</span><i class="bi bi-arrow-right ms-2"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+{% endblock %}
+
+{% block right_sidebar %}
+            <div class="right-section">
+                <h4>📊 Your Progress</h4>
+                <div class="progress-ring">
+                    <div class="circle"><span>75%</span></div>
+                    <div class="info"><strong>3/4</strong> Week 1 done</div>
+                </div>
+            </div>
+            <div class="right-section">
+                <h4>⚡ Quick Actions</h4>
+                <div class="quick-actions">
+                    <button class="quick-btn"><span class="icon">⭐</span> Bookmark</button>
+                    <button class="quick-btn"><span class="icon">📝</span> Add Note</button>
+                </div>
+            </div>
+            <div class="right-section" style="flex:1;">
+                <h4>📝 Your Notes</h4>
+                <textarea class="notes-area" id="djangoNotes" placeholder="Write your notes here..."></textarea>
+            </div>
+{% endblock %}

@@ -1,0 +1,453 @@
+/* ==========================================================================
+   ExamPrep — Design Tokens
+   Source of truth: uploaded code.html (Tailwind config) + screen.png
+   Mapped 1:1 to CSS custom properties so Bootstrap 5 components can be
+   themed without altering Bootstrap's own source.
+   ========================================================================== */
+
+:root {
+    /* ---- Color tokens (from tailwind.config colors) ---- */
+    --color-on-background: #111c2d;
+    --color-surface-tint: #4d44e3;
+    --color-primary: #3525cd;
+    --color-on-tertiary: #ffffff;
+    --color-secondary-fixed-dim: #4edea3;
+    --color-surface-dim: #cfdaf2;
+    --color-surface-container-low: #f0f3ff;
+    --color-primary-fixed-dim: #c3c0ff;
+    --color-outline: #777587;
+    --color-on-surface: #111c2d;
+    --color-primary-container: #4f46e5;
+    --color-error-container: #ffdad6;
+    --color-on-primary: #ffffff;
+    --color-on-secondary: #ffffff;
+    --color-surface-container: #e7eeff;
+    --color-on-primary-container: #dad7ff;
+    --color-on-tertiary-fixed-variant: #2f2ebe;
+    --color-tertiary-fixed: #e1e0ff;
+    --color-surface: #f9f9ff;
+    --color-on-tertiary-fixed: #07006c;
+    --color-secondary-fixed: #6ffbbe;
+    --color-tertiary: #3130c0;
+    --color-on-tertiary-container: #d9d8ff;
+    --color-on-error-container: #93000a;
+    --color-surface-variant: #d8e3fb;
+    --color-on-secondary-container: #00714d;
+    --color-background: #f9f9ff;
+    --color-inverse-surface: #263143;
+    --color-on-surface-variant: #464555;
+    --color-tertiary-fixed-dim: #c0c1ff;
+    --color-tertiary-container: #4b4dd8;
+    --color-primary-fixed: #e2dfff;
+    --color-surface-container-high: #dee8ff;
+    --color-secondary-container: #6cf8bb;
+    --color-on-secondary-fixed: #002113;
+    --color-error: #ba1a1a;
+    --color-secondary: #006c49;
+    --color-surface-bright: #f9f9ff;
+    --color-on-error: #ffffff;
+    --color-inverse-on-surface: #ecf1ff;
+    --color-surface-container-lowest: #ffffff;
+    --color-on-secondary-fixed-variant: #005236;
+    --color-on-primary-fixed-variant: #3323cc;
+    --color-inverse-primary: #c3c0ff;
+    --color-surface-container-highest: #d8e3fb;
+    --color-outline-variant: #c7c4d8;
+    --color-on-primary-fixed: #0f0069;
+
+    /* ---- Spacing tokens ---- */
+    --space-stack-sm: 8px;
+    --space-container-max: 1280px;
+    --space-stack-lg: 32px;
+    --space-margin-mobile: 16px;
+    --space-margin-desktop: 40px;
+    --space-unit: 8px;
+    --space-stack-md: 16px;
+    --space-gutter: 24px;
+
+    /* ---- Typography tokens ---- */
+    --font-body-lg: "Inter", sans-serif;
+    --font-label-sm: "JetBrains Mono", monospace;
+    --font-headline-md: "Inter", sans-serif;
+    --font-display-lg: "Inter", sans-serif;
+    --font-body-md: "Inter", sans-serif;
+
+    --text-body-lg-size: 18px;
+    --text-body-lg-line: 28px;
+    --text-body-lg-weight: 400;
+
+    --text-label-sm-size: 12px;
+    --text-label-sm-line: 16px;
+    --text-label-sm-weight: 500;
+
+    --text-headline-md-size: 24px;
+    --text-headline-md-line: 32px;
+    --text-headline-md-tracking: -0.01em;
+    --text-headline-md-weight: 600;
+
+    --text-display-lg-size: 48px;
+    --text-display-lg-line: 56px;
+    --text-display-lg-tracking: -0.02em;
+    --text-display-lg-weight: 700;
+
+    --text-body-md-size: 16px;
+    --text-body-md-line: 24px;
+    --text-body-md-weight: 400;
+
+    --text-display-lg-mobile-size: 36px;
+    --text-display-lg-mobile-line: 44px;
+    --text-display-lg-mobile-tracking: -0.02em;
+    --text-display-lg-mobile-weight: 700;
+
+    --radius-default: 0.25rem;
+    --radius-lg: 0.5rem;
+    --radius-xl: 0.75rem;
+    --radius-full: 9999px;
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+html,
+body {
+    height: 100%;
+}
+
+body {
+    background-color: var(--color-background);
+    color: var(--color-on-background);
+    font-family: var(--font-body-md);
+    font-size: var(--text-body-md-size);
+    line-height: var(--text-body-md-line);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+a {
+    text-decoration: none;
+}
+
+.container-max {
+    max-width: var(--space-container-max);
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+}
+
+.px-margin {
+    padding-left: var(--space-margin-mobile);
+    padding-right: var(--space-margin-mobile);
+}
+
+@media (min-width: 768px) {
+    .px-margin {
+        padding-left: var(--space-margin-desktop);
+        padding-right: var(--space-margin-desktop);
+    }
+}
+
+/* ==========================================================================
+   Typography utility classes (token-based)
+   ========================================================================== */
+.text-headline-md {
+    font-family: var(--font-headline-md);
+    font-size: var(--text-headline-md-size);
+    line-height: var(--text-headline-md-line);
+    letter-spacing: var(--text-headline-md-tracking);
+    font-weight: var(--text-headline-md-weight);
+}
+
+.text-body-md {
+    font-family: var(--font-body-md);
+    font-size: var(--text-body-md-size);
+    line-height: var(--text-body-md-line);
+    font-weight: var(--text-body-md-weight);
+}
+
+.text-label-sm {
+    font-family: var(--font-label-sm);
+    font-size: var(--text-label-sm-size);
+    line-height: var(--text-label-sm-line);
+    font-weight: var(--text-label-sm-weight);
+}
+
+.text-primary-token {
+    color: var(--color-primary);
+}
+
+.text-on-surface {
+    color: var(--color-on-surface);
+}
+
+.text-on-surface-variant {
+    color: var(--color-on-surface-variant);
+}
+
+/* ==========================================================================
+   Main / Grid background
+   ========================================================================== */
+main.auth-main {
+    flex: 1 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-stack-lg) var(--space-margin-mobile);
+    background-image: radial-gradient(circle at 2px 2px, rgba(79, 70, 229, 0.05) 1px, transparent 0);
+    background-size: 24px 24px;
+}
+
+/* ==========================================================================
+   Registration Card
+   ========================================================================== */
+.auth-card-wrap {
+    max-width: 480px;
+    width: 100%;
+}
+
+.auth-card {
+    background-color: var(--color-surface-container-lowest);
+    border: 1px solid rgba(199, 196, 216, 0.3);
+    border-radius: var(--radius-xl);
+    box-shadow: 0 4px 6px -1px rgba(30, 41, 59, 0.05), 0 2px 4px -2px rgba(30, 41, 59, 0.05);
+    padding: var(--space-stack-lg);
+    animation: fadeSlideIn 0.7s ease both;
+}
+
+@keyframes fadeSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.auth-card h1 {
+    color: var(--color-on-background);
+}
+
+/* Social Sign-up Buttons */
+.btn-social {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 0;
+    width: 100%;
+    border: 1px solid var(--color-outline-variant);
+    border-radius: var(--radius-lg);
+    background-color: var(--color-surface-container-lowest);
+    color: var(--color-on-surface);
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.btn-social:hover {
+    background-color: var(--color-surface-container-low);
+    transform: translateY(-4px);
+    box-shadow: 0 20px 25px -5px rgba(30, 41, 59, 0.1);
+    color: var(--color-on-surface);
+}
+
+.btn-social svg,
+.btn-social .bi {
+    transition: transform 0.2s ease;
+}
+
+.btn-social:hover svg,
+.btn-social:hover .bi {
+    transform: scale(1.1);
+}
+
+/* Divider */
+.divider-with-text {
+    display: flex;
+    align-items: center;
+    margin-bottom: var(--space-stack-lg);
+}
+
+.divider-with-text::before,
+.divider-with-text::after {
+    content: "";
+    flex-grow: 1;
+    border-top: 1px solid var(--color-outline-variant);
+}
+
+.divider-with-text span {
+    flex-shrink: 0;
+    margin: 0 1rem;
+    color: var(--color-on-surface-variant);
+    text-transform: uppercase;
+}
+
+/* Form fields */
+.form-label-token {
+    display: block;
+    color: var(--color-on-surface-variant);
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+}
+
+.form-control-token {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-outline-variant);
+    border-radius: var(--radius-lg);
+    font-family: var(--font-body-md);
+    font-size: var(--text-body-md-size);
+    color: var(--color-on-surface);
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.form-control-token::placeholder {
+    color: var(--color-on-surface-variant);
+    opacity: 0.6;
+}
+
+.form-control-token:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+    border-color: var(--color-primary-container);
+}
+
+.form-control-token.has-icon {
+    padding-right: 3rem;
+}
+
+.field-wrap {
+    position: relative;
+}
+
+.field-icon-btn {
+    position: absolute;
+    right: 0.75rem;
+    top: 38px;
+    background: none;
+    border: none;
+    color: rgba(70, 69, 85, 0.6);
+    display: inline-flex;
+    padding: 0;
+    transition: color 0.2s ease;
+}
+
+.field-icon-btn:hover {
+    color: var(--color-primary);
+}
+
+/* Password Strength */
+.strength-meter {
+    margin-top: 0.5rem;
+    display: flex;
+    gap: 4px;
+    height: 4px;
+}
+
+.strength-bar {
+    flex: 1 1 0;
+    border-radius: var(--radius-full);
+    background-color: var(--color-outline-variant);
+    transition: background-color 0.3s ease;
+}
+
+.strength-bar.level-weak {
+    background-color: var(--color-error);
+}
+
+.strength-bar.level-fair {
+    background-color: var(--color-secondary-container);
+}
+
+.strength-bar.level-strong,
+.strength-bar.level-excellent {
+    background-color: var(--color-secondary);
+}
+
+.strength-text {
+    font-family: var(--font-label-sm);
+    font-size: 10px;
+    color: rgba(70, 69, 85, 0.6);
+    margin-top: 0.25rem;
+    text-transform: uppercase;
+}
+
+/* Terms checkbox */
+.form-check-token {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.5rem 0;
+}
+
+.form-check-token input[type="checkbox"] {
+    margin-top: 0.25rem;
+    width: 1rem;
+    height: 1rem;
+    accent-color: var(--color-primary);
+    border-radius: 0.25rem;
+    border: 1px solid var(--color-outline-variant);
+}
+
+.form-check-token label a {
+    color: var(--color-primary);
+}
+
+.form-check-token label a:hover {
+    text-decoration: underline;
+}
+
+/* Submit button */
+.btn-submit-token {
+    width: 100%;
+    padding: 1rem;
+    background-color: var(--color-primary);
+    color: var(--color-on-primary);
+    font-family: var(--font-headline-md);
+    font-size: var(--text-headline-md-size);
+    font-weight: var(--text-headline-md-weight);
+    border: none;
+    border-radius: var(--radius-lg);
+    box-shadow: 0 4px 6px -1px rgba(30, 41, 59, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    transition: opacity 0.2s ease, transform 0.1s ease;
+}
+
+.btn-submit-token:hover {
+    opacity: 0.9;
+    color: var(--color-on-primary);
+}
+
+.btn-submit-token:active {
+    transform: scale(0.98);
+}
+
+/* Sign in link */
+.auth-signin {
+    margin-top: var(--space-stack-lg);
+    text-align: center;
+    color: var(--color-on-surface-variant);
+}
+
+.auth-signin a {
+    color: var(--color-primary);
+    font-weight: 700;
+}
+
+.auth-signin a:hover {
+    text-decoration: underline;
+}
+
+.trusted-by {
+    text-align: center;
+    color: rgba(70, 69, 85, 0.6);
+    margin-top: var(--space-stack-lg);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
