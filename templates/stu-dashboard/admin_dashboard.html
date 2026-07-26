@@ -1,0 +1,517 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | ParoBharo Analytics</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap 5.3 CSS & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+    <style>
+        :root {
+            --admin-bg: #0F172A;
+            --admin-card-bg: #1E293B;
+            --admin-card-border: #334155;
+            --admin-text-main: #F8FAFC;
+            --admin-text-muted: #94A3B8;
+            --admin-accent: #6366F1;
+            --admin-accent-hover: #4F46E5;
+        }
+
+        body {
+            background-color: var(--admin-bg);
+            color: var(--admin-text-main);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+        }
+
+        /* Top Navbar */
+        .admin-navbar {
+            background-color: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--admin-card-border);
+            padding: 1rem 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .brand-logo {
+            font-weight: 800;
+            font-size: 1.35rem;
+            background: linear-gradient(135deg, #6366F1 0%, #A855F7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+
+        /* Metric Cards */
+        .stat-card {
+            background: var(--admin-card-bg);
+            border: 1px solid var(--admin-card-border);
+            border-radius: 16px;
+            padding: 1.4rem;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-top: 0.5rem;
+            color: var(--admin-text-main);
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--admin-text-muted);
+            font-weight: 500;
+        }
+
+        /* Data Tables Container */
+        .admin-section-card {
+            background: var(--admin-card-bg);
+            border: 1px solid var(--admin-card-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.2rem;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--admin-text-main);
+            margin: 0;
+        }
+
+        /* Custom Table Styling */
+        .table-custom {
+            color: var(--admin-text-main);
+            vertical-align: middle;
+            margin-bottom: 0;
+        }
+
+        .table-custom th {
+            background-color: #0F172A;
+            color: var(--admin-text-muted);
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 0.8rem 1rem;
+            border-bottom: 1px solid var(--admin-card-border);
+        }
+
+        .table-custom td {
+            padding: 0.9rem 1rem;
+            border-bottom: 1px solid var(--admin-card-border);
+            font-size: 0.9rem;
+            background: transparent;
+            color: var(--admin-text-main);
+        }
+
+        .table-custom tr:last-child td {
+            border-bottom: none;
+        }
+
+        .badge-custom {
+            padding: 0.35em 0.65em;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border-radius: 8px;
+        }
+
+        .bg-passed { background: rgba(16, 185, 129, 0.15); color: #34D399; }
+        .bg-failed { background: rgba(239, 68, 68, 0.15); color: #F87171; }
+        .bg-progress { background: rgba(245, 158, 11, 0.15); color: #FBBF24; }
+        .bg-paid { background: rgba(16, 185, 129, 0.15); color: #34D399; }
+        .bg-pending { background: rgba(245, 158, 11, 0.15); color: #FBBF24; }
+
+        .user-avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6366F1, #8B5CF6);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: #FFF;
+            margin-right: 0.6rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Top Admin Navigation -->
+    <nav class="admin-navbar">
+        <div class="container-fluid d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center gap-3">
+                <a href="{% url 'dashboard:admin_panel' %}" class="brand-logo">
+                    <i class="bi bi-shield-lock-fill me-1"></i> ParoBharo Admin
+                </a>
+                <span class="badge bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 px-2 py-1 rounded" style="background: rgba(99, 102, 241, 0.2); color: #818CF8; font-size: 0.75rem;">
+                    Database Analytics
+                </span>
+            </div>
+
+            <div class="d-flex align-items-center gap-3">
+                <a href="{% url 'core:home' %}" class="btn btn-sm btn-outline-secondary text-light">
+                    <i class="bi bi-house me-1"></i> Main Site
+                </a>
+                <a href="/admin/" target="_blank" class="btn btn-sm btn-outline-primary">
+                    <i class="bi bi-gear-fill me-1"></i> Django Admin
+                </a>
+                <div class="dropdown">
+                    <button class="btn btn-sm btn-dark dropdown-toggle d-flex align-items-center gap-2 border-secondary" type="button" data-bs-toggle="dropdown">
+                        <span class="user-avatar" style="width: 26px; height: 26px; font-size: 0.75rem;">
+                            {{ request.user.username|slice:":1"|upper }}
+                        </span>
+                        <span>{{ request.user.username }}</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark">
+                        <li><a class="dropdown-item" href="{% url 'dashboard:index' %}"><i class="bi bi-speedometer2 me-2"></i> Student View</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger" href="{% url 'accounts:signout' %}"><i class="bi bi-box-arrow-right me-2"></i> Sign Out</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Container -->
+    <div class="container-fluid px-4 py-4">
+
+        <!-- Header Welcome -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="fw-bold text-white mb-1">Database Overview & Analytics</h2>
+                <p class="text-muted mb-0" style="color: var(--admin-text-muted);">Real-time snapshot of students, mock exams, orders, and system records.</p>
+            </div>
+            <div>
+                <a href="{% url 'dashboard:admin_panel' %}" class="btn btn-sm btn-indigo text-white" style="background: var(--admin-accent);">
+                    <i class="bi bi-arrow-clockwise me-1"></i> Refresh Data
+                </a>
+            </div>
+        </div>
+
+        <!-- 6 KPI Metric Cards Grid -->
+        <div class="row g-3 mb-4">
+            <!-- 1. Total Students -->
+            <div class="col-12 col-sm-6 col-lg-2">
+                <div class="stat-card">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <span class="stat-label">Total Students</span>
+                        <div class="stat-icon" style="background: rgba(99, 102, 241, 0.15); color: #818CF8;">
+                            <i class="bi bi-people-fill"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value">{{ total_students }}</div>
+                    <div class="text-muted fs-7 mt-1" style="font-size: 0.75rem; color: var(--admin-text-muted);">Registered Users</div>
+                </div>
+            </div>
+
+            <!-- 2. Total Books & Courses -->
+            <div class="col-12 col-sm-6 col-lg-2">
+                <div class="stat-card">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <span class="stat-label">Products & Books</span>
+                        <div class="stat-icon" style="background: rgba(16, 185, 129, 0.15); color: #34D399;">
+                            <i class="bi bi-journal-bookmark-fill"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value">{{ total_products }}</div>
+                    <div class="text-muted fs-7 mt-1" style="font-size: 0.75rem; color: var(--admin-text-muted);">Courses & E-books</div>
+                </div>
+            </div>
+
+            <!-- 3. Live Mock Exams -->
+            <div class="col-12 col-sm-6 col-lg-2">
+                <div class="stat-card">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <span class="stat-label">Mock Exams</span>
+                        <div class="stat-icon" style="background: rgba(245, 158, 11, 0.15); color: #FBBF24;">
+                            <i class="bi bi-card-checklist"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value">{{ total_mock_exams }}</div>
+                    <div class="text-muted fs-7 mt-1" style="font-size: 0.75rem; color: #FBBF24;">{{ live_mock_exams }} Active Live</div>
+                </div>
+            </div>
+
+            <!-- 4. Total Exam Attempts -->
+            <div class="col-12 col-sm-6 col-lg-2">
+                <div class="stat-card">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <span class="stat-label">Test Attempts</span>
+                        <div class="stat-icon" style="background: rgba(139, 92, 246, 0.15); color: #A78BFA;">
+                            <i class="bi bi-clipboard-data-fill"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value">{{ total_attempts }}</div>
+                    <div class="text-muted fs-7 mt-1" style="font-size: 0.75rem; color: #34D399;">{{ pass_rate }}% Pass Rate</div>
+                </div>
+            </div>
+
+            <!-- 5. Total Orders & Revenue -->
+            <div class="col-12 col-sm-6 col-lg-2">
+                <div class="stat-card">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <span class="stat-label">Total Orders</span>
+                        <div class="stat-icon" style="background: rgba(236, 72, 153, 0.15); color: #F472B6;">
+                            <i class="bi bi-bag-check-fill"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value">{{ total_orders }}</div>
+                    <div class="text-muted fs-7 mt-1" style="font-size: 0.75rem; color: #F472B6;">Rs. {{ total_revenue }} Total</div>
+                </div>
+            </div>
+
+            <!-- 6. Categories -->
+            <div class="col-12 col-sm-6 col-lg-2">
+                <div class="stat-card">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <span class="stat-label">Categories</span>
+                        <div class="stat-icon" style="background: rgba(6, 182, 212, 0.15); color: #22D3EE;">
+                            <i class="bi bi-grid-fill"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value">{{ total_categories }}</div>
+                    <div class="text-muted fs-7 mt-1" style="font-size: 0.75rem; color: var(--admin-text-muted);">Active Taxonomy</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Two Column Content Rows -->
+        <div class="row g-4 mb-4">
+            <!-- Left: Recent Exam Attempts -->
+            <div class="col-12 col-lg-7">
+                <div class="admin-section-card h-100 mb-0">
+                    <div class="section-header">
+                        <h3 class="section-title"><i class="bi bi-clock-history me-2 text-warning"></i> Recent Mock Exam Attempts</h3>
+                        <a href="/admin/products/examattempt/" target="_blank" class="btn btn-sm btn-link text-indigo-400 p-0 text-decoration-none" style="color: #818CF8;">View All in Admin</a>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-custom">
+                            <thead>
+                                <tr>
+                                    <th>Student</th>
+                                    <th>Mock Exam</th>
+                                    <th>Score</th>
+                                    <th>Time Spent</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for attempt in recent_attempts %}
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <span class="user-avatar">{{ attempt.user.username|slice:":1"|upper }}</span>
+                                            <div>
+                                                <div class="fw-semibold">{{ attempt.user.username }}</div>
+                                                <div class="text-muted" style="font-size: 0.75rem;">{{ attempt.user.email }}</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>{{ attempt.exam.title }}</td>
+                                    <td class="fw-bold">{{ attempt.score }} / {{ attempt.exam.total_marks }}</td>
+                                    <td>{{ attempt.time_taken_seconds }}s</td>
+                                    <td>
+                                        {% if attempt.is_passed %}
+                                            <span class="badge-custom bg-passed">PASSED</span>
+                                        {% elif attempt.status == 'IN_PROGRESS' %}
+                                            <span class="badge-custom bg-progress">IN PROGRESS</span>
+                                        {% else %}
+                                            <span class="badge-custom bg-failed">FAILED</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="5" class="text-center text-muted py-4">No exam attempts recorded yet.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Recent Registrations -->
+            <div class="col-12 col-lg-5">
+                <div class="admin-section-card h-100 mb-0">
+                    <div class="section-header">
+                        <h3 class="section-title"><i class="bi bi-person-plus-fill me-2 text-primary"></i> Newly Registered Students</h3>
+                        <a href="/admin/accounts/customuser/" target="_blank" class="btn btn-sm btn-link text-indigo-400 p-0 text-decoration-none" style="color: #818CF8;">Manage Users</a>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-custom">
+                            <thead>
+                                <tr>
+                                    <th>User</th>
+                                    <th>Target Exam</th>
+                                    <th>Joined</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for user in recent_students %}
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <span class="user-avatar">{{ user.username|slice:":1"|upper }}</span>
+                                            <div>
+                                                <div class="fw-semibold">{{ user.username }}</div>
+                                                <div class="text-muted" style="font-size: 0.75rem;">{{ user.email }}</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-secondary" style="font-size: 0.75rem; font-weight: 500;">
+                                            {{ user.profile.target_exam|default:"General" }}
+                                        </span>
+                                    </td>
+                                    <td class="text-muted" style="font-size: 0.8rem;">{{ user.date_joined|date:"M d, Y" }}</td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="3" class="text-center text-muted py-4">No students registered yet.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 2: Recent Orders & Mock Exams List -->
+        <div class="row g-4">
+            <!-- Orders -->
+            <div class="col-12 col-lg-6">
+                <div class="admin-section-card mb-0">
+                    <div class="section-header">
+                        <h3 class="section-title"><i class="bi bi-bag-check-fill me-2 text-success"></i> Recent Orders & Purchases</h3>
+                        <a href="/admin/orders/order/" target="_blank" class="btn btn-sm btn-link text-indigo-400 p-0 text-decoration-none" style="color: #818CF8;">View All Orders</a>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-custom">
+                            <thead>
+                                <tr>
+                                    <th>Order #</th>
+                                    <th>Customer</th>
+                                    <th>Amount</th>
+                                    <th>Method</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for order in recent_orders %}
+                                <tr>
+                                    <td class="fw-bold text-indigo-400" style="color: #818CF8;">#{{ order.order_number }}</td>
+                                    <td>{{ order.user.username }}</td>
+                                    <td class="fw-semibold">Rs. {{ order.total_amount }}</td>
+                                    <td>{{ order.payment_method }}</td>
+                                    <td>
+                                        {% if order.status == 'PAID' %}
+                                            <span class="badge-custom bg-paid">PAID</span>
+                                        {% else %}
+                                            <span class="badge-custom bg-pending">{{ order.status }}</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="5" class="text-center text-muted py-4">No orders placed yet.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Active Mock Exams -->
+            <div class="col-12 col-lg-6">
+                <div class="admin-section-card mb-0">
+                    <div class="section-header">
+                        <h3 class="section-title"><i class="bi bi-journal-check me-2 text-info"></i> Mock Exam Papers in Database</h3>
+                        <a href="/admin/products/mockexam/" target="_blank" class="btn btn-sm btn-link text-indigo-400 p-0 text-decoration-none" style="color: #818CF8;">Manage Mock Exams</a>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-custom">
+                            <thead>
+                                <tr>
+                                    <th>Exam Title</th>
+                                    <th>Category</th>
+                                    <th>Questions</th>
+                                    <th>Duration</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for exam in mock_exams_list %}
+                                <tr>
+                                    <td class="fw-semibold">{{ exam.title }}</td>
+                                    <td><span class="badge bg-dark border border-secondary">{{ exam.category.name }}</span></td>
+                                    <td class="fw-bold">{{ exam.questions_count }} Qs</td>
+                                    <td>{{ exam.duration_minutes }} mins</td>
+                                    <td>
+                                        {% if exam.is_live %}
+                                            <span class="badge-custom bg-passed">LIVE</span>
+                                        {% else %}
+                                            <span class="badge-custom bg-pending">DRAFT</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="5" class="text-center text-muted py-4">No mock exams created yet.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
