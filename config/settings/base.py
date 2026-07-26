@@ -1,9 +1,9 @@
 import os
 from pathlib import Path
 
-# Load .env file if python-dotenv is available or manually read .env
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
+# Load .env file if available
 env_file = BASE_DIR / '.env'
 if env_file.exists():
     with open(env_file) as f:
@@ -13,13 +13,11 @@ if env_file.exists():
                 key, val = line.split('=', 1)
                 os.environ.setdefault(key.strip(), val.strip())
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-paro-bharo-fallback-secret-key')
-
-# SECURITY WARNING: don't run with debug turned on in production!
+# SECURITY SETTINGS
+SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-paro-bharo-fallback-secret-key-2026')
 DEBUG = os.getenv('DEBUG', 'True').lower() in ('true', '1', 't')
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '*').split(',')
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 INSTALLED_APPS = [
@@ -30,7 +28,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     
-    # Custom Project Apps
+    # Project Apps
     'apps.accounts',
     'apps.categories',
     'apps.products',
@@ -47,6 +45,7 @@ LOGOUT_REDIRECT_URL = 'accounts:signin'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -75,31 +74,39 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-# Database Configuration (PostgreSQL by default with SQLite fallback)
-DB_ENGINE = os.getenv('DB_ENGINE', 'django.db.backends.postgresql')
+# Smart Database Configuration (Handles Vercel, Production PostgreSQL, and Local Development)
+IS_VERCEL = bool(os.getenv('VERCEL') or os.getenv('VERCEL_ENV'))
+
+DB_HOST = os.getenv('DB_HOST', '')
 DB_NAME = os.getenv('DB_NAME', 'parobharo_db')
 DB_USER = os.getenv('DB_USER', 'parobharo_user')
 DB_PASSWORD = os.getenv('DB_PASSWORD', 'parobharo_secure_pass')
-DB_HOST = os.getenv('DB_HOST', '127.0.0.1')
 DB_PORT = os.getenv('DB_PORT', '5432')
 
-if os.getenv('USE_SQLITE', 'False').lower() in ('true', '1', 't'):
+if os.getenv('DATABASE_URL'):
+    import dj_database_url
     DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
+        'default': dj_database_url.config(conn_max_age=600, ssl_require=True)
     }
-else:
+elif DB_HOST and DB_HOST not in ('127.0.0.1', 'localhost'):
     DATABASES = {
         'default': {
-            'ENGINE': DB_ENGINE,
+            'ENGINE': 'django.db.backends.postgresql',
             'NAME': DB_NAME,
             'USER': DB_USER,
             'PASSWORD': DB_PASSWORD,
             'HOST': DB_HOST,
             'PORT': DB_PORT,
             'CONN_MAX_AGE': 600,
+        }
+    }
+else:
+    # Use SQLite for local development and Vercel fallback without remote Postgres
+    sqlite_path = '/tmp/db.sqlite3' if IS_VERCEL else BASE_DIR / 'db.sqlite3'
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': sqlite_path,
         }
     }
 
@@ -117,6 +124,8 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
